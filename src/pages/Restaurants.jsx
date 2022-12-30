@@ -1,6 +1,6 @@
 import { TextField, Box, Container } from '@mui/material';
 import { debounce } from 'debounce';
-import { React, useCallback, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState, useContext } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
 import SwapeRestaurant from '../components/SwapeRestaurant';
@@ -8,28 +8,33 @@ import GojekAPI from '../API/GojekAPI';
 import './style.css'
 import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
+import { CartContext } from '../Contexts/CartContext';
+
 function Restaurants(props) {
+
+    const { setLocData, resetCart } = useContext(CartContext);
     const params = useParams();
     const [dataRestaurant, setDataRestaurant] = useState("");
-    const [address, setAddress] = useState("");
-    // const [keyword, setKeyword] = useState("");
+
+    const [customerLoc, setCustomerLoc] = useState("");
 
 
-
+    let dataLoc = [];
 
     const fetchAddress = async () => {
         var data = await GojekAPI.setAddress(params?.id);
-        // setDataRestaurant()  
-        setAddress(data?.data.latitude + "," + data?.data.longitude);
+        var cusLoc = data?.data.latitude + "," + data?.data.longitude;
+        setCustomerLoc(cusLoc);
 
+        localStorage.setItem("customerLoc",
+            JSON.stringify(data))
     }
 
-    const fetchRestaurant = async (keyword, address) => {
+    const fetchRestaurant = async (keyword, customerLoc) => {
 
-        var data = await GojekAPI.searchRestaurant(keyword, address);
+        var data = await GojekAPI.searchRestaurant(keyword, customerLoc);
         setDataRestaurant(data);
-
-        console.log(data)
+        resetCart();
 
     }
 
@@ -38,11 +43,11 @@ function Restaurants(props) {
 
     }, []);
 
-    const debounceDropDown = useCallback(debounce((nextValue, address) => fetchRestaurant(nextValue, address), 500), [])
+    const debounceDropDown = useCallback(debounce((nextValue, customerLoc) => fetchRestaurant(nextValue, customerLoc), 500), [])
 
     const handleChangeKeyword = (e) => {
         // if (e.target.value != "")
-        debounceDropDown(e.target.value, address);
+        debounceDropDown(e.target.value, customerLoc);
     }
 
 
@@ -82,7 +87,7 @@ function Restaurants(props) {
                     {/* {console.log(dataRestaurant?.data?.cards[0]?.content?.title)} */}
                     < SwapeRestaurant dataRestaurant={dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[0] : []} />
 
-                    <h3>{(dataRestaurant?.data?.cards) ? dataRestaurant?.data?.cards[3]?.content?.title : ""}</h3>
+                    <h3>{(dataRestaurant?.data?.cards) && dataRestaurant?.data?.cards[3]?.content?.title}</h3>
                     {/* {console.log(dataRestaurant?.data?.cards[0]?.content?.title)} */}
                     < SwapeRestaurant dataRestaurant={dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[3] : []} />
 

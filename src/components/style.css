@@ -35,3 +35,7 @@ body {
 .swiper-wrapper{
     width: 35%;
 }
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+  margin: 0px !important;
+}

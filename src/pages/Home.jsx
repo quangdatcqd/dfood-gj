@@ -7,11 +7,11 @@ import GojekAPI from '../API/GojekAPI';
 import { debounce } from "debounce";
 import { NavLink } from 'react-router-dom';
 import Cartpreview from '../components/Cartpreview';
-
+import { useSnackbar } from 'notistack';
 
 
 export default function Home() {
-
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [addressOptions, setAddressOptions] = useState([]);
     const [keyword, setKeyword] = useState("");
 
@@ -23,6 +23,15 @@ export default function Home() {
         debounceDropDown(keyword);
 
     }, [keyword]);
+
+    const fetchToken = async () => {
+        var data = await GojekAPI.getToken();
+        if (data?.access_token) {
+            localStorage.setItem("G-Token", data?.access_token);
+            enqueueSnackbar("Đã lấy được token", { variant: 'success' })
+        }
+    }
+
 
 
     const handleChangeAddress = (event) => {
@@ -49,6 +58,9 @@ export default function Home() {
                         alignItems: 'center',
                     }}
                 >
+                    <Button onClick={fetchToken} className="materialBtn" variant='contained'>
+                        GetTOken
+                    </Button>
                     <Avatar sx={{ m: 1, bgcolor: 'success.dark' }}>
                         <LockOutlinedIcon />
                     </Avatar>
@@ -68,9 +80,7 @@ export default function Home() {
                                 // autoComplete="address"
                                 onChange={handleChangeAddress}
                             />
-                            <Button onClick={handleClear} className="materialBtn">
-                                Clear
-                            </Button>
+
                             <List sx={{ width: '100%', bgcolor: 'background.paper' }} className="mr-0 mt-2 rounded">
 
 

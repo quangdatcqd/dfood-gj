@@ -51,6 +51,7 @@ const SwapeRestaurant = (props) => {
                                             {item?.merchant_name}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">{item?.point_1_label}
+                                            <span className="text-danger">{item?.image_point_label ? " - " + item?.image_point_label : ""}</span>
                                         </Typography>
 
                                     </CardContent>
@@ -63,7 +64,7 @@ const SwapeRestaurant = (props) => {
             }
             {
                 dataRestaurant?.content?.items?.map((item, key) => {
-                    { console.log(item?.description?.id, item?.id) }
+                    // { console.log(item?.description?.id, item?.id) }
                     return (
                         <SwiperSlide key={key}>
                             <NavLink
@@ -79,7 +80,7 @@ const SwapeRestaurant = (props) => {
                                     />
                                     <CardContent style={{ padding: "10px  " }} >
                                         <Typography gutterBottom variant="body1" component="div">
-                                            {(item?.description?.text) ? item?.description?.text : item?.name}
+                                            {(item?.title?.text) ? item?.title?.text : item?.name}
                                         </Typography>
                                         {/* <Typography variant="body2" color="text.secondary">{item?.additional_info?.normal_text} */}
                                         {/* </Typography> */}

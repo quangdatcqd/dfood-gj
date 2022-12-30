@@ -6,8 +6,16 @@ const OptionsMoreRadio = (props) => {
     const [valueSelected, setValueSelected] = useState("");
     const handleChange = (e) => {
         setValueSelected(e.target.value);
-        console.log(valueSelected);
+
     }
+    // const onsubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log(e)
+    //     // e.target.map((item) => {
+    //     //     setVariants(variants + item.value)
+    //     // })
+    // }
+    // console.log(data);
     return (
 
         <Stack spacing={2}>
@@ -20,7 +28,7 @@ const OptionsMoreRadio = (props) => {
                     <RadioGroup
                         row
                         aria-labelledby="demo-form-control-label-placement"
-                        name="position"
+                        name={data?.id}
                         defaultValue="top"
                         value={valueSelected}
                         onChange={handleChange}
@@ -29,21 +37,33 @@ const OptionsMoreRadio = (props) => {
                     >
                         {
                             data?.variants?.map((item, key) => {
+                                var variant = JSON.stringify(
+                                    {
+                                        category_id: data?.id,
+                                        category_name: data?.name,
+                                        id: item?.id,
+                                        name: item?.name,
+                                    }
+                                );
                                 return (
-                                    <FormControlLabel
-                                        value={item?.id}
-                                        control={
-                                            <Radio
-                                            // checked={selectedValue === 'a'}
-                                            // onChange={handleChange}
-                                            // value="a"
-                                            // name="radio-buttons"
-                                            // inputProps={{ 'aria-label': 'A' }}
-                                            />
-                                        }
-                                        label={item?.name}
-                                        labelPlacement="end"
-                                    />
+                                    <div key={key} style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+                                        <FormControlLabel
+                                            value={variant}
+                                            control={
+                                                <Radio
+                                                // checked={selectedValue === 'a'}
+                                                // onChange={handleChange}
+                                                // value="a"
+                                                // name="radio-buttons"
+                                                // inputProps={{ 'aria-label': 'A' }}
+                                                />
+                                            }
+                                            label={item?.name + " - " + item?.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                                            labelPlacement="end"
+                                        />
+
+                                    </div>
+
                                 )
                             })
                         }
