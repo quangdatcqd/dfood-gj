@@ -2,7 +2,7 @@ import { TextField, Box, Container } from '@mui/material';
 import { debounce } from 'debounce';
 import { React, useCallback, useEffect, useState, useContext } from 'react';
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import SwapeRestaurant from '../components/SwapeRestaurant';
 import GojekAPI from '../API/GojekAPI';
 import './style.css'
@@ -13,7 +13,10 @@ import { CartContext } from '../Contexts/CartContext';
 function Restaurants(props) {
 
     const { setLocData, resetCart } = useContext(CartContext);
+    // const { dataAddress } = props;
+    let location = useLocation();
     const params = useParams();
+
     const [dataRestaurant, setDataRestaurant] = useState("");
 
     const [customerLoc, setCustomerLoc] = useState("");
@@ -22,12 +25,22 @@ function Restaurants(props) {
     let dataLoc = [];
 
     const fetchAddress = async () => {
-        var data = await GojekAPI.setAddress(params?.id);
-        var cusLoc = data?.data.latitude + "," + data?.data.longitude;
-        setCustomerLoc(cusLoc);
+        var data = await GojekAPI.setAddress(location?.state?.placeid);
 
-        localStorage.setItem("customerLoc",
-            JSON.stringify(data))
+        var cusLoc = data?.data.latitude + "," + data?.data.longitude;
+
+        localStorage.setItem("customerLoc", JSON.stringify(
+
+            {
+                address: location?.state?.address,
+                name: location?.state?.name,
+                placeid: location?.state?.placeid,
+                latitude: data?.data?.latitude,
+                longitude: data?.data?.longitude,
+
+            }
+        ))
+        setCustomerLoc(cusLoc);
     }
 
     const fetchRestaurant = async (keyword, customerLoc) => {
@@ -40,7 +53,7 @@ function Restaurants(props) {
 
     useEffect(() => {
         fetchAddress();
-
+        console.log(location)
     }, []);
 
     const debounceDropDown = useCallback(debounce((nextValue, customerLoc) => fetchRestaurant(nextValue, customerLoc), 500), [])

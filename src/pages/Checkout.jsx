@@ -1,4 +1,4 @@
-import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, Paper, Stack, Typography, } from '@mui/material';
+import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, Paper, Stack, TextareaAutosize, Typography, } from '@mui/material';
 import { React, useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
@@ -17,6 +17,7 @@ const Checkout = () => {
     const params = useParams();
     const [dataCheckout, setDataCheckout] = useState();
     const [source_map, setSourceMap] = useState("");
+    const [noteOrder, setNoteOrder] = useState("");
     const [toggleChat, setToggleChat] = useState(false);
 
     const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
@@ -42,7 +43,7 @@ const Checkout = () => {
             }
             var getVC = await GojekAPI.getVoucher();
             // console.log(getVC?.data)
-            (getVC?.data?.length >= 13) && localStorage.setItem("idvoucher", getVC?.data[getVC?.data?.length - 1]?.id);
+            (getVC?.data?.length >= 13) ? localStorage.setItem("idvoucher", getVC?.data[getVC?.data?.length - 1]?.id) : localStorage.setItem("idvoucher", "");
 
         }
         fetchData();
@@ -57,14 +58,14 @@ const Checkout = () => {
         if (idvoucher != undefined)
             var dataPayload = {
                 "cartPriceEstimated": (Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)),
-                "destinationAddress": "498/19 " + customerData?.data?.address,
+                "destinationAddress": customerData?.address,
                 "destinationAddressDetails": {
                     "isSaved": false,
-                    "placeId": customerData?.data?.placeid
+                    "placeId": customerData?.placeid
                 },
-                "destinationLatLong": customerData?.data?.latitude + "," + customerData?.data?.longitude,
-                "destinationName": customerData?.data?.name,
-                "destinationNote": "alô tới a gọi 0389824667 giùm e nhé",
+                "destinationLatLong": customerData?.latitude + "," + customerData?.longitude,
+                "destinationName": customerData?.name,
+                "destinationNote": noteOrder,
                 "isGift": false,
                 "items": payload?.items,
                 "analytics": {
@@ -181,16 +182,17 @@ const Checkout = () => {
                         )
                     })
                 }
-                {
-                    // console.log(dataCheckout?.delivery_options)
-                }
+                <div style={{ border: "1px solid #1976d2", padding: "10px", marginBottom: "10px", borderRadius: "10px", }}>
+                    <p style={{ margin: "0px", fontSize: "15pt" }}>Ghi chú đơn hàng.</p>
+                    <TextareaAutosize onChange={(e) => setNoteOrder(e.target.value)} value={noteOrder} style={{ width: "100%", resize: "none", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px", fontSize: "13pt" }} />
+                </div>
                 {
 
                     dataCheckout?.delivery_options != undefined ?
                         dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.price_line_items?.rows?.map((item, key) => {
                             return (
                                 <div key={key}>
-                                    <p> {item?.title}: {item?.final_value} <strike> {item?.original_value}</strike> </p>
+                                    <p style={{ margin: "3px", fontSize: "12pt" }}> {item?.title}: {item?.final_value} <strike> {item?.original_value}</strike> </p>
                                     {/* <p>Giảm giá: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount}</p>
                                 <p>Phí ship: {dataCheckout?.delivery_options[0]?.payment_options[0]?.delivery_fee}</p>
                                 <p>Thanh toán: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount}</p> */}

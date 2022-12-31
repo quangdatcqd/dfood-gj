@@ -173,7 +173,7 @@ function CartProvider({ children }) {
         var data = {
             apply_offer: true,
             cart_price: total,
-            customer_location: customerData?.data?.latitude + "," + customerData?.data?.longitude,
+            customer_location: customerData?.latitude + "," + customerData?.longitude,
             items: items,
             merchant_location: merchantData?.restaurant?.location,
             offer_id: "",
@@ -183,7 +183,6 @@ function CartProvider({ children }) {
             promo_discount_cart_price: discount,
             restaurant_uuid: merchantData?.restaurant?.id
         }
-        console.log(merchantData)
 
         setPayload(data);
     }

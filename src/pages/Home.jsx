@@ -1,6 +1,6 @@
 import { React, useCallback, useEffect, useState } from 'react';
-import { Avatar, CssBaseline, TextField, Grid, List, ListItemButton, Container, Typography, ListItemText, Divider, Box, Button } from '@mui/material';
-
+import { Avatar, TextField, Grid, List, ListItemButton, Container, Typography, ListItemText, Divider, Box, } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import GojekAPI from '../API/GojekAPI';
@@ -14,6 +14,7 @@ export default function Home() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [addressOptions, setAddressOptions] = useState([]);
     const [keyword, setKeyword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const fetchAddressOptions = async (key) => {
         var data = await GojekAPI.searchAddress(key);
@@ -25,11 +26,16 @@ export default function Home() {
     }, [keyword]);
 
     const fetchToken = async () => {
+        setLoading(true);
         var data = await GojekAPI.getToken();
         if (data?.access_token) {
             localStorage.setItem("G-Token", data?.access_token);
+            setLoading(false)
             enqueueSnackbar("Đã lấy được token", { variant: 'success' })
+        } else {
+            enqueueSnackbar(data, { variant: 'error' })
         }
+        setLoading(false)
     }
 
 
@@ -58,9 +64,16 @@ export default function Home() {
                         alignItems: 'center',
                     }}
                 >
-                    <Button onClick={fetchToken} className="materialBtn" variant='contained'>
-                        GetTOken
-                    </Button>
+
+                    <LoadingButton
+                        size="small"
+                        onClick={fetchToken}
+                        loading={loading}
+                        loadingIndicator="Đợi.."
+                        variant="contained"
+                    >
+                        GETTOKEN
+                    </LoadingButton>
                     <Avatar sx={{ m: 1, bgcolor: 'success.dark' }}>
                         <LockOutlinedIcon />
                     </Avatar>
@@ -91,7 +104,12 @@ export default function Home() {
                                             <div key={key}>
                                                 <NavLink
                                                     style={{ textDecoration: 'none', color: "purple" }}
-                                                    to={"/restaurant/" + addressOptions[key]?.placeid}
+                                                    to={{
+                                                        pathname: "/restaurant",
+
+                                                    }}
+                                                    state={item}
+                                                // onClick={() => localStorage.setItem("customerLoc", JSON.stringify(item))}
 
                                                 >
                                                     <ListItemButton
