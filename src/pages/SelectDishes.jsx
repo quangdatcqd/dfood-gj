@@ -12,7 +12,7 @@ import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
 import LazyLoad from 'react-lazyload'
 const SelectDishes = () => {
-    const { selectedItems, } = useContext(CartContext);
+    const { selectedItems, setMerchantData } = useContext(CartContext);
     const params = useParams();
     const [dataRestaurant, setDataRestaurant] = useState("");
 
@@ -20,7 +20,7 @@ const SelectDishes = () => {
         const fetchData = async () => {
             var data = await GojekAPI.getRestaurant(params.id);
             setDataRestaurant(data);
-
+            setMerchantData(data)
             localStorage.setItem("merchantLoc", JSON.stringify(data))
 
         }

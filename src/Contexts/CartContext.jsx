@@ -183,6 +183,7 @@ function CartProvider({ children }) {
             promo_discount_cart_price: discount,
             restaurant_uuid: merchantData?.restaurant?.id
         }
+        console.log(merchantData)
 
         setPayload(data);
     }

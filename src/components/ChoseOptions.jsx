@@ -13,7 +13,7 @@ const ChoseOptions = (props) => {
     const { settoggleOption, toggleOption, data } = props;
     const contexts = useContext(CartContext);
     const [quantity, setQuantity] = useState(1);
-    const [pricePreview, setPricePreview] = useState(data?.price);
+    const [pricePreview, setPricePreview] = useState(data?.promotion?.selling_price ? data?.promotion?.selling_price : price);
 
     var variantsSelected;
     var total = 0;
@@ -29,8 +29,9 @@ const ChoseOptions = (props) => {
             variantsSelected = contexts.selectedItems[hasvariant]?.variants[0];
             price = Number(contexts.selectedItems[hasvariant]?.variants[1]);
 
-            console.log(contexts.selectedItems[hasvariant]?.quantity)
-            total = ((price + Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity)
+
+            total = ((Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity)
+
 
             setPricePreview(total)
 
@@ -66,7 +67,8 @@ const ChoseOptions = (props) => {
 
 
     useMemo(() => {
-        setPricePreview((price.current + data?.price) * quantity)
+        setPricePreview((price.current + (data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity)
+        console.log(pricePreview)
     }, [quantity, price.current])
 
 
