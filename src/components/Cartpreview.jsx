@@ -22,7 +22,7 @@ const Cartpreview = () => {
         // })
 
         setCountItems(
-            payload?.items?.length > 0 && payload?.items?.reduce((total, item, ds, dsd) => total + item?.quantity, 0)
+            payload?.items?.length > 0 && payload?.items?.reduce((total, item) => total + item?.quantity, 0)
         )
 
     }, [payload, selectedItems]);

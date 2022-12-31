@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Button, Card, CardContent, CardMedia, Dialog, DialogContent, DialogTitle, Divider, Paper, Stack, Typography, } from '@mui/material';
+import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, Paper, Stack, Typography, } from '@mui/material';
 import { React, useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
@@ -6,7 +6,6 @@ import { styled } from '@mui/material/styles';
 import BackBtn from '../components/BackBtn';
 import QuantityInput from '../components/QuantityInput';
 import { Container } from '@mui/system';
-import ChoseOptions from '../components/ChoseOptions';
 import { CartContext } from '../Contexts/CartContext';
 import { useSnackbar } from 'notistack';
 import { fomatCurrency } from '../common';
@@ -14,7 +13,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import ChatBox from './ChatBox';
 
 const Checkout = () => {
-    const { payload, locData, selectedItems } = useContext(CartContext);
+    const { payload, selectedItems } = useContext(CartContext);
     const params = useParams();
     const [dataCheckout, setDataCheckout] = useState();
     const [source_map, setSourceMap] = useState("");
