@@ -1,7 +1,8 @@
 import axios from 'axios';
 // Set config defaults when creating the instance
 const axiosClient = axios.create({
-    baseURL: 'https://lomdom.tk/dbook/public/api/',
+    // baseURL: 'https://lomdom.tk/dbook/public/api/',
+    baseURL: 'http://localhost:8000/api/',
     headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
     }
