@@ -7,7 +7,7 @@ import { IconButton, Tooltip } from "@mui/material";
 const BackBtn = (props) => {
     let navigate = useNavigate();
     return (
-        <Tooltip onClick={() => navigate(-1)} style={{ backgroundColor: "rgb(29 29 29 / 70%)", color: "white", position: "fixed", fontSize: "20px", bottom: "100px", left: "10px" }}>
+        <Tooltip onClick={() => navigate(-1)} style={{ backgroundColor: "rgb(29 29 29 / 70%)", color: "white", zIndex: 999, position: "fixed", fontSize: "20px", bottom: "100px", left: "10px" }}>
 
             <IconButton  >
                 < ArrowBackIcon />

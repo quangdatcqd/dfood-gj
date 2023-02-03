@@ -4,7 +4,18 @@
 .css-1t1j96h-MuiPaper-root-MuiDialog-paper{
   width: 600px !important;
 }
-
+#map{
+  position: relative;
+}
+.pickloc{
+      position: absolute;
+    left: calc(50% - 20px);
+    top: 220px;
+    clip-path: polygon(20% 65%, 0 0, 100% 0, 80% 65%, 0 0, 50% 100%, 100% 0);
+    background-color: red;
+    width: 40px;
+    height: 40px;
+}
  
 @media only screen and (max-width: 400px) {
   .box-select{

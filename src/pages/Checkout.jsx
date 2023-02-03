@@ -229,9 +229,13 @@ const Checkout = () => {
 
             {
                 <div id='map' style={{ height: "500px" }}>
+                    <div className='pickloc'>
+
+                    </div>
                     {/* <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7837.109077393735!2d106.64111775488112!3d10.844808056338975!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1672314641236!5m2!1svi!2s" width="100%" height="450"></iframe> */}
                     {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d979.6453706417853!2d106.64111775488112!3d10.844808056338975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x8ff38acf58184f72!2zMTDCsDUwJzM1LjkiTiAxMDbCsDM4JzIyLjMiRQ!5e0!3m2!1svi!2s!4v1672406199421!5m2!1svi!2s" width="600" height="450" loading="lazy"  ></iframe> */}
                     <iframe src={source_map} width="100%" height="450"  ></iframe>
+                    {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d489.81950773459255!2d106.64838509734601!3d10.845245826660424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752999c1a72537%3A0x45c1b27d9f32a71c!2zVGh14buRYyBWaXBtYXggUlggY2jDrW5oIGjDo25n!5e0!3m2!1svi!2s!4v1675245566875!5m2!1svi!2s" width="100%" height="500" ></iframe> */}
                 </div>
             }
 
