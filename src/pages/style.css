@@ -9,8 +9,8 @@
 }
 .pickloc{
       position: absolute;
-    left: calc(50% - 20px);
-    top: 220px;
+    left: calc(50% - 15px);
+    top: 180px;
     clip-path: polygon(20% 65%, 0 0, 100% 0, 80% 65%, 0 0, 50% 100%, 100% 0);
     background-color: red;
     width: 40px;
