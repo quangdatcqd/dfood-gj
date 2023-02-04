@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useState } from "react";
+import { React, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { EffectCoverflow, Pagination } from "swiper";
@@ -6,41 +6,52 @@ import "../components/style.css";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import Cartpreview from "./Cartpreview";
+import { CartContext } from '../Contexts/CartContext';
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+
 const SwapeRestaurant = (props) => {
+    const { toggleSelectDishes, setToggleSelectDishes, selectedRes, setSelectedRes } = useContext(CartContext);
     const { dataRestaurant } = props;
-    // const [cadsRestaurant, setCadsRestaurant] = useState(dataRestaurant);
 
+    const handleSelect = (id) => {
+        setToggleSelectDishes(true);
+        setSelectedRes(id);
+        console.log(id)
+    }
     return (
-        <Swiper
-            effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            slidesPerView={"auto"}
-            coverflowEffect={{
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-            }}
-            pagination={true}
-            modules={[EffectCoverflow, Pagination]}
-            className="mySwiper"
-            style={{ padding: "30px 10px " }}
-        >
+        <div>
+            <h3>{dataRestaurant?.content?.title} </h3>
+            <h6> {dataRestaurant?.content?.sub_title}</h6>
+            <Swiper
+                effect={"coverflow"}
+                // grabCursor={true}
+                // centeredSlides={true}
+                slidesPerView={"auto"}
+                coverflowEffect={{
+                    rotate: 0,
+                    stretch: 0,
+                    depth: 0,
+                    modifier: 0,
+                    slideShadows: false,
+                }}
+                // pagination={true}
+                modules={[EffectCoverflow, Pagination]}
+                className="swiper-restaurant"
+                style={{ padding: "  10px " }}
+            >
 
-            {
-                dataRestaurant?.content?.actions?.map((item, key) => {
-                    return (
-                        <SwiperSlide key={key}>
-                            <NavLink
-                                style={{ textDecoration: "none" }}
-                                to={"/selectdishes/" + item?.restaurant_id}
-                            >
-                                <Card sx={{ maxWidth: 345 }}>
+                {
+                    dataRestaurant?.content?.actions?.map((item, key) => {
+                        return (
+                            <SwiperSlide key={key} style={{ paddingRight: "10px  " }}>
+                                {/* <NavLink
+                                    style={{ textDecoration: "none" }}
+                                    to={"/selectdishes/" + item?.restaurant_id}
+                                > */}
+
+                                <Card sx={{ maxWidth: 345 }}
+                                    onClick={() => handleSelect(item?.restaurant_id)}
+                                >
                                     <CardMedia
                                         sx={{ height: 140 }}
                                         image={item?.image_url}
@@ -57,22 +68,24 @@ const SwapeRestaurant = (props) => {
                                     </CardContent>
 
                                 </Card>
-                            </NavLink>
-                        </SwiperSlide>
-                    )
-                })
-            }
-            {
-                dataRestaurant?.content?.items?.map((item, key) => {
-                    // { console.log(item?.description?.id, item?.id) }
-                    return (
-                        <SwiperSlide key={key}>
-                            <NavLink
-                                style={{ textDecoration: "none" }}
+                                {/* </NavLink> */}
+                            </SwiperSlide>
+                        )
+                    })
+                }
+                {
+                    dataRestaurant?.content?.items?.map((item, key) => {
+                        // { console.log(item?.description?.id, item?.id) }
+                        return (
+                            <SwiperSlide key={key}>
+                                {/* <NavLink
+                                    style={{ textDecoration: "none" }}
 
-                                to={"/selectdishes/" + item?.id}
-                            >
-                                <Card sx={{ maxWidth: 345 }}>
+                                    to={"/selectdishes/" + item?.id}
+                                > */}
+                                <Card sx={{ maxWidth: 345 }}
+                                    onClick={() => handleSelect(item?.id)}
+                                >
                                     <CardMedia
                                         sx={{ height: 140 }}
                                         image={item?.image_url}
@@ -88,15 +101,16 @@ const SwapeRestaurant = (props) => {
                                     </CardContent>
 
                                 </Card>
-                            </NavLink>
-                        </SwiperSlide>
-                    )
-                })
-            }
+                                {/* </NavLink> */}
+                            </SwiperSlide>
+                        )
+                    })
+                }
 
 
 
-        </Swiper>
+            </Swiper>
+        </div>
     );
 };
 export default SwapeRestaurant;

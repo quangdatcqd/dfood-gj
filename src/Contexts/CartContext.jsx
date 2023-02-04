@@ -10,11 +10,11 @@ function CartProvider({ children }) {
     const [quantity, setQuantity] = useState();
     const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [locData, setLocData] = useState([]);
-
+    const [toggleSelectDishes, setToggleSelectDishes] = useState(false);
     const [discountPrice, setDiscountPrice] = useState(0);
+    const [selectedRes, setSelectedRes] = useState("");
 
     var customerData;
-    var merchantDatas;
     const handleVariant = (newVariant) => {
         setVariants(newVariant);
 
@@ -200,7 +200,12 @@ function CartProvider({ children }) {
         merchantData,
         locData,
         setLocData,
-        resetCart
+        resetCart,
+        toggleSelectDishes,
+        setToggleSelectDishes,
+        selectedRes,
+        setSelectedRes
+
     }
 
     return (

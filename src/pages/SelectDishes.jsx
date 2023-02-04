@@ -1,6 +1,5 @@
 import { Avatar, AvatarGroup, Box, Card, CardContent, CardMedia, Divider, Paper, Stack, Typography, } from '@mui/material';
 import { React, useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
 import BackBtn from '../components/BackBtn';
@@ -12,13 +11,15 @@ import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
 import LazyLoad from 'react-lazyload'
 const SelectDishes = () => {
-    const { selectedItems, setMerchantData } = useContext(CartContext);
-    const params = useParams();
+
+    const { selectedItems, setMerchantData, toggleSelectDishes, setToggleSelectDishes, selectedRes, setSelectedRes } = useContext(CartContext);
+
+
     const [dataRestaurant, setDataRestaurant] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
-            var data = await GojekAPI.getRestaurant(params.id);
+            var data = await GojekAPI.getRestaurant(selectedRes);
             setDataRestaurant(data);
             setMerchantData(data)
             localStorage.setItem("merchantLoc", JSON.stringify(data))
@@ -29,7 +30,7 @@ const SelectDishes = () => {
 
     return (
 
-        <div className='bg-light w-100'   >
+        <div className='bg-light w-100  '   >
             <Container>
                 <Cartpreview />
                 <BackBtn to={"/restaurant"} />

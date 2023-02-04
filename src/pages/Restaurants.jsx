@@ -2,72 +2,63 @@ import { TextField, Box, Container } from '@mui/material';
 import { debounce } from 'debounce';
 import { React, useCallback, useEffect, useState, useContext } from 'react';
 
-import { useParams, useLocation } from 'react-router-dom';
 import SwapeRestaurant from '../components/SwapeRestaurant';
 import GojekAPI from '../API/GojekAPI';
 import './style.css'
 import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
+import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
+import SelectDishes from './SelectDishes';
+import ModalBox from '../components/ModalBox';
 
 function Restaurants(props) {
 
-    const { setLocData, resetCart } = useContext(CartContext);
+    const { toggleSelectDishes, setToggleSelectDishes, resetCart } = useContext(CartContext);
     // const { dataAddress } = props;
-    let location = useLocation();
-    const params = useParams();
 
     const [dataRestaurant, setDataRestaurant] = useState("");
+    const [dataSearchSuggestions, setDataSearchSuggestions] = useState("");
 
-    const [customerLoc, setCustomerLoc] = useState("");
+
+    var indexBrandOutlet = dataRestaurant?.cards?.findIndex((item) => item?.card_template === "BRAND_OUTLETS");
+    var indexBrandOutletV1 = dataRestaurant?.cards?.findIndex((item) => item?.card_template === "GOFOOD_QUERY_UNDERSTANDING_BRAND");
+    var indexTouchToSearch = dataRestaurant?.cards?.findIndex((item) => item?.card_template === "GOFOOD_QUERY_UNDERSTANDING_DISH");
+    var indexListMerchants = dataRestaurant?.cards?.findIndex((item) => item?.card_template === "GOFOOD_QUERY_UNDERSTANDING_RESTAURANT");
+    var indexSearchSuggestions = dataSearchSuggestions?.cards?.findIndex((element) => element?.card_template === "TOP_SEARCHES");
+    var indexSearchExolore = dataSearchSuggestions?.cards?.findIndex((element) => element?.card_template === "TOP_CATEGORIES");
 
 
-    let dataLoc = [];
 
-    const fetchAddress = async () => {
-        var data = await GojekAPI.setAddress(location?.state?.placeid);
+    useEffect(() => {
+        const fetchSearchSuggestions = async () => {
+            var data = await GojekAPI.searchSuggestions();
+            setDataSearchSuggestions(data?.data);
 
-        var cusLoc = data?.data.latitude + "," + data?.data.longitude;
+        }
+        fetchSearchSuggestions();
 
-        localStorage.setItem("customerLoc", JSON.stringify(
+    }, []);
 
-            {
-                address: location?.state?.address,
-                name: location?.state?.name,
-                placeid: location?.state?.placeid,
-                latitude: data?.data?.latitude,
-                longitude: data?.data?.longitude,
+    const fetchRestaurant = async (keyword) => {
 
-            }
-        ))
-        setCustomerLoc(cusLoc);
-    }
-
-    const fetchRestaurant = async (keyword, customerLoc) => {
-
-        var data = await GojekAPI.searchRestaurant(keyword, customerLoc);
-        setDataRestaurant(data);
+        var data = await GojekAPI.searchRestaurant(keyword);
+        setDataRestaurant(data?.data);
         resetCart();
 
     }
-
-    useEffect(() => {
-        fetchAddress();
-        console.log(location)
-    }, []);
-
-    const debounceDropDown = useCallback(debounce((nextValue, customerLoc) => fetchRestaurant(nextValue, customerLoc), 500), [])
+    const debounceDropDown = useCallback(debounce((nextValue) => fetchRestaurant(nextValue), 500), [])
 
     const handleChangeKeyword = (e) => {
         // if (e.target.value != "")
-        debounceDropDown(e.target.value, customerLoc);
+        debounceDropDown(e.target.value);
     }
 
 
 
 
     return (
-        <div className='bg-light w-100'   >
+        <div className='bg-light w-100  mt-2'   >
             <BackBtn />
             <Cartpreview />
             <Container >
@@ -77,12 +68,13 @@ function Restaurants(props) {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+
                     }}
                 >
                     <TextField
                         fullWidth
                         id="address"
-                        label="Nhập nhà hàng"
+                        label="Bạn muốn ăn gì nào?"
                         name="address"
                         // value={keyword}
                         // autoComplete="address"
@@ -93,44 +85,146 @@ function Restaurants(props) {
                 Clear
             </Button> */}
 
-                <div className='query-result'>
-                    <h3>{(dataRestaurant?.data?.cards) ? dataRestaurant?.data?.cards[0]?.content?.title : ""}</h3>
-                    <h3>{dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[0]?.content?.texts?.original : ""}</h3>
-                    <h6>{dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[0]?.content?.sub_title : ""}</h6>
-                    {/* {console.log(dataRestaurant?.data?.cards[0]?.content?.title)} */}
-                    < SwapeRestaurant dataRestaurant={dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[0] : []} />
-
-                    <h3>{(dataRestaurant?.data?.cards) && dataRestaurant?.data?.cards[3]?.content?.title}</h3>
-                    {/* {console.log(dataRestaurant?.data?.cards[0]?.content?.title)} */}
-                    < SwapeRestaurant dataRestaurant={dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[3] : []} />
-
-
-                    {/* <h3>{(dataRestaurant?.data?.cards) ? dataRestaurant?.data?.cards[7]?.content?.title : ""}</h3> */}
-                    {/* {console.log(dataRestaurant?.data?.cards[0]?.content?.title)} */}
-                    {/* < SwapeRestaurant dataRestaurant={dataRestaurant?.data?.cards ? dataRestaurant?.data?.cards[7] : []} /> */}
-                    {
-                        // dataRestaurant?.data?.cards?.map((item, key) => { 
-                        //     return (
-
-                        //         <div>
-                        //             <h3>{item?.content?.title}</h3>
-                        //             < SwapeRestaurant dataRestaurant={dataRestaurant} />
-                        //         </div>
-                        //     )
-                        // })
-                    }
-
-
-
-                </div>
+                {
+                    dataRestaurant?.cards !== null &&
+                    <div className='query-result'>
+                        {
+                            indexBrandOutlet >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutlet]} setToggleSelectDishes={setToggleSelectDishes} />
+                        }
+                        {
+                            // indexBrandOutletV1 >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutletV1]} />
+                        }
+                        {
+                            indexTouchToSearch >= 0 && < TouchToSearch touchtosearch={dataRestaurant?.cards[indexTouchToSearch]} />
+                        }
+                        {
+                            indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants]} />
+                        }
+                        {
+                            indexSearchSuggestions >= 0 && <SearchSuggestions searchsuggestions={dataSearchSuggestions?.cards[indexSearchSuggestions]} />
+                        }
+                        {
+                            indexSearchExolore >= 0 && <ExploreItems exploreitems={dataSearchSuggestions?.cards[indexSearchExolore]} />
+                        }
+                    </div>
+                }
+                <ModalBox open={toggleSelectDishes} setOpen={setToggleSelectDishes} title={"Lựa món"} >
+                    <SelectDishes />
+                </ModalBox>
             </Container>
         </div >
     );
 };
 
 
+const SearchSuggestions = (props) => {
+    const { searchsuggestions } = props;
+    return (
+        <div>
+
+            <h4 style={{ fontWeight: "bolder" }} >{searchsuggestions?.content?.title} </h4>
+            <div style={{ width: "100%", display: "flex", flexWrap: "wrap", }}>
+                {
+                    searchsuggestions?.content?.terms?.map((item, key) => {
+                        return (
+                            <div key={key} style={{
+                                fontSize: "14pt",
+                                fontWeight: "bold",
+                                borderRadius: "20px",
+                                padding: "4px 15px",
+                                border: "#e2e2e2 solid 2px",
+                                color: "green",
+                                margin: "5px 10px 5px 0px"
+                            }}>
+                                {item?.name}
+                            </div>
+                        )
+                    })
+                }
+            </div>
+            <hr />
+        </div>
+    )
+}
+
+const ExploreItems = (props) => {
+    const { exploreitems } = props;
+    return (
+        <div>
+            <h4 style={{ fontWeight: "bolder" }} >{exploreitems?.content?.title} </h4>
+            <div style={{ width: "100%", display: "flex", flexWrap: "wrap" }}>
+                {
+                    exploreitems?.content?.categories?.map((item, key) => {
+                        return (
+                            <div key={key} style={{ width: "33.33%", overflow: "hidden", padding: "5px", }}>
+                                <img width="100%" height={"160px"} style={{ objectFit: "cover", borderRadius: "20px" }} src={item?.image_url} alt="" />
+                                <p style={{ fontSize: "14pt", fontWeight: "bold", padding: "10px", textAlign: "center", margin: "0px" }}>{item?.name} </p>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        </div>
+    )
+}
 
 
 
 
+const TouchToSearch = (props) => {
+    const { touchtosearch } = props;
+
+    return (
+        <div>
+            <h4 style={{ fontWeight: "bolder" }} >{touchtosearch?.content?.title} </h4>
+            <div
+                style={{
+                    padding: "10px 15px ",
+                    boxShadow: " #c8c8c8 0px 0px 6px 0px ",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                    fontSize: "15pt",
+                    fontWeight: "bold",
+                    color: "green",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+
+
+                }}
+            >
+                <div>
+                    <img width={"30px"} style={{ marginRight: "10px" }} src={touchtosearch?.content?.primary_pill?.secondary_icon_url} alt="" />
+
+                    <span>{touchtosearch?.content?.primary_pill?.title}</span>
+                </div>
+                <img width={"50px"} style={{ borderRadius: "10px" }} src={touchtosearch?.content?.primary_pill?.primary_icon_url} alt="" />
+
+            </div>
+            <div style={{ width: "100%", display: "flex", flexWrap: "wrap", }}>
+                {
+                    touchtosearch?.content?.terms?.map((item, key) => {
+                        return (
+                            <div key={key} style={{
+                                fontSize: "14pt",
+                                fontWeight: "bold",
+                                borderRadius: "20px",
+                                padding: "4px 15px",
+                                border: "#e2e2e2 solid 2px",
+                                color: "green",
+                                margin: "5px 10px 5px 0px"
+                            }}>
+                                {item?.name}
+                            </div>
+                        )
+                    })
+                }
+            </div>
+
+
+
+        </div>
+
+    )
+}
 export default Restaurants;

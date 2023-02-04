@@ -7,7 +7,7 @@ body {
 
 body {
   background: #eee;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
   color: #000;
   margin: 0;
@@ -38,4 +38,29 @@ body {
 
 .css-1t1j96h-MuiPaper-root-MuiDialog-paper{
   margin: 0px !important;
+}
+ .swipe-cate .swiper-slide {
+ 
+  width: 120px !important; 
+  text-align: center; 
+  height: 300px; 
+  font-size: 10px;
+}
+.swipe-banner .swiper-slide {
+  /* background-position: center;
+  background-size: cover; */
+  width: 100% !important; 
+}
+.swipe-cateV1 .swiper-slide {
+  /* background-position: center;
+  background-size: cover; */
+  width:130px !important; 
+  text-align: center;
+  align-items: center;
+}
+
+.swipe-cateV2 .swiper-slide {
+  /* background-position: center;
+  background-size: cover; */
+  width:200px !important;  
 }

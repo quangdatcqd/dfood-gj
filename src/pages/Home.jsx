@@ -1,152 +1,92 @@
-import { React, useCallback, useEffect, useState } from 'react';
-import { Avatar, TextField, Grid, List, ListItemButton, Container, Typography, ListItemText, Divider, Box, } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { React, useState, useEffect } from 'react';
+import { Box, Container, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import GojekAPI from '../API/GojekAPI';
-import { debounce } from "debounce";
-import { NavLink } from 'react-router-dom';
+
 import Cartpreview from '../components/Cartpreview';
-import { useSnackbar } from 'notistack';
+import Restaurants from '../pages/Restaurants';
+import ModalBox from '../components/ModalBox';
+import ChoseAddress from '../components/ChoseAddress';
+import SwipeBanner from '../components/SwipeBanner';
+import GojekAPI from '../API/GojekAPI';
+import SwipeCategories from '../components/SwipeCategories';
+import SwipeCategoriesV1 from '../components/SwipeCategoriesV1';
+import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
+import ListItems from '../components/ListItems';
 
 
 export default function Home() {
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const [addressOptions, setAddressOptions] = useState([]);
-    const [keyword, setKeyword] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
+    const [toggleLocationChange, setToggleLocationChange] = useState(false);
 
-    const fetchAddressOptions = async (key) => {
-        var data = await GojekAPI.searchAddress(key);
-        setAddressOptions(data?.results);
-    }
+    const [toggleSearch, setToggleSearch] = useState(false);
+    const [dataHomeCards, setDataHomeCards] = useState();
+    const indexBanner = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 11);
+    const indexCategories = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 13);
+    const indexCategoriesV1 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 42);
+    const indexCategoriesV2 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 47);
+    const indexListRecomen = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 48);
+
+
     useEffect(() => {
-        debounceDropDown(keyword);
-
-    }, [keyword]);
-
-    const fetchToken = async () => {
-        setLoading(true);
-        var data = await GojekAPI.getToken();
-        if (data?.access_token) {
-            localStorage.setItem("G-Token", data?.access_token);
-            setLoading(false)
-            enqueueSnackbar("Đã lấy được token", { variant: 'success' })
-        } else {
-            enqueueSnackbar(data, { variant: 'error' })
+        const fetchHomeCards = async () => {
+            var data = await GojekAPI.cardsGofoodV2();
+            setDataHomeCards(data?.data);
         }
-        setLoading(false)
-    }
+        fetchHomeCards();
+    }, []);
 
-
-
-    const handleChangeAddress = (event) => {
-        setKeyword(event.target.value);
-    };
-
-    const debounceDropDown = useCallback(debounce((nextValue) => fetchAddressOptions(nextValue), 500), [])
-
-
-    const handleClear = () => {
-        setKeyword("");
-    }
 
     return (
-        <div className='bg-light' style={{ height: "1500px" }}>
-            <Cartpreview />
-            <Container component="main" maxWidth="xs">
+        <div style={{ backgroundColor: "white" }}>
 
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
+            <Box onClick={() => setToggleLocationChange(true)} style={{ width: "100%", textAlign: "center", padding: "6px", backgroundColor: "rgb(243 243 243)", marginBottom: "10px" }} >
+                <div style={{ fontSize: "bold", color: "red", marginBottom: "-5px" }} >Vị trí hiện tại <ExpandMoreIcon /></div>
+                <div style={{ fontSize: "16px", fontWeight: "bold" }}>  {currentLoc?.name} </div>
+            </Box>
+            <ModalBox open={toggleLocationChange} setOpen={setToggleLocationChange} title={"Thay đổi địa chỉ"} >
+                <ChoseAddress setCurrentLoc={setCurrentLoc} setOpen={setToggleLocationChange} />
+            </ModalBox>
+            <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món"} >
+                <Restaurants />
+            </ModalBox>
+
+
+            <Container >
+                <div
+                    style={{
+                        width: "100%",
+                        padding: "3px 10px",
+                        border: "solid 2px #e0e0e0",
+                        borderRadius: "20px",
+                        outline: "none",
+                        fontSize: "14pt",
+                        textAlign: "center",
+                        color: "gray"
+
                     }}
-                >
 
-                    <LoadingButton
-                        size="small"
-                        onClick={fetchToken}
-                        loading={loading}
-                        loadingIndicator="Đợi.."
-                        variant="contained"
-                    >
-                        GETTOKEN
-                    </LoadingButton>
-                    <Avatar sx={{ m: 1, bgcolor: 'success.dark' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Nhập Địa Chỉ
-                    </Typography>
-                    <Grid container spacing={2}>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="address"
-                                label="Nhập thông tin Đ/C"
-                                name="address"
-                                value={keyword}
-                                // autoComplete="address"
-                                onChange={handleChangeAddress}
-                            />
-
-                            <List sx={{ width: '100%', bgcolor: 'background.paper' }} className="mr-0 mt-2 rounded">
+                    // value={keyword}
+                    // autoComplete="address"
+                    onClick={() => setToggleSearch(true)}
+                >Bạn muốn ăn gì nào?</div>
 
 
 
-                                {
-                                    addressOptions?.map((item, key) => {
-                                        return (
-                                            <div key={key}>
-                                                <NavLink
-                                                    style={{ textDecoration: 'none', color: "purple" }}
-                                                    to={{
-                                                        pathname: "/restaurant",
+                {indexBanner >= 0 && (<SwipeBanner banners={dataHomeCards?.cards[indexBanner]} />)}
+                {indexCategories >= 0 && (<SwipeCategories banners={dataHomeCards?.cards[indexCategories]} />)}
 
-                                                    }}
-                                                    state={item}
-                                                // onClick={() => localStorage.setItem("customerLoc", JSON.stringify(item))}
-
-                                                >
-                                                    <ListItemButton
-                                                    >
-                                                        <ListItemText
-                                                            primary={item?.address}
-                                                            secondary={
-                                                                <Typography
-                                                                    sx={{ display: 'inline' }}
-                                                                    component="span"
-                                                                    variant="body2"
-                                                                    color="text.primary"
-                                                                > {item?.name} </Typography>
-                                                            }
-                                                        />
-                                                    </ListItemButton>
-                                                </NavLink>
-                                                <Divider variant="inset" className='m-0' component="li" />
-                                            </div>
-                                        )
-                                    })
-                                }
-
-
-                            </List>
-                        </Grid>
-
-                    </Grid>
+                {indexCategoriesV1 >= 0 && (<SwipeCategoriesV1 banners={dataHomeCards?.cards[indexCategoriesV1]} />)}
+                {indexCategoriesV2 >= 0 && (<SwipeCategoriesV2 products={dataHomeCards?.cards[indexCategoriesV2]} />)}
+                {indexListRecomen >= 0 && (<ListItems listmerchants={dataHomeCards?.cards[indexListRecomen]} />)}
 
 
 
 
+                <Cartpreview />
 
-                </Box>
 
-            </Container>
-
-        </div >
+            </Container >
+        </div>
     );
 }

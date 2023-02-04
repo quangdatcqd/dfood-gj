@@ -18,13 +18,15 @@ const GojekAPI = {
             return ex;
         }
     },
-    searchRestaurant(keyword, picked_loc) {
+    searchRestaurant(keyword) {
         try {
+            var location = JSON.parse(localStorage.getItem("customerLoc"));
+            var cusLoc = location?.latitude + "," + location?.longitude;
             const url = '/searchrestaurant';
             var payload = {
                 "G_Token": localStorage.getItem("G-Token"),
                 "keyword": keyword,
-                "picked_loc": picked_loc
+                "picked_loc": cusLoc
             }
             // var headers = {
             //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
@@ -56,7 +58,6 @@ const GojekAPI = {
             const url = '/setaddress';
             var payload = {
                 "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
                 "idlocation": id
             }
             // var headers = {
@@ -231,6 +232,43 @@ const GojekAPI = {
             var payload = {
                 "G_Token": localStorage.getItem("G-Token"),
                 "idOrder": localStorage.getItem("idOrder")
+
+            }
+            // var headers = {
+            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
+            // }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+
+
+    cardsGofoodV2() {
+        try {
+            const url = '/cardsgofoodv2';
+            var payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+            }
+            // var headers = {
+            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
+            // }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+
+    searchSuggestions() {
+        try {
+            const url = '/searchsuggestions';
+            var location = JSON.parse(localStorage.getItem("customerLoc"));
+            var cusLoc = location?.latitude + "," + location?.longitude;
+            var payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "picked_loc": cusLoc
 
             }
             // var headers = {
