@@ -5,6 +5,7 @@ import { Avatar, TextField, Grid, List, ListItemButton, Typography, ListItemText
 import { debounce } from "debounce";
 import { NavLink } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
+import InputBox from './InputBox';
 const ChoseAddress = (props) => {
     const { setOpen, setCurrentLoc } = props;
 
@@ -47,10 +48,11 @@ const ChoseAddress = (props) => {
         }
         localStorage.setItem("customerLoc", JSON.stringify(locationData))
         setCurrentLoc(locationData);
-        setOpen(false);
+        // setOpen(false);
+        window.location.reload(true);
     }
     return (
-        <Box style={{ padding: "10px", display: "flex", flexDirection: "column", justifyItems: "center", alignItems: "center" }} >
+        <Box style={{ padding: "20px 10px", display: "flex", flexDirection: "column", justifyItems: "center", alignItems: "center" }} >
 
             {/* <Typography component="h1" variant="h5">
                 Nhập Địa Chỉ
@@ -58,14 +60,15 @@ const ChoseAddress = (props) => {
             <Grid container spacing={2}>
 
                 <Grid item xs={12}>
-                    <TextField
-                        required
-                        fullWidth
-                        id="address"
-                        label="Nhập thông tin Đ/C"
-                        name="address"
+                    <p style={{
+                        padding: "5px 10px",
+                        marginBottom: "2px",
+                        fontWeight: "bold",
+                        fontSize: "13pt"
+                    }}>Nhập địa chỉ của bạn</p>
+                    <InputBox
                         value={keyword}
-                        // autoComplete="address"
+                        placeholder={"Nhập địa chỉ  "}
                         onChange={handleChangeAddress}
                     />
 

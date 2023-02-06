@@ -9,12 +9,11 @@ import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
 import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
-import SelectDishes from './SelectDishes';
-import ModalBox from '../components/ModalBox';
+
 
 function Restaurants(props) {
 
-    const { toggleSelectDishes, setToggleSelectDishes, resetCart } = useContext(CartContext);
+    const { toggleSelectDishes, setToggleSelectDishes } = useContext(CartContext);
     // const { dataAddress } = props;
 
     const [dataRestaurant, setDataRestaurant] = useState("");
@@ -44,7 +43,7 @@ function Restaurants(props) {
 
         var data = await GojekAPI.searchRestaurant(keyword);
         setDataRestaurant(data?.data);
-        resetCart();
+
 
     }
     const debounceDropDown = useCallback(debounce((nextValue) => fetchRestaurant(nextValue), 500), [])
@@ -59,7 +58,7 @@ function Restaurants(props) {
 
     return (
         <div className='bg-light w-100  mt-2'   >
-            <BackBtn />
+            {/* <BackBtn /> */}
             <Cartpreview />
             <Container >
                 < Box
@@ -71,13 +70,26 @@ function Restaurants(props) {
 
                     }}
                 >
-                    <TextField
-                        fullWidth
+                    <input
                         id="address"
-                        label="Bạn muốn ăn gì nào?"
+
                         name="address"
                         // value={keyword}
+                        placeholder='Bạn muốn ăn gì nào?'
                         // autoComplete="address"
+                        style={{
+                            width: "100%",
+                            padding: "8px 30px",
+                            border: "none",
+                            borderRadius: "20px",
+                            outline: "none",
+                            fontSize: "14pt",
+                            textAlign: "left",
+                            color: "gray",
+                            fontWeight: "bold",
+                            boxShadow: "0px 0px 5px 5px #e9e9e9"
+
+                        }}
                         onChange={handleChangeKeyword}
                     />
                 </Box >
@@ -108,9 +120,7 @@ function Restaurants(props) {
                         }
                     </div>
                 }
-                <ModalBox open={toggleSelectDishes} setOpen={setToggleSelectDishes} title={"Lựa món"} >
-                    <SelectDishes />
-                </ModalBox>
+
             </Container>
         </div >
     );

@@ -10,7 +10,6 @@ const SwipeBanner = (props) => {
 
     return (
         <div>
-            <hr />
 
             <Swiper
                 effect={"coverflow"}
@@ -26,7 +25,7 @@ const SwipeBanner = (props) => {
                 pagination={true}
                 modules={[EffectCoverflow, Pagination]}
                 className="mySwiper swipe-banner"
-                style={{ padding: " 10px 0px " }}
+                style={{ padding: " 10px 0px ", marginTop: "10px" }}
             >
 
                 {

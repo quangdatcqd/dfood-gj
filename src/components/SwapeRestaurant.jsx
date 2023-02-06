@@ -16,7 +16,7 @@ const SwapeRestaurant = (props) => {
     const handleSelect = (id) => {
         setToggleSelectDishes(true);
         setSelectedRes(id);
-        console.log(id)
+
     }
     return (
         <div>

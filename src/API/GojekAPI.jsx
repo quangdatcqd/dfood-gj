@@ -248,8 +248,11 @@ const GojekAPI = {
     cardsGofoodV2() {
         try {
             const url = '/cardsgofoodv2';
+            var location = JSON.parse(localStorage.getItem("customerLoc"));
+            var cusLoc = location?.latitude + "," + location?.longitude;
             var payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "picked_loc": cusLoc
             }
             // var headers = {
             //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")

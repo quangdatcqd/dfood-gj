@@ -11,6 +11,7 @@ function CartProvider({ children }) {
     const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [locData, setLocData] = useState([]);
     const [toggleSelectDishes, setToggleSelectDishes] = useState(false);
+    const [toggleCheckout, setToggleCheckout] = useState(false);
     const [discountPrice, setDiscountPrice] = useState(0);
     const [selectedRes, setSelectedRes] = useState("");
 
@@ -19,22 +20,24 @@ function CartProvider({ children }) {
         setVariants(newVariant);
 
     }
-    const handleSelectItem = (newItem) => {
+    const handleSelectItem = (newItem, quantity = -1) => {
 
         if (newItem?.quantity <= 0) return "";
         var index = getIndex(newItem?.itemId);
-        //    var  check = localStorage.getItem("payload");
-        // if (check ? JSON.parse(localStorage.getItem("payload"))?.restaurant_uuid != merchantData?.restaurant?.id) {
 
 
-        //     return "";
-        // } 
-
-        if (index >= 0 && (selectedItems[index]?.variants?.length <= 0 && variants?.length <= 0) || (selectedItems[index]?.variants === variants)) {
+        if (index >= 0 && ((selectedItems[index]?.variants?.length <= 0 && variants?.length <= 0) || (selectedItems[index]?.variants === variants) || quantity > 0)) {
 
             const newArray = selectedItems.map((item, i) => {
                 if (index === i) {
-                    return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
+
+                    if (quantity > 0)
+                        return {
+                            ...item, quantity: quantity
+                        }
+                    else
+                        return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
+
                 } else {
                     return item;
                 }
@@ -63,10 +66,32 @@ function CartProvider({ children }) {
         handlePayload();
     }
 
+    const handleUpdateItem = (newItem, index) => {
+
+        if (index >= 0) {
+
+            const newArray = selectedItems.map((item, i) => {
+                if (index === i) {
+                    return {
+                        ...item,
+                        quantity: newItem?.quantity,
+                        variants: variants,
+                    }
+                } else {
+                    return item;
+                }
+            });
+
+            setSelectedItems(newArray)
+            setVariants([]);
+        }
+
+        handlePayload();
+    }
+
     const handleDeleteItem = (data) => {
         var index = getIndex(data?.itemId);
         var carArr = selectedItems;
-
 
         if (index >= 0 && data?.quantity >= 1) {
             const newArray = selectedItems.map((item, i) => {
@@ -204,7 +229,10 @@ function CartProvider({ children }) {
         toggleSelectDishes,
         setToggleSelectDishes,
         selectedRes,
-        setSelectedRes
+        setSelectedRes,
+        toggleCheckout,
+        setToggleCheckout,
+        handleUpdateItem
 
     }
 

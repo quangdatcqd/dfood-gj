@@ -10,35 +10,6 @@ const OptionsMoreCheckbox = (props) => {
 
 
 
-
-
-
-
-
-    // var price = 0;
-    // var variants = [];
-    // var lists = [];
-    // document.querySelectorAll(".css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root > input").forEach((item, key) => {
-
-    //     if (item?.checked && item?.value !== undefined) {
-    //         var arr = item?.value?.split("|");
-    //         lists.push(arr[2]);
-
-    //         variants.push(JSON.parse(arr[0]));
-    //         if (arr[1] != undefined)
-    //             price += Number(arr[1]);
-    //     }
-    // })
-    // setListChecked(lists);
-
-    // contexts.handleVariant([
-    //     variants,
-    //     price
-    // ]);
-
-
-
-
     return (
 
         <Stack spacing={2}>

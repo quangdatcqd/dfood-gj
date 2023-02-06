@@ -1,4 +1,4 @@
-import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, Paper, Stack, TextareaAutosize, Typography, } from '@mui/material';
+import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, IconButton, Paper, Stack, TextareaAutosize, Typography, } from '@mui/material';
 import { React, useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
@@ -11,6 +11,10 @@ import { useSnackbar } from 'notistack';
 import { fomatCurrency } from '../common';
 import ChatIcon from '@mui/icons-material/Chat';
 import ChatBox from './ChatBox';
+import { Refresh } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import InputBox from '../components/InputBox';
+import SelectedItem from '../components/SelectedItem';
 
 const Checkout = () => {
     const { payload, selectedItems } = useContext(CartContext);
@@ -18,40 +22,76 @@ const Checkout = () => {
     const [dataCheckout, setDataCheckout] = useState();
     const [source_map, setSourceMap] = useState("");
     const [noteOrder, setNoteOrder] = useState("");
+
+    const [loading, setLoading] = useState(false);
+    const [loadingRefresh, setLoadingRefresh] = useState("false");
     const [toggleChat, setToggleChat] = useState(false);
 
     const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [customerData, setCustomerData] = useState(JSON.parse(localStorage.getItem("customerLoc")));
+    const [addressName, setAddressName] = useState(customerData?.name);
+
+
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     var id_oder = "";
+
+    const fetchData = async () => {
+        setLoadingRefresh("refresh-icon-ro");
+        var data = await GojekAPI.checkout(payload);
+
+
+        setDataCheckout(data);
+        if (data?.distance) {
+            enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: "1000" })
+        } else {
+            data?.errors?.map((item, key) => {
+                enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: "1000" })
+            })
+        }
+        var getVC = await GojekAPI.getVoucher();
+
+        (getVC?.data?.length >= 13) ? localStorage.setItem("idvoucher", getVC?.data[getVC?.data?.length - 1]?.id) : localStorage.setItem("idvoucher", "");
+        setLoadingRefresh("false")
+    }
     useEffect(() => {
         if (payload?.items?.length > 0) {
             localStorage.setItem("payload", JSON.stringify(payload));
             localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
         }
 
+    }, []); // 106.64904150454079!3d10.845362078042243
+    useEffect(() => {
 
-        const fetchData = async () => {
-            var data = await GojekAPI.checkout(payload);
-            setDataCheckout(data);
-            if (data?.distance) {
-                enqueueSnackbar("Lựa món ok.", { variant: 'success' })
-            } else {
-                data?.errors?.map((item, key) => {
-                    enqueueSnackbar(item?.message, { variant: 'warning' })
-                })
-            }
-            var getVC = await GojekAPI.getVoucher();
-            // console.log(getVC?.data)
-            (getVC?.data?.length >= 13) ? localStorage.setItem("idvoucher", getVC?.data[getVC?.data?.length - 1]?.id) : localStorage.setItem("idvoucher", "");
-
-        }
         fetchData();
 
+    }, [payload]);
+
+    const handleLogin = async () => {
 
 
-    }, []); // 106.64904150454079!3d10.845362078042243
+        setLoading(true);
+        var data = await GojekAPI.getToken();
+        if (data?.access_token) {
+            localStorage.setItem("G-Token", data?.access_token);
+            setLoading(false)
+            enqueueSnackbar("Đã lấy được token", { variant: 'success' });
+            handleSelectAddress();
+            fetchData();
 
+
+        } else {
+            enqueueSnackbar(data, { variant: 'error' })
+        }
+        setLoading(false)
+
+
+    }
+
+
+    const handleSelectAddress = async () => {
+        var data = await GojekAPI.setAddress(customerData?.placeid);
+
+    }
     const handleOrder = async () => {
 
         var idvoucher = localStorage.getItem("idvoucher");
@@ -64,7 +104,7 @@ const Checkout = () => {
                     "placeId": customerData?.placeid
                 },
                 "destinationLatLong": customerData?.latitude + "," + customerData?.longitude,
-                "destinationName": customerData?.name,
+                "destinationName": addressName,
                 "destinationNote": noteOrder,
                 "isGift": false,
                 "items": payload?.items,
@@ -93,7 +133,7 @@ const Checkout = () => {
         id_oder = dataOders?.orderNo;
         localStorage.setItem("idOrder", dataOders?.orderNo);
         enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
-        // console.log(dataPayload) 
+
     }
     const handleCancelOrder = async () => {
         var data = await GojekAPI.cancelOrder(id_oder);
@@ -113,103 +153,180 @@ const Checkout = () => {
 
     return (
 
-        <div className='bg-light w-100'   >
+        <div className='  w-100'   >
 
             <Container>
 
+                <div style={{
+                    width: "100%",
+                    paddingTop: "20px"
 
-                <BackBtn to={"/restaurant"} />
-                <Box>
+                }}>
+                    <p style={{
+                        fontWeight: "bold",
+                        fontSize: "11pt",
+                        marginBottom: "5px"
 
-
-                    <Stack spacing={2}>
-                        <Item >
-                            <AvatarGroup>
-
-
-                                <Box className={"w-100"}>
-                                    {/* <Typography gutterBottom variant="h5" align={"justify"} className={"w-100"} component="div"> Con Cặc </Typography> */}
-                                    <Typography gutterBottom variant="h5" align={"justify"} className={"w-100"} component="div">{merchantData?.restaurant?.name} </Typography>
-                                    <Typography gutterBottom variant="body1" align={"justify"} className={"w-100"} component="div">{merchantData?.restaurant?.address} </Typography>
-
-                                </Box>
-
-                                {/* <Avatar
-                                    alt="Remy Sharp"
-                                    src={dataRestaurant?.restaurant?.brand?.logo_url ? dataRestaurant?.restaurant?.brand?.logo_url : "/khay.JPG"}
-                                    sx={{ width: 56, height: 56 }}
-                                /> */}
-                            </AvatarGroup>
+                    }}> Địa điểm nhà hàng</p>
+                    <p style={{
+                        fontSize: "14pt",
+                        fontWeight: "bold"
+                    }}>
+                        {merchantData?.restaurant?.address}
+                    </p>
+                </div>
+                <hr />
+                <div style={{
+                    width: "100%",
 
 
-                        </Item>
-                    </Stack>
+                }}>
+                    <p style={{
+                        fontWeight: "bold",
+                        fontSize: "11pt",
+                        marginBottom: "5px"
+
+                    }}> Địa điểm giao hàng</p>
+
+                    <InputBox
+                        value={addressName}
+                        onChange={(e) => setAddressName(e.target.value)}
+                    />
+                    <p style={{
+                        fontWeight: "bold",
+                        fontSize: "11pt",
+                        margin: "20px 3px 5px 3px "
+
+                    }}> Ghi chú đơn hàng</p>
+                    <div style={{
+                        width: "100%",
+                        border: "none",
+                        borderRadius: "15px",
+                        outline: "none",
+                        fontSize: "14pt",
+                        textAlign: "left",
+                        boxShadow: "0px 0px 5px 5px #e9e9e9"
+
+                    }}>
+                        <TextareaAutosize onChange={(e) => setNoteOrder(e.target.value)} value={noteOrder} style={{ width: "100%", resize: "none", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px", fontSize: "13pt" }} />
+                    </div>
 
 
-                </Box>
+                </div>
+
                 {
                     payload?.items?.map((item, key) => {
-                        return (
-                            <Box key={key}>
-                                <Card sx={{ display: 'flex', }}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={{ width: 100 }}
-                                        image={item?.image ? item?.image : "/khay.JPG"}
-                                        alt="Live from space album cover"
-                                    />
-                                    <Box sx={{ display: 'flex', width: "100%", flexDirection: 'column' }}>
-                                        <CardContent sx={{ flex: '1 0 auto', padding: "6px 1px 0px 8px" }}>
-                                            <p style={{ fontSize: "16px", marginTop: "  0", marginBottom: "2px", fontWeight: "bold" }}>
-                                                {item?.itemName?.length <= 50 ? item?.itemName : (item?.itemName.substr(0, 50) + "...")}
-                                            </p>
-                                            <Typography component="div" style={{ overflow: "hidden" }} variant="body2">
-                                                {item?.description <= 60 ? item?.description : (item?.description !== undefined) ? (item?.description?.substr(0, 60) + "...") : ""}
-                                            </Typography>
-                                            <p style={{ fontSize: "16px", marginTop: "4px", marginBottom: "0", fontWeight: "bold" }}>
-                                                Giá :   {
-                                                    item?.price?.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
-                                            </p>
-                                        </CardContent>
-                                        <Box sx={{ position: 'relative', alignItems: 'center', pl: 1, pb: 1 }}>
-                                            <QuantityInput data={item} />
-                                        </Box>
-                                    </Box>
 
-                                </Card>
-                                <Divider variant="inset" sx={{ listStyle: "none" }} className='m-0 mt-1' component="li" />
-                            </Box>
+
+                        var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
+                        return (
+                            <div key={key} style={{
+
+                                paddingTop: "20px",
+
+                            }}>
+                                <p style={{
+                                    fontWeight: "bold",
+                                    fontSize: "14pt",
+                                    marginBottom: "3px"
+                                }}>{item?.itemName}</p>
+
+                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData?.items[index]} indexItem={index} />
+                            </div>
                         )
                     })
                 }
-                <div style={{ border: "1px solid #1976d2", padding: "10px", marginBottom: "10px", borderRadius: "10px", }}>
-                    <p style={{ margin: "0px", fontSize: "15pt" }}>Ghi chú đơn hàng.</p>
-                    <TextareaAutosize onChange={(e) => setNoteOrder(e.target.value)} value={noteOrder} style={{ width: "100%", resize: "none", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px", fontSize: "13pt" }} />
-                </div>
-                {
 
-                    dataCheckout?.delivery_options != undefined ?
-                        dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.price_line_items?.rows?.map((item, key) => {
-                            return (
-                                <div key={key}>
-                                    <p style={{ margin: "3px", fontSize: "12pt" }}> {item?.title}: {item?.final_value} <strike> {item?.original_value}</strike> </p>
-                                    {/* <p>Giảm giá: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount}</p>
+
+
+
+
+
+                <div
+                    style={{
+                        backgroundColor: "#fffdf0",
+                        borderRadius: "10px",
+                        border: "1px dotted #ffb8b8",
+                        padding: "8px 10px",
+                        marginTop: "20px"
+
+                    }}
+                >
+                    <p style={{
+                        fontWeight: "bold",
+                        fontSize: "14pt",
+                        margin: "2px 3px 10px 3px ",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+
+                    }}> Tóm tắt thanh toán
+                        <IconButton size="large" color="primary" aria-label="add to shopping cart"
+                            onClick={() => fetchData()}
+                        >
+                            <Refresh fontSize="inherit" className={loadingRefresh} />
+                        </IconButton>
+                    </p>
+
+                    {
+
+                        dataCheckout?.delivery_options != undefined ?
+                            dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.price_line_items?.rows?.map((item, key) => {
+                                return (
+                                    <div key={key}>
+                                        <p style={{ margin: "5px 3px", fontSize: "12pt", display: "flex", justifyContent: "space-between" }}> {item?.title}:<span> {item?.final_value}  <strike> {item?.original_value}</strike></span> </p>
+                                        {/* <p>Giảm giá: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount}</p>
                                 <p>Phí ship: {dataCheckout?.delivery_options[0]?.payment_options[0]?.delivery_fee}</p>
                                 <p>Thanh toán: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount}</p> */}
-                                </div>
-                            )
-                        })
+                                    </div>
+                                )
+                            })
 
-                        : ""
-                }
-                {dataCheckout?.delivery_options != undefined ? <p>Thanh toán :  {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount)} <strike> {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount)} </strike></p> : ""}
+                            : ""
+                    }
+                    {dataCheckout?.delivery_options != undefined ? <p style={{
+                        fontSize: "18px",
+                        fontWeight: "bold",
+                        borderTop: "1px dotted gray",
+                        paddingTop: "10px",
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                    }}>Tổng thanh toán :
+                        {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount)}
+                        <strike>
+                            {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount)}
+                        </strike>
+                    </p> : ""}
+
+
+                    <p className='text-success'>     {dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.text?.replace("{amount}", dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.amount)}</p>
+
+                </div>
+
 
 
                 {/* <p>Tổng đơn hàng: { } </p>
                 <p>Giảm giá: {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount}</p>
                 <p>Phí ship: {dataCheckout?.delivery_options[0]?.payment_options[0]?.delivery_fee}</p>*/}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    marginTop: "10px"
+                }}>
+                    <LoadingButton
+                        size="small"
+                        loading={loading}
+                        loadingIndicator="Đợi.."
+                        variant="contained"
+                        color='success'
+                        onClick={handleLogin}
+                    >
+                        ĐĂNG NHẬP
+                    </LoadingButton>
 
-                <Button onClick={handleOrder} variant="contained" style={{ marginTop: "10px" }} fullWidth={true} >Đặt ngay</Button>
+
+                    <Button onClick={handleOrder} variant="contained" color="secondary" style={{ marginTop: "10px" }}   >Đặt ngay</Button>
+                </div>
                 <div style={{ display: "flex", flexDirection: "row", margin: "20px", justifyContent: "space-around" }}>
 
                     <div onClick={() => setToggleChat(true)} style={{ padding: "10px", marginTop: "10px", backgroundColor: "#2783dd", width: "45px", cursor: "pointer", color: "white", borderRadius: "50px" }}>
@@ -223,7 +340,7 @@ const Checkout = () => {
                     </div>
                 </div>
 
-            </Container>
+            </Container >
 
             {toggleChat && <ChatBox toggleChat={toggleChat} setToggleChat={setToggleChat} />}
 
@@ -244,12 +361,6 @@ const Checkout = () => {
     );
 
 }
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+
 
 export default Checkout;
