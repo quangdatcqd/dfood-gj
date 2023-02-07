@@ -25,7 +25,7 @@ const SwipeBanner = (props) => {
                 pagination={true}
                 modules={[EffectCoverflow, Pagination]}
                 className="mySwiper swipe-banner"
-                style={{ padding: " 10px 0px ", marginTop: "10px" }}
+                style={{ padding: " 10px 0px ", marginTop: "10px", height: "200px" }}
             >
 
                 {
@@ -38,7 +38,7 @@ const SwipeBanner = (props) => {
                             > */}
                                 <Card sx={{}}>
                                     <CardMedia
-                                        sx={{ height: 140 }}
+                                        sx={{ height: 220 }}
                                         image={item?.image_url}
                                         title="green iguana"
                                     />

@@ -145,7 +145,7 @@ const Checkout = () => {
 
             var loca = data?.trackingDetails[0]?.data?.vehicle?.location?.snappedSegment[0]?.longitude + "!3d" + data?.trackingDetails[0]?.data?.vehicle?.location?.snappedSegment[0]?.latitude;
             setSourceMap('https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7837.109077393735!2d' + loca + '!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1672314641236!5m2!1svi!2s')
-            console.log(loca)
+
         }
     }
 
