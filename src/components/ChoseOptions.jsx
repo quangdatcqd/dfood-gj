@@ -70,11 +70,12 @@ const ChoseOptions = (props) => {
                     uuid: data?.id,
                     promoPrice: data?.promotion?.selling_price
                 }
+
             );
         } else {
 
             //indexItem > 0 hành động cập nhật món
-            contexts.handleUpdateItem(
+            contexts.handleSelectItem(
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
@@ -85,7 +86,9 @@ const ChoseOptions = (props) => {
                     uuid: data?.id,
                     promoPrice: data?.promotion?.selling_price
                 },
-                indexItem
+                indexItem,
+                2
+                // hành động cập nhật món và món kèm
             );
         }
         setToggleOption(false);

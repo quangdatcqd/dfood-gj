@@ -49,11 +49,11 @@ const SwapeRestaurant = (props) => {
                                     to={"/selectdishes/" + item?.restaurant_id}
                                 > */}
 
-                                <Card sx={{ maxWidth: 345 }}
+                                <Card sx={{}}
                                     onClick={() => handleSelect(item?.restaurant_id)}
                                 >
                                     <CardMedia
-                                        sx={{ height: 140 }}
+                                        sx={{ height: 180 }}
                                         image={item?.image_url}
                                         title="green iguana"
                                     />

@@ -3,14 +3,10 @@ import { React, useState, useContext, useEffect, memo } from 'react';
 
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
-import BackBtn from '../components/BackBtn';
-import QuantityInput from '../components/QuantityInput';
 import { Container } from '@mui/system';
 import Cartpreview from '../components/Cartpreview';
-import ChoseOptions from '../components/ChoseOptions';
 import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
-import LazyLoad from 'react-lazyload'
 import BoxBtnSelect from '../components/BoxBtnSelect';
 const SelectDishes = () => {
 

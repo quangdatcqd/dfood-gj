@@ -4,7 +4,7 @@ import { CartContext } from '../Contexts/CartContext';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 const BoxSelectedItems = (props) => {
-    const { setToggleEditItems, data, quantity, setQuantity, toggleEditItems, setToggleOption, setIndexItem } = props;
+    const { setToggleEditItems, data, quantity, setQuantity, toggleEditItems, setToggleOption } = props;
 
     const { selectedItems, handleVariant } = useContext(CartContext);
     var index = selectedItems?.findIndex((item) => item?.itemId === data?.shopping_item_id);
@@ -100,7 +100,7 @@ const BoxSelectedItems = (props) => {
                         className="box-select"
                         onClick={() => {
                             setToggleOption(true);
-                            setIndexItem(-1);
+
                             setQuantity(0);
                             handleVariant([]);
                         }}>

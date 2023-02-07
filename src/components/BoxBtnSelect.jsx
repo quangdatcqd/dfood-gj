@@ -33,37 +33,53 @@ const BoxBtnSelect = (props) => {
 
     const handleDelete = () => {
 
-        if (quantity <= 1) {
-            setQuantity(0);
-            contexts.handleDeleteItem(
-                {
-                    itemId: data?.shopping_item_id,
-                    itemName: data?.name,
-                    notes: "",
-                    price: data?.price,
-                    promoId: data?.promotion?.id,
-                    quantity: 0,
-                    uuid: data?.id,
-                    promoPrice: data?.promotion?.selling_price
-                }
-            );
-            setToggleEditItems(false)
-        }
-        else {
-            setQuantity(quantity - 1);
-            contexts.handleDeleteItem(
-                {
-                    itemId: data?.shopping_item_id,
-                    itemName: data?.name,
-                    notes: "",
-                    price: data?.price,
-                    promoId: data?.promotion?.id,
-                    quantity: quantity - 1,
-                    uuid: data?.id,
-                    promoPrice: data?.promotion?.selling_price
-                }
-            );
-        }
+        // if (quantity <= 1) {
+        //     setQuantity(0);
+        //     contexts.handleDeleteItem(
+        //         {
+        //             itemId: data?.shopping_item_id,
+        //             itemName: data?.name,
+        //             notes: "",
+        //             price: data?.price,
+        //             promoId: data?.promotion?.id,
+        //             quantity: 0,
+        //             uuid: data?.id,
+        //             promoPrice: data?.promotion?.selling_price
+        //         }
+        //     );
+        //     setToggleEditItems(false)
+        // }
+        // else {
+        //  
+        //     contexts.handleDeleteItem(
+        //         {
+        //             itemId: data?.shopping_item_id,
+        //             itemName: data?.name,
+        //             notes: "",
+        //             price: data?.price,
+        //             promoId: data?.promotion?.id,
+        //             quantity: quantity - 1,
+        //             uuid: data?.id,
+        //             promoPrice: data?.promotion?.selling_price
+        //         }
+        //     );
+        // }
+        contexts.handleSelectItem(
+            {
+                itemId: data?.shopping_item_id,
+                itemName: data?.name,
+                notes: "",
+                price: data?.price,
+                promoId: data?.promotion?.id,
+                quantity: quantity - 1,
+                uuid: data?.id,
+                promoPrice: data?.promotion?.selling_price
+            },
+            index
+            ,
+            1
+        );
+        setQuantity(quantity <= 0 ? 0 : quantity - 1);
 
 
 
@@ -72,7 +88,7 @@ const BoxBtnSelect = (props) => {
     const handleAdd = () => {
         setIndexItem(-1);
         if (data?.variant_category_ids === null) {
-            setQuantity(quantity + 1);
+
 
             contexts.handleSelectItem(
                 {
@@ -84,9 +100,13 @@ const BoxBtnSelect = (props) => {
                     quantity: quantity + 1,
                     uuid: data?.id,
                     promoPrice: data?.promotion?.selling_price
-                }
-            );
+                },
+                index,
+                index >= 0 && 1
 
+
+            );
+            setQuantity(quantity + 1);
         } else {
             setToggleOption(true);
         }
@@ -98,7 +118,7 @@ const BoxBtnSelect = (props) => {
         <div >
             <BoxSelectedItems setQuantity={setQuantity} setIndexItem={setIndexItem} toggleEditItems={toggleEditItems} setToggleEditItems={setToggleEditItems} handleDelete={handleDelete} quantity={quantity} data={data} setToggleOption={setToggleOption} />
 
-            {toggleOption && <ChoseOptions indexItem={indexItem} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={setQuantity} />}
+            {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={setQuantity} />}
 
             {(data?.variant_category_ids === null) ?
                 <QuantityInput handleAdd={handleAdd} handleDelete={handleDelete} quantity={quantity} />

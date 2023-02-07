@@ -20,33 +20,14 @@ function CartProvider({ children }) {
         setVariants(newVariant);
 
     }
-    const handleSelectItem = (newItem, quantity = -1) => {
+    const handleSelectItem = (newItem, index = -1, action = 0) => {
 
-        if (newItem?.quantity <= 0) return "";
-        var index = getIndex(newItem?.itemId);
+        // if (newItem?.quantity <= 0) return "";
+        // var index = getIndex(newItem?.itemId);
+        // console.log(selectedItems[index]?.variants?.length)
+        // 0 add item
 
-
-        if (index >= 0 && ((selectedItems[index]?.variants?.length <= 0 && variants?.length <= 0) || (selectedItems[index]?.variants === variants) || quantity > 0)) {
-
-            const newArray = selectedItems.map((item, i) => {
-                if (index === i) {
-
-                    if (quantity > 0)
-                        return {
-                            ...item, quantity: quantity
-                        }
-                    else
-                        return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
-
-                } else {
-                    return item;
-                }
-            });
-
-            setSelectedItems(newArray)
-            setVariants([]);
-        }
-        else {
+        if (action == 0) {
 
             var data = {
                 itemId: newItem?.itemId,
@@ -61,12 +42,74 @@ function CartProvider({ children }) {
             };
 
             setSelectedItems(crr => [...crr, data]);
-            setVariants([]);
+            // 1 update quantity
+        } else if (action == 1) {
+
+            updateArrayItems(newItem, index);
+            if (newItem?.quantity <= 0) {
+                var carArr = selectedItems;
+                carArr.splice(index, 1);
+                setSelectedItems(carArr);
+            }
         }
+        // 2 update variants
+        else if (action == 2) {
+            updateArrayItems(newItem, index, 1);
+
+        }
+
+
+        // if (index >= 0) {
+        //     console.log(index)
+        //     const newArray = selectedItems.map((item, i) => {
+        //         if (index === i) {
+
+        //             // if (quantity > 0)
+        //             //     return {
+        //             //         ...item, quantity: quantity
+        //             //     }
+        //             // else
+        //             return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
+
+        //         } else {
+        //             return item;
+        //         }
+        //     });
+
+        //     setSelectedItems(newArray)
+        //     setVariants([]);
+        // }
+        // else {
+
+
+        // }
+        setVariants([]);
         handlePayload();
     }
 
-    const handleUpdateItem = (newItem, index) => {
+
+    const updateArrayItems = (newItem, index, action = 0) => {
+        const newArray = selectedItems.map((item, i) => {
+            if (index === i) {
+                if (action == 0)
+                    return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
+                else
+                    return {
+                        ...item,
+                        quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1,
+                        variants: variants
+                    };
+
+            } else {
+                return item;
+            }
+        });
+
+        setSelectedItems(newArray)
+        setVariants([]);
+    }
+
+    const handleUpdateItem = (newItem, index, action = 0) => {
 
         if (index >= 0) {
 
@@ -75,7 +118,7 @@ function CartProvider({ children }) {
                     return {
                         ...item,
                         quantity: newItem?.quantity,
-                        variants: variants,
+                        variants: action == 0 ? variants : item?.variants,
                     }
                 } else {
                     return item;
@@ -89,32 +132,32 @@ function CartProvider({ children }) {
         handlePayload();
     }
 
-    const handleDeleteItem = (data) => {
-        var index = getIndex(data?.itemId);
+    const handleDeleteItem = (index) => {
+
         var carArr = selectedItems;
 
-        if (index >= 0 && data?.quantity >= 1) {
-            const newArray = selectedItems.map((item, i) => {
-                if (index === i) {
-                    return { ...item, quantity: data?.quantity };
-                } else {
-                    return item;
-                }
-            });
+        // if (index >= 0 && data?.quantity >= 1) {
+        //     const newArray = selectedItems.map((item, i) => {
+        //         if (index === i) {
+        //             return { ...item, quantity: data?.quantity };
+        //         } else {
+        //             return item;
+        //         }
+        //     });
 
-            setSelectedItems(newArray)
-            setVariants([]);
+        //     setSelectedItems(newArray)
+        //     setVariants([]);
 
-        } else {
+        // } else {
 
 
-            if (index >= 0) {
-                carArr.splice(index, 1);
-            }
+        if (index >= 0) {
 
-            setSelectedItems(carArr);
-            setVariants([]);
         }
+
+        setSelectedItems(carArr);
+        setVariants([]);
+        // }
 
         handlePayload();
     }

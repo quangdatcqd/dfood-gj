@@ -8,11 +8,12 @@ import ChoseOptions from './ChoseOptions';
 import { fomatCurrency } from '../common';
 
 const SelectedItem = (props) => {
-    const { setToggleEditItems, data, setQuantity, toggleEditItems, dataVariants, indexItem, action } = props;
+    const { data, dataVariants, indexItem, action } = props;
     const dataItem = action == 0 ? data?.variants[0] : data?.variants;
 
-    const { selectedItems, handleSelectItem, handleDeleteItem, handleVariant } = useContext(CartContext);
+    const { selectedItems, handleSelectItem, } = useContext(CartContext);
     const [toggleEditOption, setToggleEditOption] = useState(false);
+    var quantityEdited = action == 0 ? selectedItems[indexItem]?.quantity : data?.quantity;
     const [quantityEdit, setQuantityEdit] = useState(action == 0 ? selectedItems[indexItem]?.quantity : data?.quantity);
 
     const handleAdd = () => {
@@ -24,52 +25,43 @@ const SelectedItem = (props) => {
                 notes: "",
                 price: dataVariants?.price,
                 promoId: dataVariants?.promotion?.id,
-                quantity: quantityEdit + 1,
+                quantity: quantityEdited + 1,
                 uuid: dataVariants?.id,
                 promoPrice: dataVariants?.promotion?.selling_price
             },
-            quantityEdit + 1
+            indexItem,
+            1
         );
-        setQuantityEdit(quantityEdit + 1);
+        quantityEdited += 1;
     }
 
     const handleDelete = () => {
 
-        if (quantityEdit <= 1) {
-            setQuantityEdit(0)
-            handleDeleteItem(
-                {
-                    itemId: dataVariants?.shopping_item_id,
-                    itemName: dataVariants?.name,
-                    notes: "",
-                    price: dataVariants?.price,
-                    promoId: dataVariants?.promotion?.id,
-                    quantity: 0,
-                    uuid: dataVariants?.id,
-                    promoPrice: dataVariants?.promotion?.selling_price
-                }
-            );
-        }
-        else {
+        // if (quantityEdit <= 1) {
+        //     handleDeleteItem(indexItem);
+        // }
+        // else {
+        // console.log(indexItem)
+        // console.log(selectedItems)
+        // console.log(quantityEdit)
 
-            handleDeleteItem(
-                {
-                    itemId: dataVariants?.shopping_item_id,
-                    itemName: dataVariants?.name,
-                    notes: "",
-                    price: dataVariants?.price,
-                    promoId: dataVariants?.promotion?.id,
-                    quantity: quantityEdit - 1,
-                    uuid: dataVariants?.id,
-                    promoPrice: dataVariants?.promotion?.selling_price
-                }
-            );
-            setQuantityEdit(quantityEdit - 1)
-        }
+        handleSelectItem(
+            {
+                itemId: dataVariants?.shopping_item_id,
+                itemName: dataVariants?.name,
+                notes: "",
+                price: dataVariants?.price,
+                promoId: dataVariants?.promotion?.id,
+                quantity: quantityEdited - 1,
+                uuid: dataVariants?.id,
+                promoPrice: dataVariants?.promotion?.selling_price
+            },
+            indexItem,
+            1
+        );
 
-
-
-
+        // }
+        quantityEdited -= 1;
     }
 
     return (

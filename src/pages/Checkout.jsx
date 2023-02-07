@@ -1,5 +1,5 @@
 import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, IconButton, Paper, Stack, TextareaAutosize, Typography, } from '@mui/material';
-import { React, useState, useContext, useEffect } from 'react';
+import { React, useState, useCallback, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
@@ -15,7 +15,7 @@ import { Refresh } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import InputBox from '../components/InputBox';
 import SelectedItem from '../components/SelectedItem';
-
+import { debounce } from "debounce";
 const Checkout = () => {
     const { payload, selectedItems } = useContext(CartContext);
     const params = useParams();
@@ -34,7 +34,10 @@ const Checkout = () => {
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     var id_oder = "";
-
+    const debounceDropDown = useCallback(debounce(() => fetchData(), 1500), [])
+    useEffect(() => {
+        debounceDropDown(payload);
+    }, [payload]);
     const fetchData = async () => {
         setLoadingRefresh("refresh-icon-ro");
         var data = await GojekAPI.checkout(payload);
@@ -60,11 +63,7 @@ const Checkout = () => {
         }
 
     }, []); // 106.64904150454079!3d10.845362078042243
-    useEffect(() => {
 
-        fetchData();
-
-    }, [payload]);
 
     const handleLogin = async () => {
 
@@ -231,7 +230,7 @@ const Checkout = () => {
                                     marginBottom: "3px"
                                 }}>{item?.itemName}</p>
 
-                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData?.items[index]} indexItem={index} />
+                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData?.items[index]} indexItem={key} indexItemRes={index} />
                             </div>
                         )
                     })
@@ -284,22 +283,28 @@ const Checkout = () => {
 
                             : ""
                     }
-                    {dataCheckout?.delivery_options != undefined ? <p style={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        borderTop: "1px dotted gray",
-                        paddingTop: "10px",
-                        display: 'flex',
-                        justifyContent: 'space-between'
-                    }}>Tổng thanh toán :
-                        {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount)}
-                        <strike>
-                            {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount)}
-                        </strike>
-                    </p> : ""}
+                    {dataCheckout?.delivery_options != undefined ?
+                        <div>
+                            <p style={{
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                                borderTop: "1px dotted gray",
+                                paddingTop: "10px",
+                                display: 'flex',
+                                justifyContent: 'space-between'
+                            }}>Tổng thanh toán :
+                                {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount)}
+                                <strike>
+                                    {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount)}
+                                </strike>
+                            </p>
+                            <p className='text-success'>     {dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.text?.replace("{amount}", dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.amount)}</p>
+
+                        </div>
+
+                        : ""}
 
 
-                    <p className='text-success'>     {dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.text?.replace("{amount}", dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.amount)}</p>
 
                 </div>
 

@@ -68,6 +68,8 @@ const ChoseAddress = (props) => {
                     }}>Nhập địa chỉ của bạn</p>
                     <InputBox
                         value={keyword}
+                        id="address"
+                        name="address"
                         placeholder={"Nhập địa chỉ  "}
                         onChange={handleChangeAddress}
                     />

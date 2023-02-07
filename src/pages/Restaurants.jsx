@@ -9,6 +9,7 @@ import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
 import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
+import InputBox from '../components/InputBox';
 
 
 function Restaurants(props) {
@@ -70,26 +71,26 @@ function Restaurants(props) {
 
                     }}
                 >
-                    <input
-                        id="address"
+                    <InputBox
+                        id="restaurant"
 
-                        name="address"
+                        name="restaurant"
                         // value={keyword}
                         placeholder='Bạn muốn ăn gì nào?'
                         // autoComplete="address"
-                        style={{
-                            width: "100%",
-                            padding: "8px 30px",
-                            border: "none",
-                            borderRadius: "20px",
-                            outline: "none",
-                            fontSize: "14pt",
-                            textAlign: "left",
-                            color: "gray",
-                            fontWeight: "bold",
-                            boxShadow: "0px 0px 5px 5px #e9e9e9"
+                        // style={{
+                        //     width: "100%",
+                        //     padding: "8px 30px",
+                        //     border: "none",
+                        //     borderRadius: "20px",
+                        //     outline: "none",
+                        //     fontSize: "14pt",
+                        //     textAlign: "left",
+                        //     color: "gray",
+                        //     fontWeight: "bold",
+                        //     boxShadow: "0px 0px 5px 5px #e9e9e9"
 
-                        }}
+                        // }}
                         onChange={handleChangeKeyword}
                     />
                 </Box >
