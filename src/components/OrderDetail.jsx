@@ -126,10 +126,13 @@ const OrderDetail = ({ idOrder }) => {
                             Chat
                         </div>
                         <div onClick={() => handleCancelOrder()}  >
-                            Huỷ đơn
+                            Huỷ
                         </div>
                         <div onClick={() => getListOrders()}  >
                             Tải lại
+                        </div>
+                        <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token") + "|" + localStorage.getItem("R-Token")) }}   >
+                            Xuất
                         </div>
                     </div>
                 </div>
@@ -144,7 +147,7 @@ const OrderDetail = ({ idOrder }) => {
 
 
 
-        </Container>
+        </Container >
 
     );
 }

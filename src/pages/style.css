@@ -201,7 +201,7 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
  
 .box-btn-order div{
   background-color: green;
-  padding: 8px 13px;  
+  padding: 8px 8px;  
   border-radius: 20px;
   cursor: pointer;
   color: white;
