@@ -93,7 +93,7 @@ export default function Home() {
     return (
         <div style={{ backgroundColor: "white" }}>
 
-            <Box onClick={() => setToggleLocationChange(true)} style={{ width: "100%", textAlign: "center", padding: "6px", backgroundColor: "white", marginBottom: "10px" }} >
+            <Box onClick={() => setToggleLocationChange(true)} style={{ width: "100%", textAlign: "center", cursor: "pointer", padding: "6px", backgroundColor: "white", marginBottom: "10px" }} >
                 <div style={{ fontSize: "bold", color: "red", marginBottom: "-5px" }} >Vị trí hiện tại <ExpandMoreIcon /></div>
                 <div style={{ fontSize: "16px", fontWeight: "bold" }}>  {currentLoc?.name} </div>
             </Box>

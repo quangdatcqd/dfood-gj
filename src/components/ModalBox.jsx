@@ -33,7 +33,10 @@ export default function ModalBox(props) {
                     paddingTop: "50px"
                 }}
             >
-                <AppBar sx={{ position: 'fixed', backgroundColor: "white", color: "black" }}>
+                <AppBar sx={{ position: 'fixed', backgroundColor: "white", color: "black" }}
+                    onClick={() => setOpen(false)}
+
+                >
                     <Toolbar>
                         <IconButton
                             edge="start"

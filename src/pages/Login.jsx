@@ -13,19 +13,7 @@ const Login = () => {
         <Container component="main" maxWidth="xs">
 
             <BoxLoginGojek />
-            <Box
-                sx={{
 
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-
-            >
-                <Box style={{ marginTop: "20px", fontSize: "22px" }}>
-                    <NavLink to={"/home"}>Đến với FOOD</NavLink>
-                </Box>
-            </Box>
         </Container>
     );
 }

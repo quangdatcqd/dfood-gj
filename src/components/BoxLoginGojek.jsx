@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack';
 import Chip from '@mui/material/Chip';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import InputBox from './InputBox';
+import { NavLink } from 'react-router-dom';
 const BoxLoginGojek = (props) => {
     const { setToggleLogin } = props;
 
@@ -368,6 +369,15 @@ const BoxLoginGojek = (props) => {
                     </div>
                     <InputBox placeholder={"Nhập OTP"} onChange={onOTPChange} value={OTP} type={"number"} />
                 </div>
+            </div>
+            <div style={
+                {
+                    marginTop: "20px",
+                    fontSize: "20px",
+                    fontWeight: "bolder"
+                }
+            }>
+                <NavLink to={"/home"}>Đến với FOOD</NavLink>
             </div>
 
         </Container >

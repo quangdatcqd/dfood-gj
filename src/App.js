@@ -22,12 +22,12 @@ function App() {
 
           <Routes>
 
-            <Route path="/" element={<Login />} />
+            <Route path="/*" element={<Login />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/explore" element={<Explore />} />
+            {/* <Route path="/explore" element={<Explore />} />
             <Route path="/selectdishes/:id/*" element={<SelectDishes />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/tracking" element={<TrackingOrder />} />
+            <Route path="/tracking" element={<TrackingOrder />} /> */}
 
           </Routes>
         </BrowserRouter>
