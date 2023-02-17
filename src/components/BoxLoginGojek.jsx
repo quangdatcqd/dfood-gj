@@ -5,8 +5,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import GojekAPI from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
-import Chip from '@mui/material/Chip';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import InputBox from './InputBox';
 import { NavLink } from 'react-router-dom';
 const BoxLoginGojek = (props) => {

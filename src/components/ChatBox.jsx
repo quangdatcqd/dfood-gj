@@ -3,9 +3,14 @@ import SendIcon from '@mui/icons-material/Send';
 import { React, useEffect, useState } from 'react';
 import { TextareaAutosize } from '@mui/base';
 import GojekAPI from '../API/GojekAPI';
+import { useSnackbar } from 'notistack';
+
 // var customer = "";
 const ChatBox = (props) => {
-    const { setToggleChat, toggleChat } = props;
+    const { setToggleChat, toggleChat, idOrder } = props;
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     const [allMessages, setAllMessages] = useState([]);
     const [idChannel, setIdChannel] = useState("");
     const [message, setMessage] = useState("");
@@ -16,7 +21,7 @@ const ChatBox = (props) => {
 
 
     useEffect(() => {
-        let idOrder = localStorage.getItem("idOrder");
+
         const getMembers = async (id) => {
             var messages = await GojekAPI.getMemberChat(id);
 
@@ -30,29 +35,41 @@ const ChatBox = (props) => {
                 if (customer != undefined) {
                     getMessages(id);
 
+
                 }
             })
         }
         const getChannelId = async () => {
-            var data = await GojekAPI.getChannelChat(idOrder);
-            if (data?.data?.channel_id != null) {
-                idchannel = data?.data?.channel_id;
-                await setIdChannel(data?.data?.channel_id);
-                // console.log("idChannel", idChannel)
-                getMembers(data?.data?.channel_id);
+            try {
+                var data = await GojekAPI.getChannelChat(idOrder);
+                console.log(data?.success)
+                if (data?.success) {
+                    idchannel = data?.data?.channel_id;
+                    setIdChannel(data?.data?.channel_id);
+                    // console.log("idChannel", idChannel)
+                    getMembers(data?.data?.channel_id);
+                    return idchannel;
+                } else {
+                    throw new Error(data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!")
+                }
+            } catch (error) {
+                enqueueSnackbar(error.message, { variant: 'error' });
 
             }
         }
 
         if (idOrder != undefined) {
-            getChannelId();
+            let idchannel = getChannelId();
+            if (idchannel?.length >= 10) {
+                const remessage = setInterval(() => {
+                    getMessages(idchannel);
+
+                }, 10000);
+                return () => clearInterval(remessage);
+            }
         }
 
-        const remessage = setInterval(() => {
-            getMessages(idchannel);
 
-        }, 10000);
-        return () => clearInterval(remessage);
     }, []);
 
 

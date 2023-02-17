@@ -141,7 +141,7 @@ const OrderDetail = ({ idOrder }) => {
                     trackingLocation && <MapMarker location={trackingLocation} />
                 }
 
-                {toggleChat && <ChatBox toggleChat={toggleChat} setToggleChat={setToggleChat} />}
+                {toggleChat && <ChatBox toggleChat={toggleChat} idOrder={idOrder} setToggleChat={setToggleChat} />}
 
             </div>
 
