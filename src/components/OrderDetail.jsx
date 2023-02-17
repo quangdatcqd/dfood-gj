@@ -131,7 +131,7 @@ const OrderDetail = ({ idOrder }) => {
                         <div onClick={() => getListOrders()}  >
                             Tải lại
                         </div>
-                        <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token") + "|" + localStorage.getItem("R-Token")) }}   >
+                        <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token") + "  ----|----" + localStorage.getItem("R-Token")) }}   >
                             Xuất
                         </div>
                     </div>
