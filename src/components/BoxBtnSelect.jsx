@@ -1,6 +1,6 @@
 
 
-import { React, useState, useContext, useEffect } from 'react';
+import { React, useState, useContext, useLayoutEffect } from 'react';
 
 import { useSnackbar } from 'notistack';
 import ChoseOptions from './ChoseOptions';
@@ -18,11 +18,11 @@ const BoxBtnSelect = (props) => {
     const [quantity, setQuantity] = useState(0);
     const [indexItem, setIndexItem] = useState(-1);
 
-
     var index = contexts.payload?.items?.findIndex((payloadId) => {
         return payloadId?.uuid === data?.id;
     });
-    useEffect(() => {
+    useLayoutEffect(() => {
+
 
         // console.log(index)
         if (index >= 0) {

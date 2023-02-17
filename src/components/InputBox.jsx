@@ -1,7 +1,7 @@
 import React from 'react';
 
 const InputBox = (props) => {
-    const { onChange, placeholder, value, id, name } = props;
+    const { onChange, placeholder, value, id, name, type } = props;
     return (
 
         <input
@@ -9,6 +9,7 @@ const InputBox = (props) => {
             placeholder={placeholder}
             id={id}
             name={name}
+            type={type}
             // autoComplete="address"
             style={{
                 width: "100%",

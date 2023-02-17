@@ -20,7 +20,7 @@ const ChoseAddress = (props) => {
 
     }, [keyword]);
     const fetchAddressOptions = async (key) => {
-
+        if (key.length <= 0) return "";
         var data = await GojekAPI.searchAddress(key);
         setAddressOptions(data?.results);
     }

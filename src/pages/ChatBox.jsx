@@ -118,12 +118,22 @@ const ChatBox = (props) => {
 
 
                 </DialogContent>
-                <Box style={{ backgroundColor: "rgb(61 61 61)", display: "flex", padding: "10px 0px 10px 10px", width: "100%" }}>
+                <Box style={{ backgroundColor: "rgb(61, 61, 61)", width: "calc(100%-20px)" }}>
 
-                    <TextareaAutosize onChange={(e) => setMessage(e.target.value)} value={message} style={{ width: "100%", resize: "none", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px" }} />
-                    <IconButton onClick={sendMessage} style={{ padding: "5px", borderRadius: "5px", color: "white", }}  >
-                        <SendIcon />
-                    </IconButton>
+                    <div
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            backgroundColor: "white",
+
+                            padding: "10px 0px 7px 10px  "
+                        }}
+                    >
+                        <TextareaAutosize onChange={(e) => setMessage(e.target.value)} value={message} style={{ width: "100%", resize: "none", outline: "none", backgroundColor: "rgb(244 244 244)", border: "0px solid #ff0086", padding: "2px 5px", borderRadius: "8px", fontSize: "13pt" }} />
+                        <IconButton onClick={sendMessage} style={{ borderRadius: "5px", color: "green", padding: "2px" }}  >
+                            <SendIcon />
+                        </IconButton>
+                    </div>
                 </Box>
 
             </Dialog >

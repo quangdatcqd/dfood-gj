@@ -18,14 +18,19 @@ import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
 
 
+
 export default function Home() {
+
     const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
+
     const { toggleSelectDishes, setToggleSelectDishes, toggleCheckout, setToggleCheckout } = useContext(CartContext);
 
     const [toggleSearch, setToggleSearch] = useState(false);
     const [dataHomeCards, setDataHomeCards] = useState();
+    const [dataDealsHome, setDataDealsHome] = useState();
     const indexBanner = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 11);
+    const indexDealsHome = dataDealsHome?.data?.cards?.findIndex((element) => element?.card_type === 60014);
     const indexCategories = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 13);
     const indexCategoriesV1 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 42);
     const indexCategoriesV2 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 47);
@@ -39,6 +44,49 @@ export default function Home() {
         }
         fetchHomeCards();
 
+        const fetchDealsHOme = async () => {
+            var data = await GojekAPI.dealsHome();
+            setDataDealsHome(data?.data);
+        }
+        fetchDealsHOme();
+
+        // ftabTWudToKUlyz3yc - DHZ: APA91bGoxvlyyWkFKFoBen85JfvFBAVosjWEt2N3BmxKSjdx97rkcZCSWaMB5Ygoj8ZwFuWbA70_CHate8E1rcZmQTIetRNsGM1Y8VwsuyXOxGACSVm3FaLCMjI1sVJ0kGiKWuKo0O0x
+
+
+        function genTokenDevice(length) {
+            const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                result += characters[randomIndex];
+            }
+            return result;
+        }
+        var unique_id = genTokenDevice(16);
+        localStorage.setItem("unique_id", unique_id);
+        // var tokenDevice = genTokenDevice(18) + "-DHZ:" + genTokenDevice(140);
+        // localStorage.setItem("token_device", tokenDevice);
+
+        const genSessionID = () => {
+            const hexDigits = '0123456789qwertyuioplkjhgfdsazxcvbnm';
+            let uuid = '';
+
+            for (let i = 0; i < 36; i++) {
+                if (i === 8 || i === 13 || i === 18 || i === 23) {
+                    uuid += '-';
+                } else if (i === 14) {
+                    uuid += '4';
+                } else if (i === 19) {
+                    uuid += hexDigits[(Math.random() * 4) | 8];
+                } else {
+                    uuid += hexDigits[Math.floor(Math.random() * 16)];
+                }
+            }
+            localStorage.setItem("session_id", uuid);
+
+
+        }
+        genSessionID();
     }, []);
 
 
@@ -64,6 +112,8 @@ export default function Home() {
             <ModalBox open={toggleCheckout} setOpen={setToggleCheckout} title={title || "Vui lòng chọn món"} >
                 <Checkout />
             </ModalBox>
+
+
             <Container >
                 <div
                     style={{
@@ -87,6 +137,7 @@ export default function Home() {
 
 
 
+                {/* {indexDealsHome >= 0 && (<CardDealsHome banners={dataHomeCards?.cards[indexBanner]} />)} */}
                 {indexBanner >= 0 && (<SwipeBanner banners={dataHomeCards?.cards[indexBanner]} />)}
                 {indexCategories >= 0 && (<SwipeCategories banners={dataHomeCards?.cards[indexCategories]} />)}
 

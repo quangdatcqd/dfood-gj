@@ -41,7 +41,7 @@ function Restaurants(props) {
     }, []);
 
     const fetchRestaurant = async (keyword) => {
-
+        if (keyword.length <= 0) return "";
         var data = await GojekAPI.searchRestaurant(keyword);
         setDataRestaurant(data?.data);
 

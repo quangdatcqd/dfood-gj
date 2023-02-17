@@ -8,15 +8,19 @@ const axiosClient = axios.create({
     }
 });
 
+
+
 // Add a request interceptor
 axiosClient.interceptors.request.use(function (config) {
     // Do something before request is sent
+
 
     return config;
 }, function (error) {
     // localStorage.clear();
     // window.location.reload(false);
     // Do something with request error
+
     return Promise.reject(error);
 });
 
@@ -26,12 +30,15 @@ axiosClient.interceptors.response.use(function (response) {
     // Do something with response data
 
 
+
     return response.data;
 }, function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     // localStorage.clear();
     // window.location.reload(false);
+
+
     return Promise.reject(error);
 });
 

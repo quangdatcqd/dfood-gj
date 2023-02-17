@@ -66,7 +66,8 @@ const SelectedItem = (props) => {
 
     return (
         <div style={{
-            borderBottom: "dotted gray 1px", paddingBottom: "15px  "
+            // borderBottom: "dotted gray 1px", paddingBottom: "15px  "
+
         }}>
 
             {toggleEditOption && <ChoseOptions indexItem={indexItem} toggleOption={toggleEditOption} setToggleOption={setToggleEditOption} data={dataVariants} quantity={quantityEdit} setQuantity={setQuantityEdit} />}
@@ -106,17 +107,7 @@ const SelectedItem = (props) => {
                                 })
                             }
                         </div>
-                        <div
-                            style={{
-                                fontWeight: "bold",
-                                fontSize: "14pt",
-                                // width: "100px"
-                            }}
-                        >
-                            {fomatCurrency((Number(data?.promoPrice >= 0 ? data?.promoPrice : data?.price) + (data?.variants !== undefined ? (Number(data?.variants[1]) >= 0 && Number(data?.variants[1])) : 0)) * data?.quantity)}
 
-
-                        </div>
                     </div>
                     <div
                         style={{
@@ -129,12 +120,27 @@ const SelectedItem = (props) => {
                     >
                         <div
                             style={{
+                                fontWeight: "bold",
+                                fontSize: "14pt",
+                                // width: "100px"
+                                flex: 1,
+                                color: "#b01a1a"
+
+                            }}
+                        >
+                            {fomatCurrency((Number(data?.promoPrice >= 0 ? data?.promoPrice : data?.price) + (data?.variants !== undefined ? (Number(data?.variants[1]) >= 0 && Number(data?.variants[1])) : 0)) * data?.quantity)}
+
+
+                        </div>
+                        <div
+                            style={{
                                 border: "#d2d2d2 solid 1px",
                                 borderRadius: "20px",
                                 padding: "5px 10px",
                                 fontWeight: "bold",
                                 marginRight: "10px",
-                                cursor: "pointer"
+                                cursor: "pointer",
+
                             }}
                             onClick={() => {
                                 setToggleEditOption(true);
@@ -174,7 +180,7 @@ const SelectedItem = (props) => {
 
 
 
-        </div>
+        </div >
     )
 }
 

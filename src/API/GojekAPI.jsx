@@ -1,17 +1,23 @@
-import axiosClient from "./axiosClient";;
+import axiosClient from "./axiosClient";
 
+const location = JSON.parse(localStorage.getItem("customerLoc"));
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+const cusLoc = location?.latitude + "," + location?.longitude;
+
+
+console.log("renderGojek");
 const GojekAPI = {
     searchAddress(keyword) {
         try {
             const url = '/searchaddress';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
                 "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "keyword": keyword
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -20,17 +26,17 @@ const GojekAPI = {
     },
     searchRestaurant(keyword) {
         try {
-            var location = JSON.parse(localStorage.getItem("customerLoc"));
-            var cusLoc = location?.latitude + "," + location?.longitude;
+
             const url = '/searchrestaurant';
-            var payload = {
+
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
-                "keyword": keyword,
-                "picked_loc": cusLoc
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "keyword": keyword
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -40,13 +46,14 @@ const GojekAPI = {
     getRestaurant(id) {
         try {
             const url = '/getrestaurant';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "id_res": id
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -56,49 +63,49 @@ const GojekAPI = {
     setAddress(id) {
         try {
             const url = '/setaddress';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "idlocation": id
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
         }
     },
-    checkout(payload) {
+    checkout(dataPayload) {
         try {
             const url = '/checkout';
-            var payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "payload": JSON.stringify(payload),
 
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "payload": JSON.stringify(dataPayload),
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
         }
     },
-    makeOrder(payload, picked_loc) {
+    makeOrder(dataPayload) {
         try {
             const url = '/makeoder';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
-                "payload": JSON.stringify(payload),
-                "picked_loc": picked_loc
-
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "payload": JSON.stringify(dataPayload)
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
-
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -107,14 +114,15 @@ const GojekAPI = {
     getChannelChat(id) {
         try {
             const url = '/getchannelchat';
-            var payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "idOrder": id,
 
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "idOrder": id,
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -125,15 +133,14 @@ const GojekAPI = {
     getAllChat(id) {
         try {
             const url = '/getallchat';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "idChannel": id,
-
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
-
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -143,15 +150,15 @@ const GojekAPI = {
     getMemberChat(id) {
         try {
             const url = '/getmemberchat';
-            var payload = {
+
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "idChannel": id,
-
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
-
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -161,15 +168,16 @@ const GojekAPI = {
     sendMessage(id, text) {
         try {
             const url = '/sendmessage';
-            var payload = {
+
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "idChannel": id,
                 "text": text
-
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -179,14 +187,15 @@ const GojekAPI = {
     cancelOrder(id) {
         try {
             const url = '/cancelorder';
-            var payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "id_order": id,
 
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "id_order": id,
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -196,14 +205,14 @@ const GojekAPI = {
     getVoucher() {
         try {
             const url = '/getvoucher';
-            var payload = {
-                "G_Token": localStorage.getItem("G-Token")
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
 
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
-
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -212,13 +221,6 @@ const GojekAPI = {
     getToken() {
         try {
             const url = '/getrunapp';
-            // var payload = {
-            //     "G_Token": localStorage.getItem("G-Token")
-
-            // }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.get(url);
         } catch (ex) {
@@ -229,14 +231,15 @@ const GojekAPI = {
     tracking() {
         try {
             const url = '/tracking';
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
                 "idOrder": localStorage.getItem("idOrder")
-
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
+
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -248,15 +251,14 @@ const GojekAPI = {
     cardsGofoodV2() {
         try {
             const url = '/cardsgofoodv2';
-            var location = JSON.parse(localStorage.getItem("customerLoc"));
-            var cusLoc = location?.latitude + "," + location?.longitude;
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
-                "picked_loc": cusLoc
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -267,16 +269,156 @@ const GojekAPI = {
     searchSuggestions() {
         try {
             const url = '/searchsuggestions';
-            var location = JSON.parse(localStorage.getItem("customerLoc"));
-            var cusLoc = location?.latitude + "," + location?.longitude;
-            var payload = {
+            let payload = {
                 "G_Token": localStorage.getItem("G-Token"),
-                "picked_loc": cusLoc
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
 
             }
-            // var headers = {
-            //     'Authorization': 'Bearer ' + localStorage.getItem("G-Token")
-            // }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+
+    Methods(phone) {
+        try {
+            const url = `/methods`;
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "phone": phone
+            }
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    Initiate(phone, verification_id) {
+        try {
+            const url = `/initiate`;
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "phone": phone,
+                "verification_id": verification_id
+            }
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    checkPhoneHas(phone) {
+        try {
+            const url = `/checkphonehas`;
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "phone": phone
+            }
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    verifyPhone(token, otp) {
+        try {
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "otp": otp,
+                "token": token
+            }
+            const url = `/verifyphone`;
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    register(phone, token) {
+        try {
+
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "token": token,
+                "phone": phone
+            }
+            const url = `/register `;
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    refreshToken(accessToken, refreshToken, user_uuid) {
+        try {
+
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "accessToken": accessToken,
+                "refreshToken": refreshToken,
+                "user_uuid": user_uuid
+            }
+            const url = `/refreshtoken`;
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    getNumberVOTP() {
+        try {
+
+
+            const url = `/getnumbervotp`;
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    getOTPVOTP(id_session) {
+        try {
+
+
+            const url = `/getvotp/${id_session}`;
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    },
+
+    dealsHome() {
+        try {
+            const url = '/dealshome';
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+
+            }
 
             return axiosClient.post(url, payload);
         } catch (ex) {

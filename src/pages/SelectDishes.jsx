@@ -44,7 +44,7 @@ const SelectDishes = () => {
     return (
 
 
-        <Container>
+        <Container className="mb-5 pb-5">
 
             <Cartpreview />
             {/* <BackBtn to={"/restaurant"} /> */}

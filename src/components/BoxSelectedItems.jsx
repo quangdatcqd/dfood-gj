@@ -75,7 +75,19 @@ const BoxSelectedItems = (props) => {
                                 return (
 
                                     item?.itemId == data?.shopping_item_id &&
-                                    <SelectedItem data={item} indexItem={key} key={key} dataVariants={data} action={0} />
+                                    <div
+                                        style={{
+                                            borderBottom: "2px dotted gray",
+                                            marginTop: "10px"
+
+                                        }
+                                        }
+                                        key={key}
+                                    >
+                                        <SelectedItem data={item} indexItem={key} dataVariants={data} action={0} />
+
+                                    </div>
+
                                 )
 
                             })
