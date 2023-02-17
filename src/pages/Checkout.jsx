@@ -3,14 +3,11 @@ import { React, useState, useCallback, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
-import BackBtn from '../components/BackBtn';
-import QuantityInput from '../components/QuantityInput';
 import { Container } from '@mui/system';
 import { CartContext } from '../Contexts/CartContext';
 import { useSnackbar } from 'notistack';
 import { fomatCurrency } from '../common';
-import ChatIcon from '@mui/icons-material/Chat';
-import ChatBox from './ChatBox';
+
 import { Refresh } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import InputBox from '../components/InputBox';
@@ -18,17 +15,18 @@ import SelectedItem from '../components/SelectedItem';
 import { debounce } from "debounce";
 import BoxLoginGojek from '../components/BoxLoginGojek';
 import ModalBox from '../components/ModalBox';
+
 const Checkout = () => {
     const { payload, selectedItems } = useContext(CartContext);
     const params = useParams();
     const [dataCheckout, setDataCheckout] = useState();
-    const [source_map, setSourceMap] = useState("");
+
     const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder"));
     const [toggleLogin, setToggleLogin] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [loadingRefresh, setLoadingRefresh] = useState("false");
-    const [toggleChat, setToggleChat] = useState(false);
+
 
     const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [customerData, setCustomerData] = useState(JSON.parse(localStorage.getItem("customerLoc")));
@@ -126,25 +124,15 @@ const Checkout = () => {
         }
 
     }
+
     const handleCancelOrder = async () => {
-        var data = await GojekAPI.cancelOrder(id_oder);
-        enqueueSnackbar(data?.message, { variant: 'warning' })
+        var data = await GojekAPI.cancelOrder(localStorage.getItem("idOrder"));
+        enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
-    const getTracking = async () => {
-        var data = await GojekAPI.tracking();
-        if (data?.trackingDetails) {
-
-            var loca = data?.trackingDetails[0]?.data?.vehicle?.location?.snappedSegment[0]?.longitude + "!3d" + data?.trackingDetails[0]?.data?.vehicle?.location?.snappedSegment[0]?.latitude;
-            setSourceMap('https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7837.109077393735!2d' + loca + '!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1672314641236!5m2!1svi!2s')
-
-        }
-    }
-
-
 
     return (
 
-        <div className='  w-100'   >
+        <div className='  w-100 mb-5 pb-5'   >
             <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
                 <BoxLoginGojek setToggleLogin={setToggleLogin} />
             </ModalBox>
@@ -317,8 +305,6 @@ const Checkout = () => {
 
                 </div>
 
-
-
                 <div style={{
                     display: "flex",
                     justifyContent: "space-around",
@@ -334,42 +320,29 @@ const Checkout = () => {
                     >
                         ĐĂNG NHẬP
                     </LoadingButton>
-
+                    <LoadingButton
+                        size="small"
+                        variant="contained"
+                        color='warning'
+                        onClick={() => handleCancelOrder()}
+                    >
+                        Huỷ đơn
+                    </LoadingButton>
 
                     <Button onClick={handleOrder} variant="contained" color="secondary" style={{ marginTop: "10px" }}   >Đặt ngay</Button>
                 </div>
-                <div style={{ display: "flex", flexDirection: "row", margin: "20px", justifyContent: "space-around" }}>
 
-                    <div onClick={() => setToggleChat(true)} style={{ padding: "10px", marginTop: "10px", backgroundColor: "#2783dd", width: "45px", cursor: "pointer", color: "white", borderRadius: "50px" }}>
-                        <ChatIcon />
-                    </div>
-                    <div onClick={() => handleCancelOrder()} style={{ padding: "10px", marginTop: "10px", backgroundColor: "#2783dd", width: "80px", cursor: "pointer", color: "white", borderRadius: "50px" }}>
-                        Huỷ món
-                    </div>
-                    <div onClick={() => getTracking()} style={{ padding: "10px", marginTop: "10px", backgroundColor: "#2783dd", width: "65px", cursor: "pointer", color: "white", borderRadius: "50px" }}>
-                        refresh
-                    </div>
-                </div>
 
             </Container >
 
-            {toggleChat && <ChatBox toggleChat={toggleChat} setToggleChat={setToggleChat} />}
 
-            {
-                <div id='map' style={{ height: "500px" }}>
-                    <div className='pickloc'>
-
-                    </div>
-                    {/* <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7837.109077393735!2d106.64111775488112!3d10.844808056338975!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1672314641236!5m2!1svi!2s" width="100%" height="450"></iframe> */}
-                    {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d979.6453706417853!2d106.64111775488112!3d10.844808056338975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x8ff38acf58184f72!2zMTDCsDUwJzM1LjkiTiAxMDbCsDM4JzIyLjMiRQ!5e0!3m2!1svi!2s!4v1672406199421!5m2!1svi!2s" width="600" height="450" loading="lazy"  ></iframe> */}
-                    <iframe src={source_map} width="100%" height="450"  ></iframe>
-                    {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d489.81950773459255!2d106.64838509734601!3d10.845245826660424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752999c1a72537%3A0x45c1b27d9f32a71c!2zVGh14buRYyBWaXBtYXggUlggY2jDrW5oIGjDo25n!5e0!3m2!1svi!2s!4v1675245566875!5m2!1svi!2s" width="100%" height="500" ></iframe> */}
-                </div>
-            }
 
 
         </div >
     );
+
+
+
 
 }
 

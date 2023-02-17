@@ -5,11 +5,9 @@ import { Routes, BrowserRouter, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import SelectDishes from "./pages/SelectDishes";
-import Checkout from "./pages/Checkout";
-import TrackingOrder from "./pages/ChatBox";
-import Explore from "./pages/Explore";
+
 import Login from "./pages/Login";
+import MapMarker from "./components/MapMarker";
 
 function App() {
   const theme = createTheme();
@@ -26,8 +24,8 @@ function App() {
             <Route path="/home" element={<Home />} />
             {/* <Route path="/explore" element={<Explore />} />
             <Route path="/selectdishes/:id/*" element={<SelectDishes />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/tracking" element={<TrackingOrder />} /> */}
+            <Route path="/checkout" element={<Checkout />} /> */}
+            <Route path="/tracking" element={<MapMarker />} />
 
           </Routes>
         </BrowserRouter>

@@ -212,7 +212,7 @@ const TouchToSearch = (props) => {
                 <img width={"50px"} style={{ borderRadius: "10px" }} src={touchtosearch?.content?.primary_pill?.primary_icon_url} alt="" />
 
             </div>
-            <div style={{ width: "100%", display: "flex", flexWrap: "wrap", }}>
+            <div style={{ width: "100%", display: "flex", flexWrap: "wrap-reverse", }}>
                 {
                     touchtosearch?.content?.terms?.map((item, key) => {
                         return (
@@ -220,10 +220,11 @@ const TouchToSearch = (props) => {
                                 fontSize: "14pt",
                                 fontWeight: "bold",
                                 borderRadius: "20px",
-                                padding: "4px 15px",
+                                padding: "4px 13px",
                                 border: "#e2e2e2 solid 2px",
                                 color: "green",
-                                margin: "5px 10px 5px 0px"
+                                margin: "5px 10px 5px 0px",
+
                             }}>
                                 {item?.name}
                             </div>

@@ -8,6 +8,7 @@ import Restaurants from '../pages/Restaurants';
 import SelectDishes from '../pages/SelectDishes';
 import Checkout from '../pages/Checkout';
 import ModalBox from '../components/ModalBox';
+import OrderDetail from '../components/OrderDetail';
 import ChoseAddress from '../components/ChoseAddress';
 import SwipeBanner from '../components/SwipeBanner';
 import GojekAPI from '../API/GojekAPI';
@@ -16,6 +17,7 @@ import SwipeCategoriesV1 from '../components/SwipeCategoriesV1';
 import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
 import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
+import ListOrders from '../components/ListOrders';
 
 
 
@@ -23,10 +25,16 @@ export default function Home() {
 
     const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
+    const [toggleMenu, setToggleMenu] = useState(false);
+    const [toggleOrders, setToggleOrders] = useState(false);
+    const [toggleOderDetail, setToggleOderDetail] = useState(false);
+    const [listOrders, setListOrders] = useState([]);
+    const [idOrder, setIdOrder] = useState("");
 
     const { toggleSelectDishes, setToggleSelectDishes, toggleCheckout, setToggleCheckout } = useContext(CartContext);
 
     const [toggleSearch, setToggleSearch] = useState(false);
+
     const [dataHomeCards, setDataHomeCards] = useState();
     const [dataDealsHome, setDataDealsHome] = useState();
     const indexBanner = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 11);
@@ -88,17 +96,56 @@ export default function Home() {
         }
         genSessionID();
     }, []);
+    const getListOrders = async () => {
+        setToggleOrders(toggleOrders ? false : true);
+        var data = await GojekAPI.getListOrders();
+        setListOrders(data);
+    }
+    const handleClickOrder = (id) => {
+        console.log("efdd")
+
+    }
 
 
     return (
-        <div style={{ backgroundColor: "white" }}>
+        <div style={{ backgroundColor: "white" }} >
+            <div>
+                <div className='btn-menu'
+                    onClick={() => setToggleMenu(toggleMenu ? false : true)}
+                >
+                    <div className='menu-div'></div>
+                    <div className='menu-div'></div>
+                    <div className='menu-div'></div>
+                </div>
+                {
+                    toggleMenu && <div className='boxMenu'
+                    >
+                        <div onClick={getListOrders}> Đơn hàng của bạn</div>
+                        <div> Đơn hàng của bạn</div>
+                    </div>
+                }
+                {
+                    toggleOrders && <ListOrders data={listOrders?.data} setToggleOderDetail={setToggleOderDetail} setIdOrder={setIdOrder} />
+                }
+
+            </div>
 
             <Box onClick={() => setToggleLocationChange(true)} style={{ width: "100%", textAlign: "center", cursor: "pointer", padding: "6px", backgroundColor: "white", marginBottom: "10px" }} >
                 <div style={{ fontSize: "bold", color: "red", marginBottom: "-5px" }} >Vị trí hiện tại <ExpandMoreIcon /></div>
                 <div style={{ fontSize: "16px", fontWeight: "bold" }}>  {currentLoc?.name} </div>
             </Box>
+            <ModalBox open={toggleOderDetail} setOpen={setToggleOderDetail} title={"Chi tiết đơn hàng"} >
+                <OrderDetail idOrder={idOrder} />
+            </ModalBox>
             <ModalBox open={toggleLocationChange} setOpen={setToggleLocationChange} title={"Thay đổi địa chỉ"} >
-                <ChoseAddress setCurrentLoc={setCurrentLoc} setOpen={setToggleLocationChange} />
+                <ChoseAddress
+                    setCurrentLoc={setCurrentLoc}
+                    setOpen={setToggleLocationChange}
+                    onClick={() => {
+                        setToggleMenu(false);
+                        setToggleOrders(false);
+                    }}
+                />
             </ModalBox>
             <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món"} >
                 <Restaurants />
@@ -114,7 +161,11 @@ export default function Home() {
             </ModalBox>
 
 
-            <Container >
+            <Container onClick={() => {
+                setToggleMenu(false);
+                setToggleOrders(false);
+
+            }} >
                 <div
                     style={{
                         width: "100%",
@@ -152,6 +203,6 @@ export default function Home() {
 
 
             </Container >
-        </div>
+        </div >
     );
 }

@@ -5,8 +5,47 @@ const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 const cusLoc = location?.latitude + "," + location?.longitude;
 
 
-console.log("renderGojek");
+
 const GojekAPI = {
+
+    getOrderDetail(id) {
+        try {
+            const url = '/getorderdetail';
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "id_order": id,
+
+            }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    }
+    ,
+    getListOrders() {
+        try {
+            const url = '/getlistorders';
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "id_order": localStorage.getItem("idOrder"),
+
+            }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    }
+    ,
     searchAddress(keyword) {
         try {
             const url = '/searchaddress';
@@ -417,6 +456,25 @@ const GojekAPI = {
                 "picked_loc": cusLoc,
                 "user_uuid": userInfo?.id ?? userInfo?.id,
                 "uniqueid": localStorage.getItem("unique_id"),
+
+            }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+
+    orderDetail() {
+        try {
+            const url = '/orderdetail';
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "order_id": localStorage.getItem("idOrder"),
 
             }
 
