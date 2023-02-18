@@ -61,10 +61,10 @@ const Checkout = () => {
         localStorage.setItem("noteOrder", noteOrder);
         setDataCheckout(data);
         if (data?.distance) {
-            enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: "1000" })
+            enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
         } else {
             data?.errors?.map((item, key) => {
-                enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: "1000" })
+                enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
             })
         }
 
