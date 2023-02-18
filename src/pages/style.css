@@ -131,12 +131,15 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
 
 
 
-
+.container-com{
+  background-image: linear-gradient(rgb(178 211 234 / 56%), rgb(255 233 232));
+   margin-bottom: 100px;
+   padding:10px 0px 100px 0px;
+}
 .div-detail-order{
   width: 100%;
- margin-bottom: 100px;
-  background-image: linear-gradient(rgb(178 211 234 / 56%), rgb(255 233 232));
-  margin-top:15px;
+
+ 
   border-radius: 30px;
   padding: 20px 20px;
 
@@ -212,14 +215,96 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
   background-color: rgb(1, 103, 1);
 
 }
+.mess-ac{
+   
+      position: absolute;
+    top: -12px;
+    right: 13px;
+    background-color: rgb(237 50 40);
+    font-size: 7px;
+    padding: 3px 1px 1px 5px;
+    border-radius: 3px;
+    z-index: 9;
+    width: 37px;
 
+}
 
+.mess-af {
+  position: absolute;
+    width: 8px;
+  
+    height: 7px;
+    background-color: rgb(237 50 40);
+    clip-path: polygon(100% 30%, 30% 30%, 0 100%);
+    right: 6px;
+    top: 12px;
+    z-index: -1;
+  
+}
 
+.btn-active-order{
+  position: fixed;
+  right: 0px;
+  top: 63px; 
+ /* background-image: linear-gradient( to right,#00d000, rgb(0 0 0)); */
+  z-index: 99999; 
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  width: 70px;
+  height: 70px;
+  color: white;
+  font-size: 12pt;
+  font-weight: bold;
+  cursor: pointer; 
+ animation: biker 15s linear 0s infinite ;
+   
+}
+@keyframes biker {
+  /* 0% {left: -20%; top: 420px; transform: rotate(-90deg);}
+  5% {left: 0%; top: 300px;  }
+  10% {left: 10%; top: 300px ;transform: rotate(0deg);}
+  20% {left: 20%; top: 300px;}
+  30% {left: 30%; top: 345px; transform: rotate(10deg);}
+  40% {left: 40%; top: 360px;}
+  50% {left: 50%; top: 365px;transform: rotate(0deg)}
+  60% {left: 60%; top: 350px;}
+  70% {left: 70%; top: 365px;;transform: rotate(50deg)} 
+  80% {left: 80%; top: 350px;  } 
+  90% {left: 90%; top: 350px; transform: rotate(10deg);} 
+  100% {left: 110%; top: 365px;  }  */
+
+    0% {left: -10%; top: 43px; transform: rotate(-50deg);}
+  5% {left: 0%; top: 63px;  }
+  10% {left: 10%; top: 63px ;transform: rotate(0deg);}
+  20% {left: 20%; top: 63px;}
+  30% {left: 30%; top: 53px; transform: rotate(10deg);}
+  40% {left: 40%; top: 63px;}
+  50% {left: 50%; top: 63px;transform: rotate(0deg)}
+  60% {left: 60%; top: 63px;}
+  70% {left: 70%; top: 53px; transform: rotate(50deg)} 
+  80% {left: 80%; top: 63px;  } 
+  90% {left: 90%; top: 53px; transform: rotate(10deg);} 
+  100% {left: 110%; top: 63px;  } 
+}
+ 
+ 
+@media only screen and (max-width: 800px) {
+ 
+ .btn-active-order{ 
+ animation: biker 8s linear 0s infinite ;
+   
+}
+}
 
 @media only screen and (max-width: 400px) {
   .box-select{
    width: 100% !important;
  }
+ .btn-active-order{
+  
+ animation: biker 5s linear 0s infinite ;
+   
+}
 }
 
 

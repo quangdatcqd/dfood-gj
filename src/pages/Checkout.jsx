@@ -1,5 +1,5 @@
-import { AvatarGroup, Box, Button, Card, CardContent, CardMedia, Divider, IconButton, Paper, Stack, TextareaAutosize, Typography, } from '@mui/material';
-import { React, useState, useCallback, useContext, useEffect } from 'react';
+import { Button, IconButton, TextareaAutosize, } from '@mui/material';
+import { React, useState, useCallback, useContext, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
@@ -33,16 +33,31 @@ const Checkout = () => {
     const [addressName, setAddressName] = useState(customerData?.name);
 
 
-
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    var id_oder = "";
+
+    var idvoucher = useRef();
+    var id_oder = useRef();
     const debounceDropDown = useCallback(debounce(() => fetchData(), 1500), [])
     useEffect(() => {
         debounceDropDown(payload);
     }, [payload]);
     const fetchData = async () => {
+
         setLoadingRefresh("refresh-icon-ro");
-        var data = await GojekAPI.checkout(payload);
+
+        var getVC = await GojekAPI.getVoucher();
+        let indexVC = -1;
+        if (getVC?.success) {
+            indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
+            idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
+        }
+
+        var data = await GojekAPI.checkout({
+            ...payload,
+            offer_id: idvoucher.current,
+            voucherId: idvoucher.current
+
+        });
         localStorage.setItem("noteOrder", noteOrder);
         setDataCheckout(data);
         if (data?.distance) {
@@ -52,9 +67,8 @@ const Checkout = () => {
                 enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: "1000" })
             })
         }
-        var getVC = await GojekAPI.getVoucher();
 
-        (getVC?.data?.length >= 13) ? localStorage.setItem("idvoucher", getVC?.data[getVC?.data?.length - 1]?.id) : localStorage.setItem("idvoucher", "");
+
         setLoadingRefresh("false")
     }
     useEffect(() => {
@@ -72,8 +86,8 @@ const Checkout = () => {
     const handleOrder = async () => {
 
         try {
-            var idvoucher = localStorage.getItem("idvoucher");
-            if (idvoucher != undefined) {
+
+            if (idvoucher.current != undefined) {
                 var dataPayload = {
                     "cartPriceEstimated": (Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)),
                     "destinationAddress": customerData?.address,
@@ -103,14 +117,14 @@ const Checkout = () => {
                         }
                     ],
                     "restaurantId": merchantData?.restaurant?.id,
-                    "voucherId": idvoucher
+                    "voucherId": idvoucher.current
                 }
 
                 var dataOders = await GojekAPI.makeOrder(dataPayload);
                 if (dataOders?.orderNo) {
-                    id_oder = dataOders?.orderNo;
+                    id_oder.current = dataOders?.orderNo;
                     localStorage.setItem("idOrder", dataOders?.orderNo);
-                    enqueueSnackbar("Đã đặt hàng! " + id_oder, { variant: 'success' })
+                    enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success' })
                 }
                 else {
                     enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
@@ -126,13 +140,13 @@ const Checkout = () => {
     }
 
     const handleCancelOrder = async () => {
-        var data = await GojekAPI.cancelOrder(localStorage.getItem("idOrder"));
+        var data = await GojekAPI.cancelOrder(id_oder.current);
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
 
     return (
 
-        <div className='  w-100 mb-5 pb-5'   >
+        <div className='  w-100 mb-5 pb-5 container-com'   >
             <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
                 <BoxLoginGojek setToggleLogin={setToggleLogin} />
             </ModalBox>
@@ -140,7 +154,8 @@ const Checkout = () => {
 
                 <div style={{
                     width: "100%",
-                    paddingTop: "20px"
+                    paddingTop: "20px",
+
 
                 }}>
                     <p style={{

@@ -1,6 +1,7 @@
 import { React, useState, useEffect, useContext } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useSnackbar } from 'notistack';
 
 
 import Cartpreview from '../components/Cartpreview';
@@ -22,13 +23,18 @@ import ListOrders from '../components/ListOrders';
 
 
 export default function Home() {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
 
     const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
+
+
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
     const [toggleMenu, setToggleMenu] = useState(false);
     const [toggleOrders, setToggleOrders] = useState(false);
     const [toggleOderDetail, setToggleOderDetail] = useState(false);
     const [listOrders, setListOrders] = useState([]);
+    const [listOrdersActive, setListOrdersActive] = useState([]);
     const [idOrder, setIdOrder] = useState("");
 
     const { toggleSelectDishes, setToggleSelectDishes, toggleCheckout, setToggleCheckout } = useContext(CartContext);
@@ -95,17 +101,35 @@ export default function Home() {
 
         }
         genSessionID();
+        getOrdersActive();
+
+
     }, []);
     const getListOrders = async () => {
         setToggleOrders(toggleOrders ? false : true);
-        var data = await GojekAPI.getListOrders();
-        setListOrders(data);
-    }
-    const handleClickOrder = (id) => {
-        console.log("efdd")
+        if (!toggleOrders) {
+            var data = await GojekAPI.getListOrders();
+            getOrdersActive();
+            setListOrders(data);
+        }
+
 
     }
+    const getOrdersActive = async () => {
+        try {
+            var data = await GojekAPI.getOrdersActive();
+            if (data?.success) {
+                setListOrdersActive(data);
 
+            } else {
+                enqueueSnackbar(data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!", { variant: 'success' });
+
+            }
+        } catch (error) {
+            enqueueSnackbar(data?.message, { variant: 'error' });
+        }
+
+    }
 
     return (
         <div style={{ backgroundColor: "white" }} >
@@ -117,15 +141,31 @@ export default function Home() {
                     <div className='menu-div'></div>
                     <div className='menu-div'></div>
                 </div>
+
+                {
+                    listOrdersActive?.data?.cards?.length > 0 &&
+                    <div className='btn-active-order'
+                        onClick={() => {
+                            setIdOrder(listOrdersActive?.data?.cards[0]?.event_tracking_properties?.order_id)
+                            setToggleOderDetail(toggleMenu ? false : true)
+                        }}
+                    >
+                        <div className='mess-ac' > Tới đây...
+                            <div className='mess-af'> </div>
+                        </div>
+                        <img width={70} height={70} src="active-order.gif" alt="" />
+                    </div>
+                }
+
                 {
                     toggleMenu && <div className='boxMenu'
                     >
                         <div onClick={getListOrders}> Đơn hàng của bạn</div>
-                        <div> Đơn hàng của bạn</div>
+
                     </div>
                 }
                 {
-                    toggleOrders && <ListOrders data={listOrders?.data} setToggleOderDetail={setToggleOderDetail} setIdOrder={setIdOrder} />
+                    toggleOrders && <ListOrders data={listOrders?.data} dataActive={listOrdersActive?.data} setToggleOderDetail={setToggleOderDetail} setIdOrder={setIdOrder} />
                 }
 
             </div>

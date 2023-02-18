@@ -1,5 +1,5 @@
 import { Container, IconButton } from '@mui/material';
-import { React, useLayoutEffect, useState } from 'react';
+import { React, useLayoutEffect, useState, useRef } from 'react';
 import GojekAPI from '../API/GojekAPI';
 import MapMarker from './MapMarker';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -11,11 +11,15 @@ const OrderDetail = ({ idOrder }) => {
     const [toggleChat, setToggleChat] = useState(false);
     const [dataOrder, setDataOrder] = useState([]);
     const [trackingLocation, setTrackingLocation] = useState("");
+    const [trackingLocationDr, setTrackingLocationDr] = useState("");
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    console.log("den")
+
     useLayoutEffect(() => {
         getListOrders();
+
     }, []);
+
+    var trackingLocationRC = useRef();
     const handleCancelOrder = async () => {
         var data = await GojekAPI.cancelOrder(idOrder);
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
@@ -26,9 +30,11 @@ const OrderDetail = ({ idOrder }) => {
             if (data?.success) {
                 setDataOrder(data?.data)
                 var trackingLoc = data?.data?.destination?.latitude + "," + data?.data?.destination?.longitude + "|" +
-                    data?.data?.driver_info?.latitude + "," + data?.data?.driver_info?.longitude + "|" +
                     data?.data?.origin?.latitude + "," + data?.data?.origin?.longitude
-                setTrackingLocation(trackingLoc);
+                // + "|" + data?.data?.driver_info?.latitude + "," + data?.data?.driver_info?.longitude
+                trackingLocationRC.current = trackingLoc;
+
+                trackingOrder();
             }
 
         } catch (error) {
@@ -36,9 +42,22 @@ const OrderDetail = ({ idOrder }) => {
         }
 
     }
+    const trackingOrder = async () => {
+        try {
+            var data = await GojekAPI.tracking(idOrder);
+            if (data?.trackingDetails) {
+                let dataloc = data?.trackingDetails[0]?.data?.vehicle?.location?.coordinates;
+                setTrackingLocation(trackingLocationRC.current + "|" + dataloc?.latitude + "," + dataloc?.longitude);
+
+            }
+
+        } catch (error) {
+
+        }
+    }
 
     return (
-        <Container>
+        <Container className='container-com'>
 
             <div className='div-detail-order'>
                 <div className=' box-info delivery-detail'>
@@ -128,7 +147,7 @@ const OrderDetail = ({ idOrder }) => {
                         <div onClick={() => handleCancelOrder()}  >
                             Huỷ
                         </div>
-                        <div onClick={() => getListOrders()}  >
+                        <div onClick={() => trackingOrder()}  >
                             Tải lại
                         </div>
                         <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token") + "  ----|----" + localStorage.getItem("R-Token")) }}   >

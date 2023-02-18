@@ -44,7 +44,7 @@ const SelectDishes = () => {
     return (
 
 
-        <Container className="mb-5 pb-5">
+        <Container className="mb-5 pb-5 container-com">
 
             <Cartpreview />
             {/* <BackBtn to={"/restaurant"} /> */}
@@ -91,11 +91,11 @@ const ItemSelect = (props) => {
 
 
     return (
-        <div style={{ borderTop: "2px dotted #dddddd", margin: "8px 0px", display: "flex", padding: "10px 0px" }}   >
+        <div style={{ borderTop: "2px dotted #dddddd", margin: "8px 0px", display: "flex", padding: "10px", backgroundColor: "white", borderRadius: "20px" }}   >
 
             <CardMedia
                 component="img"
-                sx={{ width: 100 }}
+                sx={{ width: 100, borderRadius: "20px" }}
                 image={data?.image ? data?.image : "/khay.JPG"}
                 alt="Live from space album cover"
             />

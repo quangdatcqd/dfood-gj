@@ -1,14 +1,14 @@
 import { Container } from '@mui/material';
 import React from 'react';
 
-const ListOrders = ({ data, setToggleOderDetail, setIdOrder }) => {
+const ListOrders = ({ data, setToggleOderDetail, setIdOrder, dataActive }) => {
 
     return (
 
         <div className='box-list-orders'>
             <Container className='container-list-orders' maxWidth="sm" >
                 {
-                    data?.cards ? data?.cards?.map((item, key) => {
+                    data?.cards?.length > 0 && data?.cards?.map((item, key) => {
                         return (
                             <div className='item-order' key={key}
 
@@ -17,7 +17,7 @@ const ListOrders = ({ data, setToggleOderDetail, setIdOrder }) => {
                                     setIdOrder(item?.content?.order?.order_number)
                                 }}
                             >
-                                <p className='name-r'>{item?.content?.restaurant?.address}</p>
+                                <p className='name-r'>{item?.content?.restaurant?.name}</p>
                                 <p
                                     className='status-r'
                                     style={item?.content?.order?.order_status == 0 ? { color: "green" } : { color: "red" }}
@@ -26,8 +26,28 @@ const ListOrders = ({ data, setToggleOderDetail, setIdOrder }) => {
                             </div>
                         )
                     })
-                        :
-                        "Không có gì cả"
+
+                }
+
+                {
+                    dataActive?.cards?.length > 0 && dataActive?.cards?.map((itemactive, key) => {
+
+                        return (
+
+                            <div className='item-order' key={key}
+
+                                onClick={() => {
+                                    setToggleOderDetail(true);
+                                    setIdOrder(itemactive?.event_tracking_properties?.order_id)
+                                }}
+                            >
+                                <p className='name-r'>{itemactive?.estate?.body_components[2]?.payload?.text}</p>
+                                <p className='status-r' >{itemactive?.estate?.body_components[0]?.payload?.title}</p>
+
+                            </div>
+                        )
+                    })
+
                 }
 
 

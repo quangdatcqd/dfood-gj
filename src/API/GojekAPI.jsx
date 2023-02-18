@@ -8,6 +8,25 @@ const cusLoc = location?.latitude + "," + location?.longitude;
 
 const GojekAPI = {
 
+    getOrdersActive() {
+        try {
+            const url = '/getordersactive';
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+
+            }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    }
+    ,
+
     getOrderDetail(id) {
         try {
             const url = '/getorderdetail';
@@ -127,6 +146,25 @@ const GojekAPI = {
                 "user_uuid": userInfo?.id ?? userInfo?.id,
                 "uniqueid": localStorage.getItem("unique_id"),
                 "payload": JSON.stringify(dataPayload),
+            }
+
+            return axiosClient.post(url, payload);
+        } catch (ex) {
+            return ex;
+        }
+    },
+    dealsCheckout(brandID, merchantID) {
+        try {
+            const url = '/dealscheckout';
+
+            let payload = {
+                "G_Token": localStorage.getItem("G-Token"),
+                "session_id": localStorage.getItem("session_id"),
+                "picked_loc": cusLoc,
+                "user_uuid": userInfo?.id ?? userInfo?.id,
+                "uniqueid": localStorage.getItem("unique_id"),
+                "brand_id": brandID,
+                "merchant_id": merchantID,
             }
 
             return axiosClient.post(url, payload);
@@ -267,7 +305,7 @@ const GojekAPI = {
         }
     },
 
-    tracking() {
+    tracking(id) {
         try {
             const url = '/tracking';
             let payload = {
@@ -276,7 +314,7 @@ const GojekAPI = {
                 "picked_loc": cusLoc,
                 "user_uuid": userInfo?.id ?? userInfo?.id,
                 "uniqueid": localStorage.getItem("unique_id"),
-                "idOrder": localStorage.getItem("idOrder")
+                "idOrder": id
             }
 
 

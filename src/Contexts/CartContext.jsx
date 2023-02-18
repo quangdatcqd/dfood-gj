@@ -245,11 +245,12 @@ function CartProvider({ children }) {
             items: items,
             merchant_location: merchantData?.restaurant?.location,
             offer_id: "",
-            offer_type: "",
+            offer_type: "voucher",
             payment_types: [
             ],
             promo_discount_cart_price: discount,
             restaurant_uuid: merchantData?.restaurant?.id
+
         }
 
         setPayload(data);
