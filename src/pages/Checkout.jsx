@@ -1,5 +1,5 @@
 import { Button, IconButton, TextareaAutosize, } from '@mui/material';
-import { React, useState, useCallback, useContext, useEffect, useRef } from 'react';
+import { React, useState, useCallback, useContext, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
@@ -16,8 +16,8 @@ import { debounce } from "debounce";
 import BoxLoginGojek from '../components/BoxLoginGojek';
 import ModalBox from '../components/ModalBox';
 
-const Checkout = () => {
-    const { payload, selectedItems } = useContext(CartContext);
+const Checkout = ({ getOrdersActive }) => {
+    const { payload, selectedItems, variants } = useContext(CartContext);
     const params = useParams();
     const [dataCheckout, setDataCheckout] = useState();
 
@@ -37,12 +37,13 @@ const Checkout = () => {
 
     var idvoucher = useRef();
     var id_oder = useRef();
-    const debounceDropDown = useCallback(debounce(() => fetchData(), 1500), [])
-    useEffect(() => {
+    const debounceDropDown = useCallback(debounce((payload) => fetchData(payload), 1500), [])
+    useLayoutEffect(() => {
         debounceDropDown(payload);
-    }, [payload]);
-    const fetchData = async () => {
 
+    }, [payload]);
+    const fetchData = async (dataPayload) => {
+        const dataItems = dataPayload || payload;
         setLoadingRefresh("refresh-icon-ro");
 
         var getVC = await GojekAPI.getVoucher();
@@ -53,7 +54,7 @@ const Checkout = () => {
         }
 
         var data = await GojekAPI.checkout({
-            ...payload,
+            ...dataItems,
             offer_id: idvoucher.current,
             voucherId: idvoucher.current
 
@@ -88,6 +89,7 @@ const Checkout = () => {
         try {
 
             if (idvoucher.current != undefined) {
+
                 var dataPayload = {
                     "cartPriceEstimated": (Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)),
                     "destinationAddress": customerData?.address,
@@ -134,7 +136,7 @@ const Checkout = () => {
             enqueueSnackbar(error?.message, { variant: 'warning' })
 
         } finally {
-
+            getOrdersActive();
         }
 
     }

@@ -16,6 +16,10 @@ const SelectedItem = (props) => {
     var quantityEdited = action == 0 ? selectedItems[indexItem]?.quantity : data?.quantity;
     const [quantityEdit, setQuantityEdit] = useState(action == 0 ? selectedItems[indexItem]?.quantity : data?.quantity);
 
+
+    const onChaneQuantity = (qty) => {
+        setQuantityEdit(qty);
+    }
     const handleAdd = () => {
 
         handleSelectItem(
@@ -70,7 +74,7 @@ const SelectedItem = (props) => {
 
         }}>
 
-            {toggleEditOption && <ChoseOptions indexItem={indexItem} toggleOption={toggleEditOption} setToggleOption={setToggleEditOption} data={dataVariants} quantity={quantityEdit} setQuantity={setQuantityEdit} />}
+            {toggleEditOption && <ChoseOptions indexItem={indexItem} toggleOption={toggleEditOption} setToggleOption={setToggleEditOption} data={dataVariants} quantity={quantityEdit} setQuantity={onChaneQuantity} />}
 
 
             {

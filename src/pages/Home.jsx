@@ -197,7 +197,7 @@ export default function Home() {
 
             {/* modal đặt đơn */}
             <ModalBox open={toggleCheckout} setOpen={setToggleCheckout} title={title || "Vui lòng chọn món"} >
-                <Checkout />
+                <Checkout getOrdersActive={getOrdersActive} />
             </ModalBox>
 
 

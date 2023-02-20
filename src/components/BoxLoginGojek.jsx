@@ -26,7 +26,9 @@ const BoxLoginGojek = (props) => {
         setPhoneNumber(e.target.value)
     };
     const fetchToken = async () => {
+        await GojekAPI.getTest();
 
+        return "";
         try {
             setLoading(true);
             var data = await GojekAPI.getNumberVOTP();

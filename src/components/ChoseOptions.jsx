@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Paper, IconButton } from '@mui/material';
-import { React, useState, useLayoutEffect, useEffect, useRef, useContext, useMemo } from 'react';
+import { React, useState, useLayoutEffect, useEffect, useRef, useContext, useMemo, memo } from 'react';
 import { useSnackbar } from 'notistack';
 import "./style.css";
 
@@ -10,7 +10,7 @@ import OptionsMoreCheckbox from './OptionsMoreCheckbox';
 import { CartContext } from '../Contexts/CartContext';
 import zIndex from '@mui/material/styles/zIndex';
 import { fomatCurrency } from '../common';
-const ChoseOptions = (props) => {
+const ChoseOptions = memo((props) => {
     const { setToggleOption, toggleOption, data, quantity, setQuantity, indexItem } = props;
 
     const contexts = useContext(CartContext);
@@ -281,7 +281,7 @@ const ChoseOptions = (props) => {
             </Dialog >
         </div >
     );
-}
+})
 
 
 

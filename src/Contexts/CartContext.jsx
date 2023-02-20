@@ -180,9 +180,9 @@ function CartProvider({ children }) {
 
 
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         handlePayload();
-    }, [selectedItems]);
+    }, [selectedItems, variants]);
 
 
     useEffect(() => {

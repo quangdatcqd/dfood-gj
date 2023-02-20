@@ -9,10 +9,8 @@ import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
 import BoxBtnSelect from '../components/BoxBtnSelect';
 const SelectDishes = () => {
-
+    console.log("rerender")
     const { setMerchantData, resetCart, setToggleSelectDishes, selectedRes, merchantData } = useContext(CartContext);
-
-
     const [dataRestaurant, setDataRestaurant] = useState("");
 
     useEffect(() => {
@@ -85,7 +83,7 @@ const SelectDishes = () => {
 
 
 
-const ItemSelect = (props) => {
+const ItemSelect = memo((props) => {
     const { data } = props;
 
 
@@ -126,7 +124,7 @@ const ItemSelect = (props) => {
 
         </div>
     )
-}
+})
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -135,4 +133,4 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
-export default memo(SelectDishes);
+export default SelectDishes;

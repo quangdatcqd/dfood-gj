@@ -21,6 +21,9 @@ const BoxBtnSelect = (props) => {
     var index = contexts.payload?.items?.findIndex((payloadId) => {
         return payloadId?.uuid === data?.id;
     });
+    const handleChangeQty = (qty) => {
+        setQuantity(qty);
+    }
     useLayoutEffect(() => {
 
 
@@ -64,25 +67,26 @@ const BoxBtnSelect = (props) => {
         //         }
         //     );
         // }
-        contexts.handleSelectItem(
-            {
-                itemId: data?.shopping_item_id,
-                itemName: data?.name,
-                notes: "",
-                price: data?.price,
-                promoId: data?.promotion?.id,
-                quantity: quantity - 1,
-                uuid: data?.id,
-                promoPrice: data?.promotion?.selling_price
-            },
-            index
-            ,
-            1
-        );
-        setQuantity(quantity <= 0 ? 0 : quantity - 1);
 
 
-
+        if (quantity >= 1) {
+            contexts.handleSelectItem(
+                {
+                    itemId: data?.shopping_item_id,
+                    itemName: data?.name,
+                    notes: "",
+                    price: data?.price,
+                    promoId: data?.promotion?.id,
+                    quantity: quantity - 1,
+                    uuid: data?.id,
+                    promoPrice: data?.promotion?.selling_price
+                },
+                index
+                ,
+                1
+            );
+            setQuantity(quantity <= 0 ? 0 : quantity - 1);
+        }
 
     }
     const handleAdd = () => {
@@ -118,7 +122,7 @@ const BoxBtnSelect = (props) => {
         <div >
             <BoxSelectedItems setQuantity={setQuantity} setIndexItem={setIndexItem} toggleEditItems={toggleEditItems} setToggleEditItems={setToggleEditItems} handleDelete={handleDelete} quantity={quantity} data={data} setToggleOption={setToggleOption} />
 
-            {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={setQuantity} />}
+            {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={handleChangeQty} />}
 
             {(data?.variant_category_ids === null) ?
                 <QuantityInput handleAdd={handleAdd} handleDelete={handleDelete} quantity={quantity} />

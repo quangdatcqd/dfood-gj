@@ -25,7 +25,8 @@ const QuantityInput = (props) => {
                 onClick={handleDelete}
             >
                 <IconButton
-                    size="small"  >
+                    size="small"
+                >
                     <RemoveCircleOutlineIcon
                         style={{
                             fontSize: "26px",
