@@ -1,7 +1,7 @@
 // in app.js
 import * as React from "react";
 import { SnackbarProvider } from 'notistack';
-import { Routes, BrowserRouter, Route, useNavigate } from "react-router-dom";
+import { Routes, BrowserRouter, Route, } from "react-router-dom";
 import Home from "./pages/Home";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -14,7 +14,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}  >
-      <SnackbarProvider anchorOrigin={{ vertical: "top", horizontal: "center" }} maxSnack={2} autoHideDuration={2000}>
+      <SnackbarProvider anchorOrigin={{ vertical: "top", horizontal: "center" }} maxSnack={2} autoHideDuration={1500}>
 
         <BrowserRouter>
 

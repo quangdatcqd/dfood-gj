@@ -7,6 +7,7 @@ import GojekAPI from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
 import InputBox from './InputBox';
 import { NavLink } from 'react-router-dom';
+import { generateID } from '../common';
 const BoxLoginGojek = (props) => {
     const { setToggleLogin } = props;
 
@@ -26,9 +27,9 @@ const BoxLoginGojek = (props) => {
         setPhoneNumber(e.target.value)
     };
     const fetchToken = async () => {
-        await GojekAPI.getTest();
 
-        return "";
+        generateID();
+
         try {
             setLoading(true);
             var data = await GojekAPI.getNumberVOTP();
@@ -83,8 +84,14 @@ const BoxLoginGojek = (props) => {
     const requestOTP = async (number = "") => {
 
         var numberPhone = phoneNumber;
-        if (number != "") numberPhone = number;
-        else setLoadingROTP(true);
+        if (number != "") {
+            numberPhone = number;
+
+        }
+        else {
+            setLoadingROTP(true);
+            generateID();
+        }
         try {
 
             let data = await GojekAPI.checkPhoneHas(numberPhone);
@@ -173,6 +180,8 @@ const BoxLoginGojek = (props) => {
             var data = await GojekAPI.register(phoneNumber, token);
             if (data?.success) {
                 localStorage.setItem("userInfo", JSON.stringify(data?.data?.customer));
+                localStorage.setItem("G-Token", data?.data?.access_token);
+
                 refreshToken(data?.data?.access_token, data?.data?.refresh_token, data?.data?.customer?.id);
             } else {
                 throw new Error(

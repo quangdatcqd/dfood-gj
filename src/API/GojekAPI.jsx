@@ -1,7 +1,8 @@
+import { randomString } from "../common";
 import axiosClient from "./axiosClient";
 
 const location = JSON.parse(localStorage.getItem("customerLoc"));
-const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
 const cusLoc = location?.latitude + "," + location?.longitude;
 
 
@@ -10,17 +11,8 @@ const GojekAPI = {
 
     getOrdersActive() {
         try {
-            const url = '/getordersactive';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-
-            }
-
-            return axiosClient.post(url, payload);
+            const url = 'https://api.gojekapi.com/v1/customer/card/active';
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -29,18 +21,8 @@ const GojekAPI = {
 
     getOrderDetail(id) {
         try {
-            const url = '/getorderdetail';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "id_order": id,
-
-            }
-
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/v1/bookings/${id}/detail`;
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -48,18 +30,8 @@ const GojekAPI = {
     ,
     getListOrders() {
         try {
-            const url = '/getlistorders';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "id_order": localStorage.getItem("idOrder"),
-
-            }
-
-            return axiosClient.post(url, payload);
+            const url = 'https://api.gojekapi.com/gofood/consumer/v3/orders';
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -67,17 +39,9 @@ const GojekAPI = {
     ,
     searchAddress(keyword) {
         try {
-            const url = '/searchaddress';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "keyword": keyword
-            }
+            const url = 'https://api.gojekapi.com/v2/search-places?location=20.9794367%252C105.7099217&service_type=5&location_type=dropoff&keyword=' + encodeURIComponent(keyword);
 
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -85,123 +49,64 @@ const GojekAPI = {
     searchRestaurant(keyword) {
         try {
 
-            const url = '/searchrestaurant';
+            const url = `https://api.gojekapi.com/gofood/search/v1/query_understanding?search_query=${encodeURIComponent(keyword)}&picked_loc=${cusLoc}&redesign_enabled=true&super_partner_enabled=true`;
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "keyword": keyword
-            }
-
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
     },
     getRestaurant(id) {
         try {
-            const url = '/getrestaurant';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "id_res": id
-            }
+            const url = `https://api.gojekapi.com/gofood/consumer/v4/restaurants/${id}`;
 
-            return axiosClient.post(url, payload);
+
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
     },
     setAddress(id) {
         try {
-            const url = '/setaddress';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idlocation": id
-            }
+            const url = `https://api.gojekapi.com/poi/v3/findLatLng?placeid=${id}&service_type=5`;
 
-            return axiosClient.post(url, payload);
+
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
     },
     checkout(dataPayload) {
         try {
-            const url = '/checkout';
-
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "payload": JSON.stringify(dataPayload),
-            }
-
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/haggler/public/delivery/v1/estimate`;
+            return axiosClient.post(url, dataPayload);
         } catch (ex) {
             return ex;
         }
     },
     dealsCheckout(brandID, merchantID) {
         try {
-            const url = '/dealscheckout';
+            const url = `https://api.gojekapi.com/gofood/v2/deals/checkout?merchant_id=${merchantID}&brand_id=${brandID}&service_type=5&picked_loc=${cusLoc}`;
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "brand_id": brandID,
-                "merchant_id": merchantID,
-            }
 
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
     },
     makeOrder(dataPayload) {
         try {
-            const url = '/makeoder';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "payload": JSON.stringify(dataPayload)
-            }
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/waiter/v4/orders`;
+
+            return axiosClient.post(url, dataPayload);
         } catch (ex) {
             return ex;
         }
     },
     getChannelChat(id) {
         try {
-            const url = '/getchannelchat';
-
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idOrder": id,
-            }
-
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/v2/order/${id}/channel?service_type=5`;
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -209,16 +114,9 @@ const GojekAPI = {
 
     getAllChat(id) {
         try {
-            const url = '/getallchat';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idChannel": id,
-            }
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/v2/chat/channels/${id}/messages?batch_size=20&direction=prev&message_ts=8999999999999`;
+
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -226,17 +124,10 @@ const GojekAPI = {
 
     getMemberChat(id) {
         try {
-            const url = '/getmemberchat';
+            const url = `https://api.gojekapi.com/v2/chat/channels/${id}`;
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idChannel": id,
-            }
-            return axiosClient.post(url, payload);
+
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -244,17 +135,9 @@ const GojekAPI = {
 
     sendMessage(id, text) {
         try {
-            const url = '/sendmessage';
+            const url = `https://api.gojekapi.com/v2/chat/channels/${id}/message`;
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idChannel": id,
-                "text": text
-            }
+            let payload = `{"channel_type":"group-booking","data":"{\\"tracking_id\\":\\"ff41235f-b55c-4f52-9e07-62abd8560d35\\"}","request_id":"d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd","text":"${text}","type":"text"}`
 
             return axiosClient.post(url, payload);
         } catch (ex) {
@@ -263,34 +146,20 @@ const GojekAPI = {
     },
     cancelOrder(id) {
         try {
-            const url = '/cancelorder';
+            const url = `https://api.gojekapi.com/waiter/v1/orders/${id}/cancel`;
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "id_order": id,
-            }
+            let payload = `{"activitySource":2,"bookingId":0,"cancelDescription":"Cancelled by customer apps","cancelReasonCode":"CUSTOMER_CANCEL_WITH_NO_REASON","orderNo":"${id}"}`;
 
-            return axiosClient.post(url, payload);
+            return axiosClient.put(url, payload);
         } catch (ex) {
             return ex;
         }
     },
     getVoucher() {
         try {
-            const url = '/getvoucher';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
+            const url = `https://api.gojekapi.com/gopoints/v3/wallet/vouchers?limit=200&page=1`;
 
-            }
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -307,17 +176,8 @@ const GojekAPI = {
 
     tracking(id) {
         try {
-            const url = '/tracking';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "idOrder": id
-            }
-
-
+            const url = `https://api.gojekapi.com/v4/booking/track`;
+            let payload = `{"orderNumbers":"${id}"}`
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -327,17 +187,8 @@ const GojekAPI = {
 
     cardsGofoodV2() {
         try {
-            const url = '/cardsgofoodv2';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-
-            }
-
-            return axiosClient.post(url, payload);
+            const url = 'https://api.gojekapi.com/v2/customer/cards/gofood-home-v2';
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -345,17 +196,8 @@ const GojekAPI = {
 
     searchSuggestions() {
         try {
-            const url = '/searchsuggestions';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-
-            }
-
-            return axiosClient.post(url, payload);
+            const url = `https://api.gojekapi.com/gofood/search/v2/suggestions?picked_loc=${encodeURIComponent(cusLoc)}`;
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
@@ -363,15 +205,8 @@ const GojekAPI = {
 
     Methods(phone) {
         try {
-            const url = `/methods`;
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "phone": phone
-            }
+            const url = `https://goid.gojekapi.com/nvs/v1/methods`;
+            let payload = `{"client_id":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","country_code":"+84","flow":"signup","phone_number":"${phone}"}`;
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -379,16 +214,8 @@ const GojekAPI = {
     },
     Initiate(phone, verification_id) {
         try {
-            const url = `/initiate`;
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "phone": phone,
-                "verification_id": verification_id
-            }
+            const url = `https://goid.gojekapi.com/nvs/v1/initiate`;
+            let payload = `{"client_id":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","country_code":"+84","flow":"signup","phone_number":"${phone}","verification_id":"${verification_id}","verification_method":"otp","verification_ref_id":"${localStorage.getItem("session_id")}"}`
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -396,15 +223,8 @@ const GojekAPI = {
     },
     checkPhoneHas(phone) {
         try {
-            const url = `/checkphonehas`;
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "phone": phone
-            }
+            const url = `https://goid.gojekapi.com/nvs/methods`;
+            let payload = `{"country_code":"+84","phone_number":"${phone}"}`;
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -412,16 +232,8 @@ const GojekAPI = {
     },
     verifyPhone(token, otp) {
         try {
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "otp": otp,
-                "token": token
-            }
-            const url = `/verifyphone`;
+            let payload = `{"client_id":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","data":{"otp":"${otp}","otp_token":"${token}"},"flow":"signup","verification_method":"otp"}`
+            const url = `https://goid.gojekapi.com/nvs/v1/verify`;
             return axiosClient.post(url, payload);
         } catch (ex) {
             return ex;
@@ -430,36 +242,30 @@ const GojekAPI = {
     register(phone, token) {
         try {
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "token": token,
-                "phone": phone
-            }
-            const url = `/register `;
-            return axiosClient.post(url, payload);
+            let payload = `{"client_name":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","data":{"consent_given":true,"email":"${randomString("0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM" + "_", 10)}d@gmail.com","name":"dat","onboarding_partner":"android","phone":"+84${phone}"}}`;
+            const url = `https://api.gojekapi.com/v7/customers/signup`;
+            return axiosClient.post(url, payload, {
+                headers: {
+                    'Verification-Token': 'Bearer ' + token,
+                    'Authorization': 'Basic ZjM4OTcxMDktOGJjZi00NjU4LWE2M2QtMTAwNjI1NjJiNTgx',
+                }
+            });
         } catch (ex) {
             return ex;
         }
     },
-    refreshToken(accessToken, refreshToken, user_uuid) {
+    refreshToken(access_token, refresh_token, user_uid) {
         try {
 
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "accessToken": accessToken,
-                "refreshToken": refreshToken,
-                "user_uuid": user_uuid
-            }
-            const url = `/refreshtoken`;
-            return axiosClient.post(url, payload);
+            let payload = `{"client_id":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","data":{"refresh_token":"${refresh_token}"},"grant_type":"refresh_token","scopes":[]}`
+            const url = `https://goid.gojekapi.com/goid/token`;
+            return axiosClient.post(url, payload,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'User-Uuid': user_uid
+                    }
+                });
         } catch (ex) {
             return ex;
         }
@@ -468,7 +274,7 @@ const GojekAPI = {
         try {
 
 
-            const url = `/getnumbervotp`;
+            const url = `https://api.viotp.com/request/getv2?token=6da02b69278e49ce8d7b6d51b4e8d56d&serviceId=12`;
             return axiosClient.get(url);
         } catch (ex) {
             return ex;
@@ -478,7 +284,7 @@ const GojekAPI = {
         try {
 
 
-            const url = `/getvotp/${id_session}`;
+            const url = `https://api.viotp.com/session/getv2?requestId=${id_session}&token=6da02b69278e49ce8d7b6d51b4e8d56d`;
             return axiosClient.get(url);
         } catch (ex) {
             return ex;
@@ -487,36 +293,23 @@ const GojekAPI = {
 
     dealsHome() {
         try {
-            const url = '/dealshome';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
+            const location = JSON.parse(localStorage.getItem("customerLoc"));
+            const cusLoc = location?.latitude + "," + location?.longitude;
+            const url = 'https://api.gojekapi.com/gofood/v2/deals/home?picked_loc=' + encodeURIComponent(cusLoc);
 
-            }
 
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
     },
 
-    orderDetail() {
+    orderDetail(id) {
         try {
-            const url = '/orderdetail';
-            let payload = {
-                "G_Token": localStorage.getItem("G-Token"),
-                "session_id": localStorage.getItem("session_id"),
-                "picked_loc": cusLoc,
-                "user_uuid": userInfo?.id ?? userInfo?.id,
-                "uniqueid": localStorage.getItem("unique_id"),
-                "order_id": localStorage.getItem("idOrder"),
+            const url = `https://api.gojekapi.com/v1/bookings/${id}/detail`;
 
-            }
 
-            return axiosClient.post(url, payload);
+            return axiosClient.get(url);
         } catch (ex) {
             return ex;
         }
