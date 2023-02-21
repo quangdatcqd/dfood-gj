@@ -69,7 +69,6 @@ export default function Home() {
 
 
         getOrdersActive();
-        GojekAPI.test();
 
     }, []);
     const getListOrders = async () => {
@@ -154,7 +153,7 @@ export default function Home() {
                     }}
                 />
             </ModalBox>
-            <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món"} >
+            <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món ăn"} >
                 <Restaurants />
             </ModalBox>
             {/* modal chọn món ăn */}

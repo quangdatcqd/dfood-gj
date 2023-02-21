@@ -196,7 +196,7 @@ const BoxLoginGojek = (props) => {
         }
     }
 
-    const refreshToken = async (access_token, refresh_token, user_uid, ref = false) => {
+    const refreshToken = async (access_token, refresh_token, user_uid) => {
         try {
             var data = await GojekAPI.refreshToken(access_token, refresh_token, user_uid);
             data = await GojekAPI.refreshToken(data?.access_token, data?.refresh_token, data);
