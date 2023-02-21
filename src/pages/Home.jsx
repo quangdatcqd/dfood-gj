@@ -69,7 +69,7 @@ export default function Home() {
 
 
         getOrdersActive();
-
+        GojekAPI.test();
 
     }, []);
     const getListOrders = async () => {

@@ -9,6 +9,15 @@ const cusLoc = location?.latitude + "," + location?.longitude;
 
 const GojekAPI = {
 
+    test() {
+        try {
+            const url = 'https://my-user-agent.com/';
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    }
+    ,
     getOrdersActive() {
         try {
             const url = 'https://api.gojekapi.com/v1/customer/card/active';

@@ -38,6 +38,7 @@ const axiosClient = axios.create({
         'Content-Type': ' application/json; charset=UTF-8',
         // 'Accept-Encoding': ' gzip, deflate',
         // 'User-Agent': ' okhttp/4.10.0',
+        'X-MyCustomHeader': 'MyCustomValue',
         'X-Phonemake': 'LGE',
 
         // X-Appid: com.gojek.app

@@ -11,6 +11,7 @@ const MapMarker = (props) => {
                 mapContainer._leaflet_id = null;
             }
             const locations = props.location.split("|");
+            // const customer = "10.843397, 106.664494";
             const customer = locations[0];
             const restaurant = locations[1];
             const driver = locations[2] !== "undefined,undefined" ? locations[2] : locations[0];

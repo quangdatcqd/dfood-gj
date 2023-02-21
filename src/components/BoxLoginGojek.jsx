@@ -183,6 +183,7 @@ const BoxLoginGojek = (props) => {
                 localStorage.setItem("G-Token", data?.data?.access_token);
 
                 refreshToken(data?.data?.access_token, data?.data?.refresh_token, data?.data?.customer?.id);
+
             } else {
                 throw new Error(
                     data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!"
@@ -195,17 +196,19 @@ const BoxLoginGojek = (props) => {
         }
     }
 
-    const refreshToken = async (access_token, refresh_token, user_uid) => {
+    const refreshToken = async (access_token, refresh_token, user_uid, ref = false) => {
         try {
             var data = await GojekAPI.refreshToken(access_token, refresh_token, user_uid);
+            data = await GojekAPI.refreshToken(data?.access_token, data?.refresh_token, data);
             if (data?.access_token) {
                 localStorage.setItem("G-Token", data?.access_token);
                 localStorage.setItem("R-Token", data?.refresh_token);
-                enqueueSnackbar("Đã lấy được token", { variant: 'success' });
-                handleSelectAddress();
+
                 // setToggleLogin(false);
 
 
+                enqueueSnackbar("Đã lấy được token", { variant: 'success' });
+                handleSelectAddress();
             } else {
                 setLoadingSubmit(false);
                 throw new Error(
