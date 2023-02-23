@@ -60,8 +60,6 @@ const BoxLoginGojek = (props) => {
 
                         var datav = await GojekAPI.getOTPVOTP(data.data?.request_id);
                         if (datav?.success && datav?.data?.Code !== null) {
-
-
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
                             break mainloop;

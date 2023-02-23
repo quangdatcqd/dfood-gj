@@ -63,12 +63,12 @@ export default function Home() {
 
 
 
-        const idT = setInterval(() => {
+        setInterval(() => {
 
             getOrdersActive();
 
         }, 5000);
-        return clearInterval(idT);
+
     }, []);
     const getListOrders = async () => {
         setToggleOrders(toggleOrders ? false : true);
