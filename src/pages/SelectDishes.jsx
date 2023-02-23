@@ -9,7 +9,6 @@ import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
 import BoxBtnSelect from '../components/BoxBtnSelect';
 const SelectDishes = () => {
-    console.log("rerender")
     const { setMerchantData, resetCart, setToggleSelectDishes, selectedRes, merchantData } = useContext(CartContext);
     const [dataRestaurant, setDataRestaurant] = useState("");
 

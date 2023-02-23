@@ -1,6 +1,6 @@
 
 import { Avatar, Container } from '@mui/material';
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import GojekAPI from '../API/GojekAPI';
@@ -14,6 +14,7 @@ const BoxLoginGojek = (props) => {
 
 
     const [loading, setLoading] = useState(false);
+    const [ipAddress, setIpAddress] = useState("Kiểm tra");
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [loadingROTP, setLoadingROTP] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -26,7 +27,15 @@ const BoxLoginGojek = (props) => {
     const onPhoneChange = (e) => {
         setPhoneNumber(e.target.value)
     };
+
+    useEffect(() => {
+        checkIPAddress();
+
+    }, []);
+
     const fetchToken = async () => {
+
+
 
         generateID();
 
@@ -44,7 +53,7 @@ const BoxLoginGojek = (props) => {
 
 
                 if (token.length >= 2) {
-
+                    let count = 0;
                     mainloop:
                     while (true) {
 
@@ -56,6 +65,16 @@ const BoxLoginGojek = (props) => {
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
                             break mainloop;
+                        } else {
+                            if (count >= 15) {
+                                setLoading(false);
+
+                                throw new Error(
+                                    "Không có otp bấm lấy lại đi!"
+                                )
+                            }
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            count++;
                         }
 
                     }
@@ -64,17 +83,23 @@ const BoxLoginGojek = (props) => {
 
 
                 } else {
+                    setLoading(false);
                     throw new Error(
                         "Không có token!"
                     )
                 }
 
             } else {
+                setLoading(false);
                 throw new Error(
                     data?.message || "Không phản hồi!"
                 )
+
+
             }
         } catch (error) {
+            setLoading(false);
+
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
 
@@ -164,9 +189,8 @@ const BoxLoginGojek = (props) => {
             if (data?.success) {
                 register(phone_number, data?.data?.verification_token);
             } else {
-                throw new Error(
-                    data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!"
-                );
+                // console.log(data);
+
             }
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
@@ -221,6 +245,11 @@ const BoxLoginGojek = (props) => {
             setLoadingSubmit(false);
             setLoading(false);
         }
+    }
+    const checkIPAddress = async () => {
+        var data = await GojekAPI.test();
+        setIpAddress(data?.ip)
+        enqueueSnackbar(data?.ip, { variant: 'success' })
     }
     const handleSelectAddress = async () => {
         var id = JSON.parse(localStorage.getItem("customerLoc")).placeid;
@@ -381,6 +410,17 @@ const BoxLoginGojek = (props) => {
                     </div>
                     <InputBox placeholder={"Nhập OTP"} onChange={onOTPChange} value={OTP} type={"number"} />
                 </div>
+            </div>
+
+            <div style={
+                {
+                    marginTop: "20px",
+                    fontSize: "20px",
+                    fontWeight: "bolder",
+                    color: "orange",
+                    cursor: "pointer"
+                }} onClick={checkIPAddress}>
+                {ipAddress}
             </div>
             <div style={
                 {

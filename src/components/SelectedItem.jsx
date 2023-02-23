@@ -8,6 +8,7 @@ import ChoseOptions from './ChoseOptions';
 import { fomatCurrency } from '../common';
 
 const SelectedItem = (props) => {
+
     const { data, dataVariants, indexItem, action } = props;
     const dataItem = action == 0 ? data?.variants[0] : data?.variants;
 

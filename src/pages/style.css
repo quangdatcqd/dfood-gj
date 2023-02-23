@@ -287,6 +287,76 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
   100% {left: 110%; top: 63px;  } 
 }
  
+.box-coupon{  
+  margin: 0 auto;
+  font-weight: bold;
+  font-size: 13pt;
+  border:#e10f30  solid 3px ;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #e10f30;
+}
+
+.box-coupon:hover{
+  background-color: #8f061a;
+  color: white
+}
+
+
+.box-restaurant{
+  padding: 10px; 
+  box-shadow: rgb(206 206 206) 3px 3px 6px;
+   margin-top: 8px;
+   border-radius: 20px;
+   background-color: white; 
+  display: flex;
+  
+}
+.box-res-content{
+  margin-left: 10px;
+  flex: 1;
+     
+}
+.promos-title{
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #fffaee;
+     font-weight: bold; 
+   
+}
+.active-promo-title{ 
+  animation: activepromotitle 1s linear 0s infinite;
+  padding: 5px 10px;
+  font-size: 14pt !important;
+
+ 
+}
+ @keyframes activepromotitle {
+      0% {background-color:  #02922a; color: white;}
+      
+      100% {background-color:  #086453; color: white; }
+  }
+.box-res-image{
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  object-fit: cover;
+  overflow: hidden;
+}
+.promos-title p{
+  margin: 0px;
+  
+}
+.promos-title-max{
+
+}
+.promos-title-min{
+  font-size: 12px;
+  color: red;
+}
  
 @media only screen and (max-width: 800px) {
  

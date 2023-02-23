@@ -19,28 +19,23 @@ import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
 import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
 import ListOrders from '../components/ListOrders';
+import ListResVIP from '../components/ListResVIP';
 
 
 
 export default function Home() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-
     const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
-
-
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
     const [toggleMenu, setToggleMenu] = useState(false);
+    const [toggleListRes, setToggleListRes] = useState(false);
     const [toggleOrders, setToggleOrders] = useState(false);
     const [toggleOderDetail, setToggleOderDetail] = useState(false);
     const [listOrders, setListOrders] = useState([]);
     const [listOrdersActive, setListOrdersActive] = useState([]);
     const [idOrder, setIdOrder] = useState("");
-
     const { toggleSelectDishes, setToggleSelectDishes, toggleCheckout, setToggleCheckout } = useContext(CartContext);
-
     const [toggleSearch, setToggleSearch] = useState(false);
-
     const [dataHomeCards, setDataHomeCards] = useState();
     const [dataDealsHome, setDataDealsHome] = useState();
     const indexBanner = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 11);
@@ -68,8 +63,12 @@ export default function Home() {
 
 
 
-        getOrdersActive();
+        const idT = setInterval(() => {
 
+            getOrdersActive();
+
+        }, 5000);
+        return clearInterval(idT);
     }, []);
     const getListOrders = async () => {
         setToggleOrders(toggleOrders ? false : true);
@@ -156,6 +155,9 @@ export default function Home() {
             <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món ăn"} >
                 <Restaurants />
             </ModalBox>
+            <ModalBox open={toggleListRes} setOpen={setToggleListRes} title={"Ưu đãi món ăn"} >
+                <ListResVIP open={toggleListRes} />
+            </ModalBox>
             {/* modal chọn món ăn */}
             <ModalBox open={toggleSelectDishes} setOpen={setToggleSelectDishes} title={title || "Vui lòng chọn món"}>
                 <SelectDishes />
@@ -196,6 +198,13 @@ export default function Home() {
 
                 {/* {indexDealsHome >= 0 && (<CardDealsHome banners={dataHomeCards?.cards[indexBanner]} />)} */}
                 {indexBanner >= 0 && (<SwipeBanner banners={dataHomeCards?.cards[indexBanner]} />)}
+                {
+                    (dataDealsHome?.cards?.length > 0 && dataDealsHome?.cards[0]?.content?.offer_list?.discounts?.length > 0) &&
+                    <div className='box-coupon' onClick={() => setToggleListRes(true)}>
+                        {dataDealsHome?.cards[0]?.content?.offer_list?.discounts[0]?.title}
+                    </div>
+                }
+
                 {indexCategories >= 0 && (<SwipeCategories banners={dataHomeCards?.cards[indexCategories]} />)}
 
                 {indexCategoriesV1 >= 0 && (<SwipeCategoriesV1 banners={dataHomeCards?.cards[indexCategoriesV1]} />)}
