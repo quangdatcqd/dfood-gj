@@ -1,13 +1,20 @@
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import React from 'react';
+import { React, useContext } from 'react';
 import { EffectCoverflow, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
+import { CartContext } from '../Contexts/CartContext';
 const SwipeCategoriesV2 = (props) => {
     const { products } = props;
 
+    const { setToggleSelectDishes, setSelectedRes } = useContext(CartContext);
+    const handleSelect = (id) => {
+        setToggleSelectDishes(true);
+        setSelectedRes(id);
+
+    }
     return (
         <div>
             <hr />
@@ -37,8 +44,11 @@ const SwipeCategoriesV2 = (props) => {
                                     style={{ textDecoration: "none" }}
                                     to={"/selectdishes/" + item?.restaurant_id}
                                 > */}
-                                <Card sx={{ maxWidth: 345 }}>
+                                <Card sx={{ maxWidth: 345 }}
+                                    onClick={() => handleSelect(item?.restaurant_id)}
+                                >
                                     <CardMedia
+
                                         sx={{ height: 130, width: "100%" }}
                                         image={item?.image_url}
                                         title="green iguana"

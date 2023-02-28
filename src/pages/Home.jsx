@@ -61,13 +61,9 @@ export default function Home() {
 
         // ftabTWudToKUlyz3yc - DHZ: APA91bGoxvlyyWkFKFoBen85JfvFBAVosjWEt2N3BmxKSjdx97rkcZCSWaMB5Ygoj8ZwFuWbA70_CHate8E1rcZmQTIetRNsGM1Y8VwsuyXOxGACSVm3FaLCMjI1sVJ0kGiKWuKo0O0x
 
+        getOrdersActive();
 
 
-        setInterval(() => {
-
-            getOrdersActive();
-
-        }, 5000);
 
     }, []);
     const getListOrders = async () => {
