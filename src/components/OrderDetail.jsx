@@ -150,7 +150,7 @@ const OrderDetail = ({ idOrder }) => {
                         <div onClick={() => trackingOrder()}  >
                             Tải lại
                         </div>
-                        <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token") + "  ----|----" + localStorage.getItem("R-Token")) }}   >
+                        <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token")) }}   >
                             Xuất
                         </div>
                     </div>
