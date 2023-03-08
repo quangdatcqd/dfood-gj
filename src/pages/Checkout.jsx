@@ -28,7 +28,8 @@ const Checkout = ({ getOrdersActive }) => {
     const [loadingRefresh, setLoadingRefresh] = useState("false");
 
 
-    const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
+    const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantData")));
+    const [merchantLoc, setMerchantLoc] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [customerData, setCustomerData] = useState(JSON.parse(localStorage.getItem("customerLoc")));
     const [addressName, setAddressName] = useState(customerData?.name);
 
@@ -43,34 +44,43 @@ const Checkout = ({ getOrdersActive }) => {
 
     }, [payload]);
     const fetchData = async (dataPayload) => {
-        const dataItems = dataPayload || payload;
-        setLoadingRefresh("refresh-icon-ro");
+        try {
+            const dataItems = dataPayload || payload;
+            setLoadingRefresh("refresh-icon-ro");
 
-        var getVC = await GojekAPI.getVoucher();
-        let indexVC = -1;
-        if (getVC?.success) {
-            indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
-            idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
+            var getVC = await GojekAPI.getVoucher();
+            let indexVC = -1;
+            if (getVC?.success) {
+                indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
+                idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
+            }
+
+            var data = await GojekAPI.checkout({
+                ...dataItems,
+                offer_id: idvoucher.current,
+                voucherId: idvoucher.current
+
+            });
+            localStorage.setItem("noteOrder", noteOrder);
+            setDataCheckout(data);
+            if (data?.distance) {
+                enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
+            } else {
+                data?.errors?.map((item, key) => {
+                    enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
+
+                })
+            }
+
+        } catch (error) {
+
+            enqueueSnackbar(error.message, { variant: 'warning', autoHideDuration: 2000 })
+
+        } finally {
+            setLoadingRefresh("false")
         }
 
-        var data = await GojekAPI.checkout({
-            ...dataItems,
-            offer_id: idvoucher.current,
-            voucherId: idvoucher.current
 
-        });
-        localStorage.setItem("noteOrder", noteOrder);
-        setDataCheckout(data);
-        if (data?.distance) {
-            enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
-        } else {
-            data?.errors?.map((item, key) => {
-                enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
-            })
-        }
-
-
-        setLoadingRefresh("false")
     }
     useEffect(() => {
         if (payload?.items?.length > 0) {
@@ -109,16 +119,16 @@ const Checkout = ({ getOrdersActive }) => {
                         "understandingId": "a09669f7-7d2e-43d8-a462-bfcb240efe17"
                     },
                     "orderReviewScreenEnabled": false,
-                    "originAddress": merchantData?.restaurant?.address,
-                    "originLatLong": merchantData?.restaurant?.location,
-                    "originName": merchantData?.restaurant?.name,
+                    "originAddress": merchantLoc?.address,
+                    "originLatLong": merchantLoc?.location,
+                    "originName": merchantLoc?.name,
                     "paymentOptions": [
                         {
                             "displayName": "Tiền mặt",
                             "type": "CASH"
                         }
                     ],
-                    "restaurantId": merchantData?.restaurant?.id,
+                    "restaurantId": merchantLoc?.id,
                     "voucherId": idvoucher.current
                 }
 
@@ -170,7 +180,7 @@ const Checkout = ({ getOrdersActive }) => {
                         fontSize: "14pt",
                         fontWeight: "bold"
                     }}>
-                        {merchantData?.restaurant?.address}
+                        {merchantData?.address}
                     </p>
                 </div>
                 <hr />
@@ -223,7 +233,7 @@ const Checkout = ({ getOrdersActive }) => {
                     payload?.items?.map((item, key) => {
 
 
-                        var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
+                        // var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
                         return (
                             <div key={key} style={{
 
@@ -240,7 +250,7 @@ const Checkout = ({ getOrdersActive }) => {
                                     marginBottom: "3px"
                                 }}>{item?.itemName}</p>
 
-                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData?.items[index]} indexItem={key} indexItemRes={index} />
+                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData} indexItem={key} />
                             </div>
                         )
                     })

@@ -53,6 +53,7 @@ const BoxItem = (props) => {
         setToggleSelectDishes(true);
         setSelectedRes(id);
 
+
     }
     return (
         <div style={{ cursor: "pointer", display: "flex", justifyItems: "center", borderBottom: "rgb(234 234 234) solid 2px", padding: "10px 0px 30px 0px" }} onClick={() => handleSelect(listmerchants?.restaurant_id || listmerchants?.id)}>

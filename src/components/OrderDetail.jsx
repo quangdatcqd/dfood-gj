@@ -68,7 +68,7 @@ const OrderDetail = ({ idOrder }) => {
                     </div>
                     <div className='addr-box'>
                         <p className='addr'>Địa chỉ của bạn</p>
-                        <p className='addr-i'>{dataOrder?.destination?.address}</p>
+                        <p className='addr-i'>{dataOrder?.destination?.location_name + "-" + dataOrder?.destination?.address}</p>
                     </div>
                 </div>
 

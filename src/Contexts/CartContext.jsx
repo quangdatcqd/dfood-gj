@@ -20,6 +20,8 @@ function CartProvider({ children }) {
         setVariants(newVariant);
 
     }
+
+
     const handleSelectItem = (newItem, index = -1, action = 0) => {
 
         // if (newItem?.quantity <= 0) return "";
@@ -32,7 +34,7 @@ function CartProvider({ children }) {
             var data = {
                 itemId: newItem?.itemId,
                 itemName: newItem?.itemName,
-                notes: "",
+                notes: newItem?.notes,
                 price: Number(newItem?.price),
                 promoId: newItem?.promoId,
                 quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1,
@@ -92,12 +94,17 @@ function CartProvider({ children }) {
         const newArray = selectedItems.map((item, i) => {
             if (index === i) {
                 if (action == 0)
-                    return { ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1 };
+                    return {
+                        ...item, quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1,
+                        notes: newItem?.notes
+
+                    };
                 else
                     return {
                         ...item,
                         quantity: (newItem?.quantity > 0) ? newItem?.quantity : 1,
-                        variants: variants
+                        variants: variants,
+                        notes: newItem?.notes
                     };
 
             } else {
@@ -108,6 +115,7 @@ function CartProvider({ children }) {
         setSelectedItems(newArray)
         setVariants([]);
     }
+
 
     const handleUpdateItem = (newItem, index, action = 0) => {
 
@@ -243,13 +251,13 @@ function CartProvider({ children }) {
             cart_price: total,
             customer_location: customerData?.latitude + "," + customerData?.longitude,
             items: items,
-            merchant_location: merchantData?.restaurant?.location,
+            merchant_location: merchantData?.location,
             offer_id: "",
             offer_type: "voucher",
             payment_types: [
             ],
             promo_discount_cart_price: discount,
-            restaurant_uuid: merchantData?.restaurant?.id
+            restaurant_uuid: merchantData?.id
 
         }
 

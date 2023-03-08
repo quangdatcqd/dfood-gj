@@ -315,6 +315,10 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
   display: flex;
   
 }
+.box-restaurant:hover{
+   background-color: rgb(255 219 219);
+
+}
 .box-res-content{
   margin-left: 10px;
   flex: 1;

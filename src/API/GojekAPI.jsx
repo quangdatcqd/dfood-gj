@@ -8,6 +8,7 @@ const HEADERS = () => {
     const cusLoc = location?.latitude + "," + location?.longitude;
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const str = randomString("1234567890QWERTYUIOPLKJHGFDSAZXCVBNMazxcvbnmlkjhgfdsqwertyuiop", 5);
     return {
         headers: {
 
@@ -27,13 +28,13 @@ const HEADERS = () => {
             'X-Signature': ' 1001',
             'X-Signature-Time': ' 0',
             'Accept': ' application/json',
-            'X-Appversion': ' 4.61.1',
+            'X-Appversion': ' 4.62.2',
             'X-Appid': ' com.gojek.app',
-            'X-Platform': ' Android',
-            'X-Deviceos': ' Android,7.1.2',
+            // 'X-Platform': ' Android',
+            'X-Deviceos': ' Android,9',
             'X-User-Type': ' customer',
             'X-Pushtokentype': ' FCM',
-            'X-Phonemodel': ' goodgle,G0d11A',
+            'X-Phonemodel': str + "," + str,
             'X-Usertimezone': ' +07:00',
             'Accept-Language': ' vi-VN',
             'Gojek-Country-Code': '  VN',
@@ -45,13 +46,36 @@ const HEADERS = () => {
             'Content-Type': ' application/json; charset=UTF-8',
             // 'Accept-Encoding': ' gzip, deflate',
             // 'User-Agent': ' okhttp/4.10.0', 
-            'X-Phonemake': 'LGEd',
+            'X-Phonemake': str,
         },
         picked_loc: cusLoc
     }
 }
 
+
+
 const GojekAPI = {
+    postDataRestaurant(id, data, best) {
+        try {
+            const url = `https://lomdom.tk/dbook/public/api/postdatarestaurant`;
+            return axiosClient.post(url, {
+                id: id,
+                data: JSON.stringify(data),
+                best: best ? 1 : 0
+            });
+        } catch (ex) {
+            return ex;
+        }
+    },
+    getGenIDRes() {
+        try {
+
+            return axiosClient.get("http://localhost:8000/api/generateidreslist");
+        } catch (ex) {
+            return ex;
+        }
+    }
+    ,
 
     test() {
         try {
@@ -132,7 +156,7 @@ const GojekAPI = {
     },
     getRestaurant(id) {
         try {
-            const url = `https://api.gojekapi.com/gofood/consumer/v4/restaurants/${id}`;
+            const url = `https://api.gojekapi.com/gofood/consumer/v5/restaurants/${id}`;
             // const url = `https://api.gojekapi.com/gofood/consumer/v5/restaurants/2644b825-0c4e-4a36-8cbf-bb01c33ed0b1?search_position=2&search_id=0ae29d3e-49ba-46dd-931b-6356dd32d73f&location=null&order_intent=delivery&is_offer_list_experiment=true&cart_recommendations_enabled=false&picked_loc=10.687392%2C106.59386&delivery_mode_intent=regular`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {

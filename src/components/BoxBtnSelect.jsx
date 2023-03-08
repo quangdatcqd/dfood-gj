@@ -7,6 +7,7 @@ import ChoseOptions from './ChoseOptions';
 import { CartContext } from '../Contexts/CartContext';
 import QuantityInput from './QuantityInput';
 import BoxSelectedItems from './BoxSelectedItems';
+import { TextareaAutosize } from '@mui/material';
 
 
 const BoxBtnSelect = (props) => {
@@ -15,6 +16,7 @@ const BoxBtnSelect = (props) => {
     const contexts = useContext(CartContext);
     const [toggleOption, setToggleOption] = useState(false);
     const [toggleEditItems, setToggleEditItems] = useState(false);
+    const [noteItem, setNoteItem] = useState("");
     const [quantity, setQuantity] = useState(0);
     const [indexItem, setIndexItem] = useState(-1);
 
@@ -32,7 +34,7 @@ const BoxBtnSelect = (props) => {
             setQuantity(contexts.payload?.items[index]?.quantity);
         }
 
-    }, [contexts.payload]);
+    }, [contexts.payload, contexts.setIndexItem]);
 
     const handleDelete = () => {
 
@@ -70,11 +72,12 @@ const BoxBtnSelect = (props) => {
 
 
         if (quantity >= 1) {
+
             contexts.handleSelectItem(
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
-                    notes: "",
+                    notes: noteItem,
                     price: data?.price,
                     promoId: data?.promotion?.id,
                     quantity: quantity - 1,
@@ -91,6 +94,7 @@ const BoxBtnSelect = (props) => {
     }
     const handleAdd = () => {
         setIndexItem(-1);
+
         if (data?.variant_category_ids === null) {
 
 
@@ -98,7 +102,7 @@ const BoxBtnSelect = (props) => {
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
-                    notes: "",
+                    notes: noteItem,
                     price: data?.price,
                     promoId: data?.promotion?.id,
                     quantity: quantity + 1,
@@ -123,6 +127,7 @@ const BoxBtnSelect = (props) => {
             <BoxSelectedItems setQuantity={setQuantity} setIndexItem={setIndexItem} toggleEditItems={toggleEditItems} setToggleEditItems={setToggleEditItems} handleDelete={handleDelete} quantity={quantity} data={data} setToggleOption={setToggleOption} />
 
             {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={handleChangeQty} />}
+            <TextareaAutosize onChange={(e) => setNoteItem(e.target.value)} value={noteItem} style={{ width: "100%", resize: "none", padding: "5px", outline: "none", border: "1px solid rgb(214 214 214)", borderRadius: "10px", fontSize: "10pt", fontWeight: "bold", marginBottom: "30px" }} />
 
             {(data?.variant_category_ids === null) ?
                 <QuantityInput handleAdd={handleAdd} handleDelete={handleDelete} quantity={quantity} />

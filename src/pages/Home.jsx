@@ -44,7 +44,7 @@ export default function Home() {
     const indexCategoriesV1 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 42);
     const indexCategoriesV2 = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 47);
     const indexListRecomen = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 48);
-    const title = JSON.parse(localStorage.getItem("merchantLoc"))?.restaurant?.name;
+    const title = JSON.parse(localStorage.getItem("merchantLoc"))?.name;
 
     useEffect(() => {
         const fetchHomeCards = async () => {
@@ -195,7 +195,8 @@ export default function Home() {
                 {/* {indexDealsHome >= 0 && (<CardDealsHome banners={dataHomeCards?.cards[indexBanner]} />)} */}
                 {indexBanner >= 0 && (<SwipeBanner banners={dataHomeCards?.cards[indexBanner]} />)}
                 {
-                    (dataDealsHome?.cards?.length > 0 && dataDealsHome?.cards[0]?.content?.offer_list?.discounts?.length > 0) &&
+                    // (dataDealsHome?.cards?.length > 0 && dataDealsHome?.cards[0]?.content?.offer_list?.discounts?.length > 0) &&
+
                     <div className='box-coupon' onClick={() => setToggleListRes(true)}>
                         {dataDealsHome?.cards[0]?.content?.offer_list?.discounts[0]?.title}
                     </div>

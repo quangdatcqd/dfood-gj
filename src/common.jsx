@@ -70,7 +70,7 @@ export const generateID = () => {
     localStorage.setItem("XM1", XM1);
 
     localStorage.setItem("device_id", randomString(fullchars + "+/", 342) + "==")
-    var unique_id = randomString(chars, 16);
+    var unique_id = randomString(chars, 32);
     localStorage.setItem("unique_id", unique_id);
     var tokenDevice = randomString(fullchars, 18) + "-DHZ:" + randomString(fullchars, 140);
     localStorage.setItem("token_device", tokenDevice);
