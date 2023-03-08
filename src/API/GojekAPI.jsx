@@ -21,7 +21,7 @@ const HEADERS = () => {
             'X-Devicetoken': localStorage.getItem("token_device"),
             'User-Uuid': userInfo?.id ?? userInfo?.id,
             'Authorization': ' Bearer  ' + localStorage.getItem("G-Token"),
-            'X-Location ': cusLoc,
+            'X-Location': cusLoc,
             //' AVDVDbVfnBQpM1zKB7JKU9F9faEZTHD6DURJ5V0VW92TFp6YS0KAYdgDoI6VkLxPmgiEiSvqMun2N0bzTRRUu/Ywg7yZhWE8VMswUHvucRMGO4W1X64rnFYqcPd8nujH8+T5vDlruJaiLrwZeB55nNcAiFCmp/ss2VR5O9f6wv96utIf/I3heR9lfZ9uaL99e7EoOZSMN4z3EzpyVUYwL/ccyVb4iIWiJZqGS/ue4p4SqSlZYgb8gaHpnOWAb5FeJMGPsINmhoMas0q5BvHNiLosJDqPV/WB3hWeKhhgVj964F+cGaRWY3LdyZKJRBh4Yv+tAR+t3T0aXP6iB54AfA=='
             'X-Device-Id': localStorage.getItem("device_id"),
             'X-M1': localStorage.getItem("XM1"),
@@ -30,7 +30,7 @@ const HEADERS = () => {
             'Accept': ' application/json',
             'X-Appversion': ' 4.62.2',
             'X-Appid': ' com.gojek.app',
-            // 'X-Platform': ' Android',
+            'X-Platform': 'ios',
             'X-Deviceos': ' Android,9',
             'X-User-Type': ' customer',
             'X-Pushtokentype': ' FCM',
@@ -47,6 +47,8 @@ const HEADERS = () => {
             // 'Accept-Encoding': ' gzip, deflate',
             // 'User-Agent': ' okhttp/4.10.0', 
             'X-Phonemake': str,
+
+
         },
         picked_loc: cusLoc
     }
@@ -176,7 +178,14 @@ const GojekAPI = {
     checkout(dataPayload) {
         try {
             const url = `https://api.gojekapi.com/haggler/public/delivery/v1/estimate`;
-            return axiosClient.post(url, dataPayload, HEADERS());
+            return axiosClient.post(url, dataPayload,
+                {
+                    headers: {
+                        ...HEADERS().headers,
+                        'X-Platform': "",
+                    }
+                }
+            );
         } catch (ex) {
             return ex;
         }
