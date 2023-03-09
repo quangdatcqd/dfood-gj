@@ -147,7 +147,7 @@ const OrderDetail = ({ idOrder }) => {
                         <div onClick={() => handleCancelOrder()}  >
                             Huỷ
                         </div>
-                        <div onClick={() => trackingOrder()}  >
+                        <div onClick={() => getListOrders()}  >
                             Tải lại
                         </div>
                         <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token")) }}   >
