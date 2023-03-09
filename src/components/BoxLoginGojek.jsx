@@ -18,6 +18,7 @@ const BoxLoginGojek = (props) => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [loadingROTP, setLoadingROTP] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [logginStatus, setLogginStatus] = useState("");
     const [OTP, setOTP] = useState("");
     const [otpToken, setOTPToken] = useState("");
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -36,7 +37,7 @@ const BoxLoginGojek = (props) => {
     const fetchToken = async () => {
 
 
-
+        setLogginStatus("");
         generateID();
 
         try {
@@ -66,7 +67,7 @@ const BoxLoginGojek = (props) => {
                         } else {
                             if (count >= 15) {
                                 setLoading(false);
-
+                                setLogginStatus("Không có otp bấm lấy lại đi!")
                                 throw new Error(
                                     "Không có otp bấm lấy lại đi!"
                                 )
@@ -106,14 +107,13 @@ const BoxLoginGojek = (props) => {
 
     const requestOTP = async (number = "") => {
         setLoading(true);
-
+        setLogginStatus("")
         var numberPhone = phoneNumber;
         if (number != "") {
             numberPhone = number;
 
         }
         else {
-
 
             setLoadingROTP(true);
             generateID();
@@ -164,6 +164,7 @@ const BoxLoginGojek = (props) => {
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
             setLoadingROTP(false);
+            setLoading(false);
 
         }
     };
@@ -232,7 +233,7 @@ const BoxLoginGojek = (props) => {
 
                 // setToggleLogin(false);
 
-
+                setLogginStatus("Đã đăng nhập thành công!");
                 enqueueSnackbar("Đã lấy được token", { variant: 'success' });
                 handleSelectAddress();
             } else {
@@ -413,10 +414,17 @@ const BoxLoginGojek = (props) => {
                     <InputBox placeholder={"Nhập OTP"} onChange={onOTPChange} value={OTP} type={"number"} />
                 </div>
             </div>
-
+            <p style={{
+                fontSize: "12pt",
+                color: "red",
+                margin: "5px",
+                fontWeight: "bold"
+            }}>
+                {logginStatus}
+            </p>
             <div style={
                 {
-                    marginTop: "20px",
+                    marginTop: "10px",
                     fontSize: "20px",
                     fontWeight: "bolder",
                     color: "orange",
@@ -424,6 +432,10 @@ const BoxLoginGojek = (props) => {
                 }} onClick={checkIPAddress}>
                 {ipAddress}
             </div>
+
+
+
+
             {
                 !loading &&
 
