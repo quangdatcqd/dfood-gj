@@ -40,7 +40,7 @@ const BoxSelectedItems = (props) => {
                     position: "relative",
                     color: "black",
                     fontWeight: "bolder"
-                }} >{selectedItems[index]?.itemName}
+                }} >{selectedItems && selectedItems[index]?.itemName}
                     <div style={{
                         position: "absolute",
                         right: "0px",
