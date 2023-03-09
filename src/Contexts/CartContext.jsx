@@ -27,10 +27,8 @@ function CartProvider({ children }) {
         // if (newItem?.quantity <= 0) return "";
         // var index = getIndex(newItem?.itemId);
         // console.log(selectedItems[index]?.variants?.length)
-        // 0 add item
-
+        // 0 add item 
         if (action == 0) {
-
             var data = {
                 itemId: newItem?.itemId,
                 itemName: newItem?.itemName,
@@ -43,7 +41,7 @@ function CartProvider({ children }) {
                 promoPrice: newItem?.promoPrice
             };
 
-            setSelectedItems(crr => [...crr, data]);
+            setSelectedItems([...selectedItems, data]);
             // 1 update quantity
         } else if (action == 1) {
 
@@ -91,6 +89,7 @@ function CartProvider({ children }) {
 
 
     const updateArrayItems = (newItem, index, action = 0) => {
+
         const newArray = selectedItems.map((item, i) => {
             if (index === i) {
                 if (action == 0)
@@ -127,6 +126,7 @@ function CartProvider({ children }) {
                         ...item,
                         quantity: newItem?.quantity,
                         variants: action == 0 ? variants : item?.variants,
+
                     }
                 } else {
                     return item;
@@ -234,7 +234,7 @@ function CartProvider({ children }) {
             items.push({
                 itemId: item?.itemId,
                 itemName: item?.itemName,
-                notes: "",
+                notes: item?.notes,
                 price: price,
                 promoId: item?.promoId,
                 quantity: item?.quantity,

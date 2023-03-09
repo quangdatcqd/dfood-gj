@@ -19,56 +19,30 @@ const BoxBtnSelect = (props) => {
     const [noteItem, setNoteItem] = useState("");
     const [quantity, setQuantity] = useState(0);
     const [indexItem, setIndexItem] = useState(-1);
+    const [quantityShow, setQuantityShow] = useState(0);
 
     var index = contexts.payload?.items?.findIndex((payloadId) => {
         return payloadId?.uuid === data?.id;
     });
-    const handleChangeQty = (qty) => {
-        setQuantity(qty);
-    }
+
     useLayoutEffect(() => {
+        setQuantity(index >= 0 && contexts.payload?.items[index]?.quantity >= 1 ? contexts.payload?.items[index]?.quantity : 0);
 
+        setNoteItem(index >= 0 ? contexts.payload?.items[index]?.notes : "")
+        let countQ = 0;
+        contexts.payload?.items?.map((item) => {
+            if (item?.uuid == data?.id) {
+                countQ += item?.quantity;
 
-        // console.log(index)
-        if (index >= 0) {
-            setQuantity(contexts.payload?.items[index]?.quantity);
-        }
+            }
+        })
+
+        setQuantityShow(countQ);
 
     }, [contexts.payload, contexts.setIndexItem]);
 
     const handleDelete = () => {
 
-        // if (quantity <= 1) {
-        //     setQuantity(0);
-        //     contexts.handleDeleteItem(
-        //         {
-        //             itemId: data?.shopping_item_id,
-        //             itemName: data?.name,
-        //             notes: "",
-        //             price: data?.price,
-        //             promoId: data?.promotion?.id,
-        //             quantity: 0,
-        //             uuid: data?.id,
-        //             promoPrice: data?.promotion?.selling_price
-        //         }
-        //     );
-        //     setToggleEditItems(false)
-        // }
-        // else {
-        //  
-        //     contexts.handleDeleteItem(
-        //         {
-        //             itemId: data?.shopping_item_id,
-        //             itemName: data?.name,
-        //             notes: "",
-        //             price: data?.price,
-        //             promoId: data?.promotion?.id,
-        //             quantity: quantity - 1,
-        //             uuid: data?.id,
-        //             promoPrice: data?.promotion?.selling_price
-        //         }
-        //     );
-        // }
 
 
         if (quantity >= 1) {
@@ -94,9 +68,11 @@ const BoxBtnSelect = (props) => {
     }
     const handleAdd = () => {
         setIndexItem(-1);
+        if (contexts.payload?.restaurant_uuid != data?.restaurant_id) {
+            contexts?.resetCart();
+        }
 
         if (data?.variant_category_ids === null) {
-
 
             contexts.handleSelectItem(
                 {
@@ -117,6 +93,7 @@ const BoxBtnSelect = (props) => {
             setQuantity(quantity + 1);
         } else {
             setToggleOption(true);
+
         }
     }
 
@@ -126,11 +103,14 @@ const BoxBtnSelect = (props) => {
         <div >
             <BoxSelectedItems setQuantity={setQuantity} setIndexItem={setIndexItem} toggleEditItems={toggleEditItems} setToggleEditItems={setToggleEditItems} handleDelete={handleDelete} quantity={quantity} data={data} setToggleOption={setToggleOption} />
 
-            {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} setQuantity={handleChangeQty} />}
-            <TextareaAutosize onChange={(e) => setNoteItem(e.target.value)} value={noteItem} style={{ width: "100%", resize: "none", padding: "5px", outline: "none", border: "1px solid rgb(214 214 214)", borderRadius: "10px", fontSize: "10pt", fontWeight: "bold", marginBottom: "30px" }} />
+            {toggleOption && <ChoseOptions indexItem={-1} toggleOption={toggleOption} setToggleOption={setToggleOption} data={data} quantity={quantity} />}
 
             {(data?.variant_category_ids === null) ?
-                <QuantityInput handleAdd={handleAdd} handleDelete={handleDelete} quantity={quantity} />
+                <div>
+                    < QuantityInput handleAdd={handleAdd} handleDelete={handleDelete} quantity={quantity} />
+                    <TextareaAutosize onChange={(e) => setNoteItem(e.target.value)} value={noteItem} style={{ width: "100%", resize: "none", padding: "5px", outline: "none", border: "1px solid rgb(214 214 214)", borderRadius: "10px", fontSize: "10pt", fontWeight: "bold", marginBottom: "30px" }} />
+                </div>
+
                 :
                 <div
                     style={{
@@ -157,7 +137,7 @@ const BoxBtnSelect = (props) => {
                                     color: "green",
                                     fontWeight: "bold"
                                 }}>
-                                {contexts.payload?.items[index]?.quantity > 0 && contexts.payload?.items[index]?.quantity + " mục"}
+                                {quantityShow + " mục"}
 
                             </button>
                             :

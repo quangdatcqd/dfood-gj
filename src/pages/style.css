@@ -256,7 +256,7 @@ box-shadow: rgb(81 81 81 / 33%) 0px 0px 6px 4px;
   font-size: 12pt;
   font-weight: bold;
   cursor: pointer; 
- animation: biker 15s linear 0s infinite ;
+ animation: biker 20s linear 0s infinite ;
    
 }
 @keyframes biker {

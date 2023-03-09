@@ -7,13 +7,14 @@ import { fomatCurrency } from '../common';
 const Cartpreview = () => {
     const { setToggleCheckout, selectedItems, payload } = useContext(CartContext);
 
-    const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
+    const [merchantLoc, setMerchantLoc] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [countItems, setCountItems] = useState(0);
 
     useEffect(() => {
         setCountItems(
             payload?.items?.length > 0 && payload?.items?.reduce((total, item) => total + item?.quantity, 0)
         )
+        setMerchantLoc(JSON.parse(localStorage.getItem("merchantLoc")));
     }, [payload, selectedItems]);
     return (
         <div style={{
@@ -55,7 +56,7 @@ const Cartpreview = () => {
                         {fomatCurrency((Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)))}
                     </div>
                 </div>
-                <div>{merchantData?.restaurant?.address}</div>
+                <div>{merchantLoc?.name}</div>
 
 
             </Container>

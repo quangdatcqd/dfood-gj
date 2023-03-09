@@ -1,10 +1,8 @@
-import { Button, IconButton, TextField } from '@mui/material';
-import { React, useState, useContext, useEffect } from 'react';
+import { IconButton } from '@mui/material';
+import { React } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { useSnackbar } from 'notistack';
-import ChoseOptions from './ChoseOptions';
-import { CartContext } from '../Contexts/CartContext';
+
 const QuantityInput = (props) => {
 
     const { handleAdd, handleDelete, quantity } = props;

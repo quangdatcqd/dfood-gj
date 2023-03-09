@@ -22,12 +22,11 @@ const SelectedItem = (props) => {
         setQuantityEdit(qty);
     }
     const handleAdd = () => {
-
         handleSelectItem(
             {
                 itemId: dataVariants?.shopping_item_id,
                 itemName: dataVariants?.name,
-                notes: "",
+                notes: selectedItems[indexItem]?.notes,
                 price: dataVariants?.price,
                 promoId: dataVariants?.promotion?.id,
                 quantity: quantityEdited + 1,
@@ -48,13 +47,13 @@ const SelectedItem = (props) => {
         // else {
         // console.log(indexItem)
         // console.log(selectedItems)
-        // console.log(quantityEdit)
+
 
         handleSelectItem(
             {
                 itemId: dataVariants?.shopping_item_id,
                 itemName: dataVariants?.name,
-                notes: "",
+                notes: selectedItems[indexItem]?.notes,
                 price: dataVariants?.price,
                 promoId: dataVariants?.promotion?.id,
                 quantity: quantityEdited - 1,
@@ -76,10 +75,7 @@ const SelectedItem = (props) => {
         }}>
 
             {toggleEditOption && <ChoseOptions indexItem={indexItem} toggleOption={toggleEditOption} setToggleOption={setToggleEditOption} data={dataVariants} quantity={quantityEdit} setQuantity={onChaneQuantity} />}
-
-
             {
-
                 <div>
                     < div
                         style={{
@@ -111,9 +107,17 @@ const SelectedItem = (props) => {
                                     )
                                 })
                             }
+                            {
+                                data?.notes &&
+                                <div>
+                                    Ghi chú:  {data?.notes}
+                                </div>
+                            }
+
                         </div>
 
                     </div>
+
                     <div
                         style={{
                             width: "100%",

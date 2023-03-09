@@ -158,7 +158,7 @@ const GojekAPI = {
     },
     getRestaurant(id) {
         try {
-            const url = `https://api.gojekapi.com/gofood/consumer/v5/restaurants/${id}`;
+            const url = `https://api.gojekapi.com/gofood/consumer/v4/restaurants/${id}`;
             // const url = `https://api.gojekapi.com/gofood/consumer/v5/restaurants/2644b825-0c4e-4a36-8cbf-bb01c33ed0b1?search_position=2&search_id=0ae29d3e-49ba-46dd-931b-6356dd32d73f&location=null&order_intent=delivery&is_offer_list_experiment=true&cart_recommendations_enabled=false&picked_loc=10.687392%2C106.59386&delivery_mode_intent=regular`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {

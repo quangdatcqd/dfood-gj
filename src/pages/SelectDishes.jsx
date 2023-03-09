@@ -14,9 +14,9 @@ const SelectDishes = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            var data = await GojekAPI.getRestaurant(selectedRes);
+            var data = await GojekAPI.getRestaurantV5(selectedRes);
             const indexCategoriesV2 = data?.data?.cards?.findIndex((element) => element?.card_type === 60008);
-            checkResetCart(data?.data?.cards[indexCategoriesV2]?.content?.restaurant?.id);
+
             setDataRestaurant(data?.data);
 
             setMerchantData(data?.data?.cards[indexCategoriesV2]?.content?.restaurant);
@@ -28,15 +28,6 @@ const SelectDishes = () => {
         }
 
         fetchData();
-        const checkResetCart = (id) => {
-
-
-            if (id !== merchantData?.restaurant?.id) {
-                resetCart();
-            }
-
-        }
-
 
     }, []);
 

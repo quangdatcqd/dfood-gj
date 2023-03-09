@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Paper, IconButton } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, TextareaAutosize } from '@mui/material';
 import { React, useState, useLayoutEffect, useEffect, useRef, useContext, useMemo, memo } from 'react';
-import { useSnackbar } from 'notistack';
+
 import "./style.css";
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -8,16 +8,17 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 import OptionsMoreCheckbox from './OptionsMoreCheckbox';
 import { CartContext } from '../Contexts/CartContext';
-import zIndex from '@mui/material/styles/zIndex';
 import { fomatCurrency } from '../common';
 const ChoseOptions = memo((props) => {
-    const { setToggleOption, toggleOption, data, quantity, setQuantity, indexItem } = props;
+    const { setToggleOption, toggleOption, data, indexItem } = props;
 
     const contexts = useContext(CartContext);
+    const [noteItem, setNoteItem] = useState();
+    const [quantity, setQuantity] = useState(1);
 
     const [pricePreview, setPricePreview] = useState(data?.promotion?.selling_price ? data?.promotion?.selling_price : price);
 
-    var variantsSelected;
+    var variants = useRef([]);
     var total = 0;
     var price = 0;
     var hasvariant;
@@ -26,36 +27,41 @@ const ChoseOptions = memo((props) => {
 
     //     handleChange();
     // }, []);
-    useMemo(() => {
+
+    useEffect(() => {
+
 
         hasvariant = contexts.selectedItems?.findIndex((itemSelected) => itemSelected?.uuid === data?.id);
 
         if (hasvariant >= 0 && indexItem >= 0) {
-            setQuantity(contexts.selectedItems[hasvariant]?.quantity);
+            setQuantity(contexts.selectedItems[indexItem]?.quantity >= 1 ? contexts.selectedItems[indexItem]?.quantity : 1);
+            setNoteItem(contexts.selectedItems[indexItem]?.notes)
 
+            variants.current = contexts.selectedItems[indexItem]?.variants[0];
 
-            variantsSelected = contexts.selectedItems[hasvariant]?.variants[0];
-            price = Number(contexts.selectedItems[hasvariant]?.variants[1]);
+            price = Number(contexts.selectedItems[indexItem]?.variants[1]);
 
 
             total = ((Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity);
 
-            contexts.handleVariant([variantsSelected, price]);
+            contexts.handleVariant([variants.current, price]);
             setPricePreview(total);
         } else {
-            variantsSelected = [];
+            variants.current = [];
             setQuantity(1);
         }
 
+    }, []);
 
-    }, [])
+
+
     var price = useRef(Number(price) >= 0 ? Number(price) : 0);
 
 
 
     const handleOK = () => {
         // indexItem < 0 hành động thêm mới món
-        // console.log(indexItem)
+
 
 
         if (indexItem < 0) {
@@ -63,7 +69,7 @@ const ChoseOptions = memo((props) => {
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
-                    notes: "",
+                    notes: noteItem,
                     price: data?.price,
                     promoId: data?.promotion?.id,
                     quantity: quantity,
@@ -79,7 +85,7 @@ const ChoseOptions = memo((props) => {
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
-                    notes: "",
+                    notes: noteItem,
                     price: data?.price,
                     promoId: data?.promotion?.id,
                     quantity: quantity,
@@ -98,7 +104,7 @@ const ChoseOptions = memo((props) => {
 
     }, [quantity, price.current]);
 
-    var variants = useRef(variantsSelected !== undefined ? variantsSelected : []);
+
     const handleChange = (variantItemKey, variantKey) => {
         var hasItem = variants.current?.findIndex((variant) => variant?.id === data?.variant_categories[variantKey]?.variants[variantItemKey]?.id);
 
@@ -134,7 +140,7 @@ const ChoseOptions = memo((props) => {
                 {
                     itemId: data?.shopping_item_id,
                     itemName: data?.name,
-                    notes: "",
+                    notes: noteItem,
                     price: data?.price,
                     promoId: data?.promotion?.id,
                     quantity: quantity,
@@ -147,7 +153,7 @@ const ChoseOptions = memo((props) => {
             setToggleOption(false);
 
         } else {
-            setQuantity(quantity - 1);
+            setQuantity(quantity > 1 ? quantity - 1 : 1);
         }
 
 
@@ -215,6 +221,18 @@ const ChoseOptions = memo((props) => {
                         ref={descriptionElementRef}
                         tabIndex={-1}
                     >
+                        <div>
+                            <p
+                                style={{
+                                    marginBottom: "0px",
+                                    marginLeft: "10px",
+                                    fontSize: "12pt",
+                                    fontWeight: "bold"
+                                }}
+                            >Ghi chú món ăn</p>
+                            <TextareaAutosize onChange={(e) => setNoteItem(e.target.value)} value={noteItem} style={{ width: "calc(100% - 20px)", resize: "none", margin: "5px 10px", padding: "5px 10px", outline: "none", border: "1px solid rgb(214 214 214)", borderRadius: "10px", fontSize: "10pt", fontWeight: "bold", }} />
+
+                        </div>
                         {
                             data?.variant_categories?.map((item, index) => {
                                 return (<OptionsMoreCheckbox handleChange={handleChange} variants={variants} variantKey={index} key={index} data={item} />)

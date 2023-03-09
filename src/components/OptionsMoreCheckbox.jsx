@@ -14,12 +14,11 @@ const OptionsMoreCheckbox = (props) => {
 
         <Stack spacing={2}>
             <Item>
-
                 <FormControl style={{ width: "100%", }}>
                     <FormLabel style={{ color: "black", fontWeight: "bold" }} id="demo-form-control-label-placement">
                         {data?.name}
                     </FormLabel>
-                    <p style={{ width: "100%", color: "red", fontWeight: "bold" }}> <span style={{ float: "left" }}>{data?.rules?.selection?.required && "Bắt buộc*"}</span><span style={{ float: "right" }}>{data?.rules?.selection?.max_quantity && "Chọn tối đa " + data?.rules?.selection?.max_quantity}</span>  </p>
+                    <p style={{ width: "100%", margin: "0px", color: "red", fontWeight: "bold" }}> <span style={{ float: "left" }}>{data?.rules?.selection?.required && "Bắt buộc*"}</span><span style={{ float: "right" }}>{data?.rules?.selection?.max_quantity && "Chọn tối đa " + data?.rules?.selection?.max_quantity}</span>  </p>
 
                     <FormGroup style={{ width: "100%", }}>
 
@@ -35,6 +34,7 @@ const OptionsMoreCheckbox = (props) => {
 
                                 // let check = listChecked.find(checkAge);
                                 let isCheck = false;
+
                                 (variants.current?.findIndex((variant) => variant?.id === item?.id) >= 0) ? (isCheck = true) : isCheck = false
                                 // contexts.selectedItems[indexItem.current]?.variants[0]?.includes(item?.id) ? (isCheck = true) : (isCheck = false);
                                 // console.log(contexts.selectedItems[indexItem.current]?.variants[0])

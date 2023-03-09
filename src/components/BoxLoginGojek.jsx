@@ -105,6 +105,7 @@ const BoxLoginGojek = (props) => {
     }
 
     const requestOTP = async (number = "") => {
+        setLoading(true);
 
         var numberPhone = phoneNumber;
         if (number != "") {
@@ -112,6 +113,8 @@ const BoxLoginGojek = (props) => {
 
         }
         else {
+
+
             setLoadingROTP(true);
             generateID();
         }
@@ -161,6 +164,7 @@ const BoxLoginGojek = (props) => {
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
             setLoadingROTP(false);
+
         }
     };
     const verifyPhone = async (otpv = "", otp_tokenv = "", phone_numberv = "") => {
@@ -420,16 +424,20 @@ const BoxLoginGojek = (props) => {
                 }} onClick={checkIPAddress}>
                 {ipAddress}
             </div>
-            <div style={
-                {
-                    marginTop: "20px",
-                    fontSize: "20px",
-                    fontWeight: "bolder"
-                }
-            }>
-                <NavLink to={"/home"}>Đến với FOOD</NavLink>
-            </div>
+            {
+                !loading &&
 
+
+                <div style={
+                    {
+                        marginTop: "20px",
+                        fontSize: "20px",
+                        fontWeight: "bolder"
+                    }
+                }>
+                    <NavLink to={"/home"}>Đến với FOOD</NavLink>
+                </div>
+            }
         </Container >
     );
 }

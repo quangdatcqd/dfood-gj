@@ -28,7 +28,7 @@ const Checkout = ({ getOrdersActive }) => {
     const [loadingRefresh, setLoadingRefresh] = useState("false");
 
 
-    const [merchantData, setMerchantData] = useState(JSON.parse(localStorage.getItem("merchantData")));
+    const [merchantData, setMerchantData] = useState([]);
     const [merchantLoc, setMerchantLoc] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
     const [customerData, setCustomerData] = useState(JSON.parse(localStorage.getItem("customerLoc")));
     const [addressName, setAddressName] = useState(customerData?.name);
@@ -41,8 +41,8 @@ const Checkout = ({ getOrdersActive }) => {
     const debounceDropDown = useCallback(debounce((payload) => fetchData(payload), 1500), [])
     useLayoutEffect(() => {
         debounceDropDown(payload);
-
     }, [payload]);
+
     const fetchData = async (dataPayload) => {
         try {
             const dataItems = dataPayload || payload;
@@ -87,6 +87,13 @@ const Checkout = ({ getOrdersActive }) => {
             localStorage.setItem("payload", JSON.stringify(payload));
             localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
         }
+        const fetchRes = async () => {
+            let data = await GojekAPI.getRestaurant(merchantLoc?.id);
+            setMerchantData(data);
+        }
+        fetchRes();
+
+
     }, []); // 106.64904150454079!3d10.845362078042243
 
 
@@ -146,7 +153,9 @@ const Checkout = ({ getOrdersActive }) => {
             enqueueSnackbar(error?.message, { variant: 'warning' })
 
         } finally {
-            getOrdersActive();
+            setTimeout(() => {
+                getOrdersActive();
+            }, 2000);
         }
 
     }
@@ -180,7 +189,7 @@ const Checkout = ({ getOrdersActive }) => {
                         fontSize: "14pt",
                         fontWeight: "bold"
                     }}>
-                        {merchantData?.address}
+                        {merchantLoc?.address}
                     </p>
                 </div>
                 <hr />
@@ -233,7 +242,7 @@ const Checkout = ({ getOrdersActive }) => {
                     payload?.items?.map((item, key) => {
 
 
-                        // var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
+                        var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
                         return (
                             <div key={key} style={{
 
@@ -250,7 +259,7 @@ const Checkout = ({ getOrdersActive }) => {
                                     marginBottom: "3px"
                                 }}>{item?.itemName}</p>
 
-                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={merchantData} indexItem={key} />
+                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={index > 0 && merchantData?.items[index]} indexItem={key} />
                             </div>
                         )
                     })
