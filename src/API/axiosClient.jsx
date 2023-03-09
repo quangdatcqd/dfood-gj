@@ -36,13 +36,14 @@ axiosClient.interceptors.response.use(function (response) {
     // Do something with response error
     // localStorage.clear();
     // window.location.reload(false);
-    if (error.response && error.response.data && error.response.data.errors) {
+    // if (error.response && error.response.data && error.response.data.errors) {
 
-        throw new Error(
-            error.response.data.errors[0]?.message_title
-        );
-    }
-    // return Promise.reject(error);
+    //     throw new Error(
+    //         error.response.data.errors[0]
+    //     );
+
+    // }
+    return error.response.data;
 });
 
 export default axiosClient;

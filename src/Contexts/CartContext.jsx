@@ -175,7 +175,7 @@ function CartProvider({ children }) {
         setSelectedItems([]);
         setDiscountPrice(0);
         setVariants([]);
-        setPayload("");
+        setPayload([]);
         localStorage.setItem("payload", "");
         localStorage.setItem("selectedItems", "");
 

@@ -162,9 +162,10 @@ const BoxLoginGojek = (props) => {
 
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
+            setLoading(false);
         } finally {
             setLoadingROTP(false);
-            setLoading(false);
+
 
         }
     };
@@ -197,7 +198,7 @@ const BoxLoginGojek = (props) => {
             }
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
-
+            setLoading(false);
         } finally {
             setLoadingSubmit(false);
         }
@@ -218,6 +219,7 @@ const BoxLoginGojek = (props) => {
             }
         } catch (error) {
             throw new Error(error.message);
+            setLoading(false);
         } finally {
             setLoadingSubmit(false);
         }

@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CartProvider } from './Contexts/CartContext';
+import HandleError from './components/HandleError';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <CartProvider>
-    <App />
-  </CartProvider>
-
+  <HandleError>
+    <CartProvider>
+      <App />
+    </CartProvider>
+  </HandleError>
   /* </React.StrictMode> */
 );
 

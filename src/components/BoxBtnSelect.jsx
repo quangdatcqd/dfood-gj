@@ -1,6 +1,6 @@
 
 
-import { React, useState, useContext, useLayoutEffect } from 'react';
+import { React, useState, useContext, useLayoutEffect, useEffect } from 'react';
 
 import { useSnackbar } from 'notistack';
 import ChoseOptions from './ChoseOptions';
@@ -25,7 +25,7 @@ const BoxBtnSelect = (props) => {
         return payloadId?.uuid === data?.id;
     });
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         setQuantity(index >= 0 && contexts.payload?.items[index]?.quantity >= 1 ? contexts.payload?.items[index]?.quantity : 0);
 
         setNoteItem(index >= 0 ? contexts.payload?.items[index]?.notes : "")
@@ -70,6 +70,7 @@ const BoxBtnSelect = (props) => {
         setIndexItem(-1);
         if (contexts.payload?.restaurant_uuid != data?.restaurant_id) {
             contexts?.resetCart();
+            return "";
         }
 
         if (data?.variant_category_ids === null) {

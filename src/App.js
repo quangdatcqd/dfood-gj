@@ -12,6 +12,7 @@ function App() {
   const theme = createTheme();
 
   return (
+
     <ThemeProvider theme={theme}  >
       <SnackbarProvider anchorOrigin={{ vertical: "bottom", horizontal: "left" }} maxSnack={2} autoHideDuration={1500}>
 

@@ -61,6 +61,7 @@ const Checkout = ({ getOrdersActive }) => {
                 voucherId: idvoucher.current
 
             });
+
             localStorage.setItem("noteOrder", noteOrder);
             setDataCheckout(data);
             if (data?.distance) {

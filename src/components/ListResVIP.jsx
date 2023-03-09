@@ -17,7 +17,7 @@ const ListResVIP = ({ open }) => {
     const fetchDataRes = async () => {
 
         // idToFind.current = await GojekAPI.getGenIDRes();
-        console.log(idToFind.current);
+
         if (idToFind.current?.length <= 6) console.log("không lấy được ID để push");
         var dataResOffers = null;
         while (true) {
@@ -61,6 +61,8 @@ const ListResVIP = ({ open }) => {
                                             is_best_promo: true,
                                             title: itemDis?.title + " - Giảm sâu " + promoMax + "%",
                                         }
+
+
                                     }
                                 }
                             });
@@ -82,7 +84,7 @@ const ListResVIP = ({ open }) => {
                         discounts: listOffer
                     };
                     await GojekAPI.postDataRestaurant(idToFind.current, resData, bestRes);
-
+                    if (bestRes) setDataRes((dataRes) => [<BoxRestaurant data={itemRes} dataR={dataR?.data?.cards[2]?.content?.offer_list?.discounts} key={Math.random()} />, ...dataRes])
 
                 }
                 // var res = JSON.stringify(dataR?.data);
@@ -102,6 +104,7 @@ const ListResVIP = ({ open }) => {
     useEffect(() => {
         fetchDataRes();
         page.current = 0;
+        return () => loop.current = false;
     }, []);
 
     return (
@@ -110,7 +113,7 @@ const ListResVIP = ({ open }) => {
         >
             <h3>ID: {idToFind.current}</h3>
             {
-                // dataRes
+                dataRes
             }
 
         </Container>
@@ -179,7 +182,6 @@ const BoxRestaurant = ({ data, dataR }) => {
                                     }
                                     <hr className='my-1' />
                                 </div>
-
                             )
                         })
                     }
