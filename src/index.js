@@ -9,11 +9,11 @@ import HandleError from './components/HandleError';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <HandleError>
-    <CartProvider>
-      <App />
-    </CartProvider>
-  </HandleError>
+  // <HandleError>
+  <CartProvider>
+    <App />
+  </CartProvider>
+  // </HandleError>
   /* </React.StrictMode> */
 );
 

@@ -33,10 +33,7 @@ const BoxLoginGojek = (props) => {
         checkIPAddress();
 
     }, []);
-
     const fetchToken = async () => {
-
-
         setLogginStatus("");
         generateID();
 
@@ -218,8 +215,9 @@ const BoxLoginGojek = (props) => {
                 );
             }
         } catch (error) {
-            throw new Error(error.message);
             setLoading(false);
+            throw new Error(error.message);
+
         } finally {
             setLoadingSubmit(false);
         }
@@ -247,8 +245,7 @@ const BoxLoginGojek = (props) => {
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
-            setLoadingSubmit(false);
-            setLoading(false);
+
         }
     }
     const checkIPAddress = async () => {
@@ -257,8 +254,18 @@ const BoxLoginGojek = (props) => {
         enqueueSnackbar(data?.ip, { variant: 'success' })
     }
     const handleSelectAddress = async () => {
-        var id = JSON.parse(localStorage.getItem("customerLoc")).placeid;
-        var data = await GojekAPI.setAddress(id);
+
+
+        try {
+            var id = JSON.parse(localStorage.getItem("customerLoc")).placeid;
+            var data = await GojekAPI.setAddress(id);
+        } catch (error) {
+
+        }
+        finally {
+            setLoadingSubmit(false);
+            setLoading(false);
+        }
 
     }
 

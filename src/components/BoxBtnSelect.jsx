@@ -68,7 +68,8 @@ const BoxBtnSelect = (props) => {
     }
     const handleAdd = () => {
         setIndexItem(-1);
-        if (contexts.payload?.restaurant_uuid != data?.restaurant_id) {
+
+        if (contexts.payload?.restaurant_uuid != data?.restaurant_id && contexts.selectedItems != []) {
             contexts?.resetCart();
             return "";
         }

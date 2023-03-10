@@ -11,59 +11,41 @@ import { CartContext } from '../Contexts/CartContext';
 import { fomatCurrency } from '../common';
 const ChoseOptions = memo((props) => {
     const { setToggleOption, toggleOption, data, indexItem } = props;
-
     const contexts = useContext(CartContext);
     const [noteItem, setNoteItem] = useState();
     const [quantity, setQuantity] = useState(1);
-
-    const [pricePreview, setPricePreview] = useState(data?.promotion?.selling_price ? data?.promotion?.selling_price : price);
+    const [pricePreview, setPricePreview] = useState(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price);
 
     var variants = useRef([]);
     var total = 0;
-    var price = 0;
     var hasvariant;
-
-    // useEffect(() => {
-
-    //     handleChange();
-    // }, []);
-
+    const price = useRef(0);
     useEffect(() => {
-
-
         hasvariant = contexts.selectedItems?.findIndex((itemSelected) => itemSelected?.uuid === data?.id);
 
         if (hasvariant >= 0 && indexItem >= 0) {
             setQuantity(contexts.selectedItems[indexItem]?.quantity >= 1 ? contexts.selectedItems[indexItem]?.quantity : 1);
             setNoteItem(contexts.selectedItems[indexItem]?.notes)
-
             variants.current = contexts.selectedItems[indexItem]?.variants[0];
-
-            price = Number(contexts.selectedItems[indexItem]?.variants[1]);
-
-
-            total = ((Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity);
-
-            contexts.handleVariant([variants.current, price]);
+            price.current = Number(contexts.selectedItems[indexItem]?.variants[1]);
+            // total = (((Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity) + pricein);
+            contexts.handleVariant([variants.current, price.current]);
             setPricePreview(total);
         } else {
             variants.current = [];
             setQuantity(1);
         }
-
     }, []);
 
-
-
-    var price = useRef(Number(price) >= 0 ? Number(price) : 0);
+    useEffect(() => {
+        setPricePreview(((Number(price.current) >= 0 && Number(price.current)) + (data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity)
+        console.log(((Number(price.current) >= 0 && Number(price.current)) + (data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity);
+    }, [quantity, price.current]);
 
 
 
     const handleOK = () => {
-        // indexItem < 0 hành động thêm mới món
-
-
-
+        // indexItem < 0 hành động thêm mới món 
         if (indexItem < 0) {
             contexts.handleSelectItem(
                 {
@@ -99,13 +81,11 @@ const ChoseOptions = memo((props) => {
         }
         setToggleOption(false);
     };
-    useMemo(() => {
-        setPricePreview(((Number(price.current) >= 0 && Number(price.current)) + (data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity)
 
-    }, [quantity, price.current]);
 
 
     const handleChange = (variantItemKey, variantKey) => {
+
         var hasItem = variants.current?.findIndex((variant) => variant?.id === data?.variant_categories[variantKey]?.variants[variantItemKey]?.id);
 
         if (hasItem >= 0) {
@@ -126,10 +106,11 @@ const ChoseOptions = memo((props) => {
             });
 
         }
+        contexts.handleVariant([variants.current, price.current])
         // total = ((price.current + Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity);
 
 
-        contexts.handleVariant([variants.current, price.current])
+
 
     }
     // variants = useRef(variantsSelected);
