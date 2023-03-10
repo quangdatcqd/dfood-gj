@@ -29,6 +29,19 @@ const ListResVIP = ({ open }) => {
                 if (!loop.current) break;
                 var dataR = await GojekAPI.getRestaurantV5(itemRes?.content?.id);
                 var discounts = dataR?.data?.cards[2]?.content?.offer_list?.discounts;
+
+                let title = itemRes?.content?.title?.text;
+                let titleArr = [];
+                const check = title.includes(",")
+                if (check) {
+                    titleArr = title.split(",");
+                } else {
+                    titleArr = title.split("-");
+
+                }
+                let titleResult = titleArr.slice(0, (titleArr.length - 1)).join("-").trim();
+
+
                 if (discounts != null && discounts?.length >= 2) {
                     var bestRes = false;
                     var listOffer = [];
@@ -46,6 +59,7 @@ const ListResVIP = ({ open }) => {
                         if (!checkNot) {
                             var offerMax = Number(itemDis?.title?.match("[0-9]+"));
                             var listLineItems = [];
+                            let promoTitle = "";
                             itemDis?.line_items?.map((itemLine) => {
                                 var minOrder = itemLine?.text;
                                 regex = /Đặt tối thiểu/;
@@ -54,37 +68,46 @@ const ListResVIP = ({ open }) => {
                                 if (checkNot1) {
                                     minOrder = Number(minOrder?.match("[0-9]+"));
                                     var promoMax = Math.floor((offerMax / minOrder) * 100);
+
+                                    let discountPrice = Math.floor(((50 * minOrder) / 100)) <= 50 ? Math.floor(((50 * minOrder) / 100)) : 50;
+                                    discountPrice = discountPrice + offerMax;
                                     if (promoMax >= 40) {
                                         bestRes = true;
+
                                         offer = {
                                             ...offer,
                                             is_best_promo: true,
-                                            title: itemDis?.title + " - Giảm sâu " + promoMax + "%",
+                                            title: itemDis?.title + " => Giảm " + discountPrice + "k / " + minOrder + "k"
                                         }
-
+                                        listOffer = [
+                                            ...listOffer,
+                                            offer
+                                        ]
 
                                     }
                                 }
                             });
+                            titleResult += promoTitle;
                         }
-                        listOffer = [
-                            ...listOffer,
-                            offer
-                        ]
+
 
                         // setDataRes((dataRes) => [<BoxRestaurant data={item} dataR={dataR?.data?.cards[2]?.content?.offer_list?.discounts} key={Math.random()} />, ...dataRes])
 
                     });
-                    var resData = {
 
-                        restaurant_name: itemRes?.content?.title?.text,
-                        restaurant_id: itemRes?.content?.id,
-                        image_url: itemRes?.content?.image_url,
-                        addition_info: itemRes?.content?.additional_info?.highlighted_text + " - " + itemRes?.content?.additional_info?.normal_text,
-                        discounts: listOffer
-                    };
-                    await GojekAPI.postDataRestaurant(idToFind.current, resData, bestRes);
-                    if (bestRes) setDataRes((dataRes) => [<BoxRestaurant data={itemRes} dataR={dataR?.data?.cards[2]?.content?.offer_list?.discounts} key={Math.random()} />, ...dataRes])
+
+                    if (bestRes) {
+                        var resData = {
+
+                            restaurant_name: titleResult,
+                            restaurant_id: itemRes?.content?.id,
+                            image_url: itemRes?.content?.image_url,
+                            addition_info: itemRes?.content?.additional_info?.highlighted_text + " - " + itemRes?.content?.additional_info?.normal_text,
+                            discounts: listOffer
+                        };
+                        await GojekAPI.postDataRestaurant(idToFind.current, resData, bestRes);
+                        setDataRes((dataRes) => [<BoxRestaurant data={itemRes} dataR={dataR?.data?.cards[2]?.content?.offer_list?.discounts} key={Math.random()} />, ...dataRes])
+                    }
 
                 }
                 // var res = JSON.stringify(dataR?.data);
@@ -119,6 +142,14 @@ const ListResVIP = ({ open }) => {
         </Container>
     );
 }
+
+
+const ResVIP = ({ text }) => {
+    return (
+        <p>{text}</p>
+    )
+}
+
 
 const BoxRestaurant = ({ data, dataR }) => {
     const { setToggleSelectDishes, setSelectedRes } = useContext(CartContext);
