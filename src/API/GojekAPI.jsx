@@ -91,7 +91,7 @@ const GojekAPI = {
     getRessDeals(page) {
         try {
 
-            var url = `https://api.gojekapi.com/gofood/consumer/v3/restaurants?collection=V_PARTNER_CLEAN&include_banner=false&is_from_offer_page=true&page=${page}&picked_loc=${encodeURIComponent(HEADERS().picked_loc)}&redesign_enabled=true&search_id=3e8dae6de-02b4-45a0-81ed-1fafdf76e04b&super_partner_enabled=true&voucher_batch_id=`;
+            var url = `https://api.gojekapi.com/gofood/consumer/v3/restaurants?collection=V_PARTNER_CLEAN&include_banner=false&is_from_offer_page=true&page=${page}&picked_loc=${encodeURIComponent(HEADERS().picked_loc)}&redesign_enabled=true&search_id=3e8dae6de-02b4-45a0-81ed-1fafdf76e04b&super_partner_enabled=true&voucher_batch_id=&limit=15`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
