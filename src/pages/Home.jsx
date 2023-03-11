@@ -107,7 +107,7 @@ export default function Home() {
                     listOrdersActive?.data?.cards?.length > 0 &&
                     <div className='btn-active-order'
                         onClick={() => {
-                            setIdOrder(listOrdersActive?.data?.cards[0]?.event_tracking_properties?.order_id)
+                            setIdOrder(localStorage.getItem("idOrder"))
                             setToggleOderDetail(toggleMenu ? false : true)
                         }}
                     >
