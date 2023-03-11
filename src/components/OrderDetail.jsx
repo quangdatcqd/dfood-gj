@@ -9,10 +9,12 @@ import { Refresh } from '@mui/icons-material';
 import { fomatCurrency } from '../common';
 const OrderDetail = ({ idOrder }) => {
     const [toggleChat, setToggleChat] = useState(false);
+    const [loadingCoppy, setLoadingCoppy] = useState(false);
     const [dataOrder, setDataOrder] = useState([]);
     const [trackingLocation, setTrackingLocation] = useState("");
     const [trackingLocationDr, setTrackingLocationDr] = useState("");
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
 
     useLayoutEffect(() => {
         getListOrders();
@@ -55,7 +57,16 @@ const OrderDetail = ({ idOrder }) => {
 
         }
     }
+    const handleCoppy = () => {
+        setLoadingCoppy(true)
+        navigator.clipboard.writeText(
+            "Kiểm tra đơn hàng tại: \n" +
+            "https://qtrack.vercel.app/" + idOrder
+        )
+        setLoadingCoppy(false)
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
 
+    }
     return (
         <Container className='container-com'>
 
@@ -154,7 +165,7 @@ const OrderDetail = ({ idOrder }) => {
                         <div onClick={() => { navigator.clipboard.writeText(localStorage.getItem("G-Token")) }}   >
                             Token
                         </div>
-                        <div onClick={() => { navigator.clipboard.writeText("https://qtrack.vercel.app/" + idOrder) }}   >
+                        <div onClick={() => handleCoppy()}   >
                             Xuất
                         </div>
 
