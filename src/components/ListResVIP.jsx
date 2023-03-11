@@ -77,7 +77,7 @@ const ListResVIP = ({ open }) => {
                                         offer = {
                                             ...offer,
                                             is_best_promo: true,
-                                            title: itemDis?.title + " => Giảm " + discountPrice + "k / " + minOrder + "k"
+                                            title: " => Giảm " + discountPrice + "k cho đơn " + minOrder + "k"
                                         }
                                         listOffer = [
                                             ...listOffer,
