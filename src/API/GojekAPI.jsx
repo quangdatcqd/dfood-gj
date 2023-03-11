@@ -60,7 +60,7 @@ const GojekAPI = {
 
     postSession(id) {
         try {
-            const url = `http://localhost:8000/api/postsession`;
+            const url = `https://lomdom.tk/dbook/public/api/postsession`;
             return axiosClient.post(url, {
                 id_order: id,
                 G_Token: localStorage.getItem("G-Token"),
