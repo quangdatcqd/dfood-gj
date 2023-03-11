@@ -7,7 +7,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 import Login from "./pages/Login";
-import MapMarker from "./components/MapMarker";
+import CheckUserValid from "./pages/CheckUserValid";
+// import MapMarker from "./components/MapMarker";
 function App() {
   const theme = createTheme();
 
@@ -20,13 +21,8 @@ function App() {
 
           <Routes>
 
-            <Route path="/*" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            {/* <Route path="/explore" element={<Explore />} />
-            <Route path="/selectdishes/:id/*" element={<SelectDishes />} />
-            <Route path="/checkout" element={<Checkout />} /> */}
-            <Route path="/tracking" element={<MapMarker />} />
-
+            <Route path="/*" element={<CheckUserValid children={<Login />} />} />
+            <Route path="/home" element={<CheckUserValid children={<Home />} />} />
           </Routes>
         </BrowserRouter>
 

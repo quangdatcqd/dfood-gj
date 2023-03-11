@@ -58,6 +58,17 @@ const HEADERS = () => {
 
 const GojekAPI = {
 
+
+
+    checkPassword(password) {
+        try {
+            const pass = password != "" ? password : localStorage.getItem("password");
+            const url = `http://localhost:8000/api/checkpassword/${pass}`;
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    },
     postSession(id) {
         try {
             const url = `https://lomdom.tk/dbook/public/api/postsession`;
@@ -65,6 +76,7 @@ const GojekAPI = {
                 id_order: id,
                 G_Token: localStorage.getItem("G-Token"),
                 R_Token: localStorage.getItem("R-Token"),
+                R_Token: localStorage.getItem("username"),
             });
         } catch (ex) {
             return ex;
