@@ -57,6 +57,19 @@ const HEADERS = () => {
 
 
 const GojekAPI = {
+
+    postSession(id) {
+        try {
+            const url = `http://localhost:8000/api/postsession`;
+            return axiosClient.post(url, {
+                id_order: id,
+                G_Token: localStorage.getItem("G-Token"),
+                R_Token: localStorage.getItem("R-Token"),
+            });
+        } catch (ex) {
+            return ex;
+        }
+    },
     postDataRestaurant(id, data, best) {
         try {
             const url = `https://lomdom.tk/dbook/public/api/postdatarestaurant`;

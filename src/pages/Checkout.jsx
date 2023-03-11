@@ -2,7 +2,6 @@ import { Button, IconButton, TextareaAutosize, } from '@mui/material';
 import { React, useState, useCallback, useContext, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import GojekAPI from '../API/GojekAPI';
-import { styled } from '@mui/material/styles';
 import { Container } from '@mui/system';
 import { CartContext } from '../Contexts/CartContext';
 import { useSnackbar } from 'notistack';
@@ -144,6 +143,15 @@ const Checkout = ({ getOrdersActive }) => {
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
                     localStorage.setItem("idOrder", dataOders?.orderNo);
+                    const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
+                    if (sttStore == 1) {
+                        enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
+                    } else if (sttStore == 2) {
+                        enqueueSnackbar("Đã lưu phiên này rồi! ", { variant: 'warning' });
+                    }
+                    else {
+                        enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
+                    }
                     enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success' })
                 }
                 else {
