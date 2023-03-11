@@ -63,7 +63,7 @@ const GojekAPI = {
     checkPassword(password) {
         try {
             const pass = password != "" ? password : localStorage.getItem("password");
-            const url = `http://localhost:8000/api/checkpassword/${pass}`;
+            const url = `https://lomdom.tk/dbook/public/api/checkpassword/${pass}`;
             return axiosClient.get(url);
         } catch (ex) {
             return ex;
