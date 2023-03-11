@@ -13,7 +13,9 @@ const OrderDetail = ({ idOrder }) => {
     const [dataOrder, setDataOrder] = useState([]);
     const [trackingLocation, setTrackingLocation] = useState("");
     const [trackingLocationDr, setTrackingLocationDr] = useState("");
+    const [trackingStatus, setTrackingStatus] = useState("");
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
 
 
     useLayoutEffect(() => {
@@ -30,7 +32,8 @@ const OrderDetail = ({ idOrder }) => {
         try {
             var data = await GojekAPI.getOrderDetail(idOrder);
             if (data?.success) {
-                setDataOrder(data?.data)
+                setDataOrder(data?.data);
+                setTrackingStatus(listStatus(data?.data?.status))
                 var trackingLoc = data?.data?.destination?.latitude + "," + data?.data?.destination?.longitude + "|" +
                     data?.data?.origin?.latitude + "," + data?.data?.origin?.longitude
                 // + "|" + data?.data?.driver_info?.latitude + "," + data?.data?.driver_info?.longitude
@@ -67,9 +70,27 @@ const OrderDetail = ({ idOrder }) => {
         enqueueSnackbar("Đã coppy", { variant: 'success' })
 
     }
+
+
     return (
         <Container className='container-com'>
+            <div style={{
+                position: "fixed",
+                right: "5px",
+                bottom: "5px",
+                backgroundColor: "red",
+                color: "white",
+                padding: "8px 20px",
+                borderRadius: "10px",
+                zIndex: "999999999",
+                fontWeight: "bold"
 
+
+
+
+            }}>
+                {trackingStatus}
+            </div>
             <div className='div-detail-order'>
                 <div className=' box-info delivery-detail'>
                     <p className='title-d  '>Thông tin giao hàng</p>
@@ -186,5 +207,45 @@ const OrderDetail = ({ idOrder }) => {
 
     );
 }
+const listStatus = (key) => {
+    // 3==  đag chuẩN bị món
+    // 6 ==  đã bị huỷ
+    // 4 == đang giao hàng
 
+    switch (key) {
+        case 1:
+
+            return "Đang không biết!"
+        case 2:
+
+            return "Đang tìm tài xế!"
+
+
+        case 3:
+
+            return "Đag chuẩn bị món ăn!"
+
+
+        case 4:
+
+            return "Đang giao hàng!"
+
+
+        case 5:
+
+            return "Đã hoàn thành đơn!"
+
+
+        case 6:
+
+            return "Đã bị huỷ!"
+
+
+
+        default:
+            return ""
+
+    }
+
+}
 export default OrderDetail;
