@@ -27,7 +27,8 @@ const CheckUserValid = ({ children }) => {
     const handleSubmit = async () => {
         setloading(true)
         try {
-            var data = await GojekAPI.checkPassword(password);
+            if (username != "")
+                var data = await GojekAPI.checkPassword(password);
             if (data == 1) {
                 localStorage.setItem("password", password);
                 localStorage.setItem("username", username);

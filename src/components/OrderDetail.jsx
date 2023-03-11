@@ -64,7 +64,7 @@ const OrderDetail = ({ idOrder }) => {
         setLoadingCoppy(true)
         navigator.clipboard.writeText(
             "Kiểm tra đơn hàng tại: \n" +
-            "https://qtrack.vercel.app/" + idOrder
+            "https://qtrack.vercel. app/" + idOrder
         )
         setLoadingCoppy(false)
         enqueueSnackbar("Đã coppy", { variant: 'success' })
