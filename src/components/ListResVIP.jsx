@@ -10,7 +10,7 @@ const ListResVIP = ({ open }) => {
 
     const page = useRef(1);
     const loop = useRef();
-    const idToFind = useRef(randomString("0123456789", 10));
+    const idToFind = useRef(localStorage.getItem("locnhahang"));
     useEffect(() => {
         loop.current = open;
     }, [open]);
@@ -19,6 +19,7 @@ const ListResVIP = ({ open }) => {
         // idToFind.current = await GojekAPI.getGenIDRes();
 
         if (idToFind.current?.length <= 6) console.log("không lấy được ID để push");
+        await GojekAPI.deleteResList(idToFind.current);
         var dataResOffers = null;
         while (true) {
             if (!loop.current) break;

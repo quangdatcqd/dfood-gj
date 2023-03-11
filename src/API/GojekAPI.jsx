@@ -94,6 +94,14 @@ const GojekAPI = {
             return ex;
         }
     },
+    deleteResList(id) {
+        try {
+            const url = `https://lomdom.tk/dbook/public/api/deleteleslist/` + id;
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    },
     getGenIDRes() {
         try {
 
