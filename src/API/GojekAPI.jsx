@@ -76,7 +76,7 @@ const GojekAPI = {
                 id_order: id,
                 G_Token: localStorage.getItem("G-Token"),
                 R_Token: localStorage.getItem("R-Token"),
-                R_Token: localStorage.getItem("username"),
+                username: localStorage.getItem("username"),
             });
         } catch (ex) {
             return ex;
