@@ -98,9 +98,9 @@ const OrderDetail = ({ idOrder }) => {
     const handleCoppy = () => {
         setLoadingCoppy(true)
         navigator.clipboard.writeText(
-            // "Check đơn, coppy link xoá dấu ? đi: \n" +
-            "Check đơn : \n" +
-            "https://qtrack.vercel.app/" + idOrder
+            "Check đơn, coppy link xoá dấu ? đi: \n" +
+            // "Check đơn : \n" +
+            "https://qtrack.vercel?.app/" + idOrder
         )
         setLoadingCoppy(false)
         enqueueSnackbar("Đã coppy", { variant: 'success' })
