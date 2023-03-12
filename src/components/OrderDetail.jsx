@@ -1,16 +1,13 @@
-import { Container, IconButton } from '@mui/material';
+import { Container } from '@mui/material';
 import { React, useLayoutEffect, useState, useRef } from 'react';
 import GojekAPI from '../API/GojekAPI';
 import MapMarker from './MapMarker';
-import ChatIcon from '@mui/icons-material/Chat';
 import ChatBox from './ChatBox';
 import { useSnackbar } from 'notistack';
-import { Refresh } from '@mui/icons-material';
 import { fomatCurrency } from '../common';
 
 const OrderDetail = ({ idOrder }) => {
     const [toggleChat, setToggleChat] = useState(false);
-    const [loadingCoppy, setLoadingCoppy] = useState(false);
     const [dataOrder, setDataOrder] = useState([]);
     const [channelID, setChannelID] = useState("");
     const [trackingLocation, setTrackingLocation] = useState("");
@@ -26,23 +23,26 @@ const OrderDetail = ({ idOrder }) => {
     }, []);
 
     var trackingLocationRC = useRef();
+
     const handleCancelOrder = async () => {
+        var check = await getListSP();
+        if (check == 0) {
+            makeCancel();
+        }
+    }
+    const getListSP = async () => {
         try {
             var data = await GojekAPI.getListSupport();
             if (data?.success) {
                 if (data?.data?.tokens?.length > 0) {
                     setChannelID(data?.data?.tokens[0]?.channel?.id);
                     setToggleChat(true);
-                } else {
-
-                    makeCancel();
-
+                    return 1;
                 }
             }
+            return 0;
         } catch (error) {
-
         }
-
     }
 
     const makeCancel = async () => {
@@ -51,14 +51,16 @@ const OrderDetail = ({ idOrder }) => {
         var phone = dataOrder?.destination?.recipient_phone;
         var data = await GojekAPI.cancelOrder(idOrder, phone, dataOrder?.customer_id);
         if (data?.success) {
-            enqueueSnackbar("Đã yêu cầu huỷ đơn hàng!", { variant: 'success' })
-            setTimeout(async () => {
-                handleCancelOrder();
-            }, 3000);
+            enqueueSnackbar("Đã yêu cầu huỷ đơn hàng, đợi xíu!", { variant: 'success' })
+            while (true) {
+                let id = await getListSP();
+                if (id != 0) break;
+                await new Promise(reject => setTimeout(reject, 2000))
+                enqueueSnackbar("Đợi xíu!", { variant: 'warning' })
+            }
 
         } else {
             enqueueSnackbar(data?.error[0]?.message, { variant: 'error' })
-
         }
 
     }
@@ -96,13 +98,13 @@ const OrderDetail = ({ idOrder }) => {
         }
     }
     const handleCoppy = () => {
-        setLoadingCoppy(true)
+
         navigator.clipboard.writeText(
             "Check đơn, coppy link xoá dấu ? đi: \n" +
             // "Check đơn : \n" +
             "https://qtrack.vercel?.app/" + idOrder
         )
-        setLoadingCoppy(false)
+
         enqueueSnackbar("Đã coppy", { variant: 'success' })
 
     }
