@@ -33,7 +33,7 @@ const OrderDetail = ({ idOrder }) => {
             var data = await GojekAPI.getOrderDetail(idOrder);
             if (data?.success) {
                 setDataOrder(data?.data);
-                setTrackingStatus(listStatus(data?.data?.status))
+                setTrackingStatus(listStatus(data?.data?.status) + " " + data?.data?.cancellation?.description)
                 var trackingLoc = data?.data?.destination?.latitude + "," + data?.data?.destination?.longitude + "|" +
                     data?.data?.origin?.latitude + "," + data?.data?.origin?.longitude
                 // + "|" + data?.data?.driver_info?.latitude + "," + data?.data?.driver_info?.longitude
