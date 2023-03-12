@@ -57,8 +57,126 @@ const HEADERS = () => {
 
 
 const GojekAPI = {
+    getListSupport() {
+        try {
+            const url = `https://api.gojekapi.com/support/customer/v1/tokens?limit=1`;
 
+            return axiosClient.get(url, HEADERS());
+        } catch (ex) {
+            return ex;
+        }
+    },
+    cancelOrder(idOrder, phone, userID) {
 
+        try {
+            const url = `https://api.gojekapi.com/zendesk/nanorep/v1/tickets?booking_country_code=VN`;
+
+            let payload = {
+                "ticket": {
+                    "fields": [
+                        {
+                            "name": "custom_field_n_Issue_Type__c",
+                            "value": "I  want to edit my order (vouchers, items..)"
+                        },
+                        {
+                            "name": "custom_field_api_version",
+                            "value": "V2"
+                        },
+                        {
+                            "name": "GOVIET_CCU_Issue_Level_1__c",
+                            "value": "Yêu cầu huỷ đơn hàng"
+                        },
+                        {
+                            "name": "GOVIET_CCU_Issue_Level_3__c",
+                            "value": "Yêu cầu huỷ đơn hàng"
+                        },
+                        {
+                            "name": "System_Customer_Phone__c",
+                            "value": phone
+                        },
+                        {
+                            "name": "Order_Number__c",
+                            "value": idOrder
+                        },
+                        {
+                            "name": "System_Customer_ID__c",
+                            "value": userID
+                        },
+                        {
+                            "name": "Service_Type_ID_S__c",
+                            "value": "5"
+                        },
+                        {
+                            "name": "blueprint_form_id_s__c",
+                            "value": "2992"
+                        },
+                        {
+                            "name": "System_Customer_Email__c",
+                            "value": "linhnguyen@gmail.com"
+                        },
+                        {
+                            "name": "unit__c",
+                            "value": "CCU"
+                        },
+                        {
+                            "name": "Issue__c",
+                            "value": "order__request_system_cancellation__general_request_system_cancellation"
+                        },
+                        {
+                            "name": "System_Device_Type__c",
+                            "value": "Android"
+                        },
+                        {
+                            "name": "country__c",
+                            "value": "VN"
+                        },
+                        {
+                            "name": "IP_Address__c",
+                            "value": "fe80::b4e2:37ff:fef2:8b6f%dummy0"
+                        },
+                        {
+                            "name": "System_Device_OS_Version__c",
+                            "value": "230413028"
+                        },
+                        {
+                            "name": "System_Customer_App_Version__c",
+                            "value": "4.61.1"
+                        },
+                        {
+                            "name": "custom_field_Go_Type__c",
+                            "value": "Customer"
+                        },
+                        {
+                            "name": "custom_field_Origin",
+                            "value": "In-Apps"
+                        },
+                        {
+                            "name": "custom_field_RecordType",
+                            "value": "GOVIET CCU Support"
+                        },
+                        {
+                            "name": "System_Device_Name__c",
+                            "value": "lge,LGM-V300L"
+                        }
+                    ],
+                    "subject": "[In App Help][General][general request system cancellation]",
+                    "tags": [
+                        "nanorep",
+                        "nanorep-customer",
+                        "consumer-app",
+                        "inapphelp",
+                        "inapphelp_order",
+                        "order__request_system_cancellation__general_request_system_cancellation"
+                    ]
+                }
+            }
+                ;
+
+            return axiosClient.post(url, payload, HEADERS());
+        } catch (ex) {
+            return ex;
+        }
+    },
 
     checkPassword(password) {
         try {
@@ -284,17 +402,7 @@ const GojekAPI = {
             return ex;
         }
     },
-    cancelOrder(id) {
-        try {
-            const url = `https://api.gojekapi.com/waiter/v1/orders/${id}/cancel`;
 
-            let payload = `{"activitySource":2,"bookingId":0,"cancelDescription":"Cancelled by customer apps","cancelReasonCode":"CUSTOMER_CANCEL_WITH_NO_REASON","orderNo":"${id}"}`;
-
-            return axiosClient.put(url, payload, HEADERS());
-        } catch (ex) {
-            return ex;
-        }
-    },
     getVoucher() {
         try {
             const url = `https://api.gojekapi.com/gopoints/v3/wallet/vouchers?limit=200&page=1`;

@@ -4,17 +4,19 @@ import { React, useEffect, useState } from 'react';
 import { TextareaAutosize } from '@mui/base';
 import GojekAPI from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
+import { LoadingButton } from '@mui/lab';
 
 // var customer = "";
 const ChatBox = (props) => {
-    const { setToggleChat, toggleChat, idOrder } = props;
+    const { setToggleChat, makeCancel, idOrder, channelID } = props;
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const [allMessages, setAllMessages] = useState([]);
-    const [idChannel, setIdChannel] = useState("");
+    const [idChannel, setIdChannel] = useState(channelID);
     const [message, setMessage] = useState("");
     const [customer, setCustomer] = useState("");
+    const [loadingCancel, setLoadingCancel] = useState(false);
     let idchannel;
 
 
@@ -42,7 +44,7 @@ const ChatBox = (props) => {
         const getChannelId = async () => {
             try {
                 var data = await GojekAPI.getChannelChat(idOrder);
-                console.log(data?.success)
+
                 if (data?.success) {
                     idchannel = data?.data?.channel_id;
                     setIdChannel(data?.data?.channel_id);
@@ -58,8 +60,16 @@ const ChatBox = (props) => {
             }
         }
 
+
         if (idOrder != undefined) {
-            let idchannel = getChannelId();
+            let idchannel = null;
+            if (channelID == "") {
+                idchannel = getChannelId();
+            } else {
+                idchannel = channelID;
+                getMembers(idchannel); getMessages(idchannel);
+            }
+
             if (idchannel?.length >= 10) {
                 const remessage = setInterval(() => {
                     getMessages(idchannel);
@@ -72,7 +82,11 @@ const ChatBox = (props) => {
 
     }, []);
 
-
+    const handleCancel = () => {
+        setLoadingCancel(true)
+        makeCancel();
+        setLoadingCancel(false)
+    }
     const getMessages = async (id) => {
         var messages = await GojekAPI.getAllChat(id);
 
@@ -99,7 +113,18 @@ const ChatBox = (props) => {
                 cx={{ margin: "0px", width: "400px" }}
 
             >
-                <DialogTitle id="scroll-dialog-title">Nhắn tin với tài xế
+                <DialogTitle id="scroll-dialog-title">{channelID == "" ? "Nhắn tin với tài xế" :
+                    <LoadingButton
+                        size="small"
+                        loading={loadingCancel}
+                        loadingIndicator="Đợi.."
+                        variant="contained"
+                        color='success'
+                        onClick={() => handleCancel()}
+                    >
+                        Yêu cầu huỷ đơn tiếp
+                    </LoadingButton>
+                }
                 </DialogTitle>
                 <DialogContent style={{ height: "500px", backgroundColor: "rgb(61 61 61)", paddingTop: "10px" }}  >
 

@@ -7,10 +7,12 @@ import ChatBox from './ChatBox';
 import { useSnackbar } from 'notistack';
 import { Refresh } from '@mui/icons-material';
 import { fomatCurrency } from '../common';
+import CancelOrder from './CancelOrder';
 const OrderDetail = ({ idOrder }) => {
     const [toggleChat, setToggleChat] = useState(false);
     const [loadingCoppy, setLoadingCoppy] = useState(false);
     const [dataOrder, setDataOrder] = useState([]);
+    const [channelID, setChannelID] = useState("");
     const [trackingLocation, setTrackingLocation] = useState("");
     const [trackingLocationDr, setTrackingLocationDr] = useState("");
     const [trackingStatus, setTrackingStatus] = useState("");
@@ -25,9 +27,42 @@ const OrderDetail = ({ idOrder }) => {
 
     var trackingLocationRC = useRef();
     const handleCancelOrder = async () => {
-        var data = await GojekAPI.cancelOrder(idOrder);
-        enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
+        try {
+            var data = await GojekAPI.getListSupport();
+            if (data?.success) {
+                if (data?.data?.tokens?.length > 0) {
+                    setChannelID(data?.data?.tokens[0]?.channel?.id);
+                    setToggleChat(true);
+                } else {
+
+                    makeCancel();
+
+                }
+            }
+        } catch (error) {
+
+        }
+
     }
+
+    const makeCancel = async () => {
+        var cfCancel = window.confirm("Huỷ với lí do thay đổi món!");
+        if (!cfCancel) return "";
+        var phone = dataOrder?.destination?.recipient_phone;
+        var data = await GojekAPI.cancelOrder(idOrder, phone, dataOrder?.customer_id);
+        if (data?.success) {
+            enqueueSnackbar("Đã yêu cầu huỷ đơn hàng!", { variant: 'success' })
+            setTimeout(async () => {
+                handleCancelOrder();
+            }, 3000);
+
+        } else {
+            enqueueSnackbar(data?.error[0]?.message, { variant: 'error' })
+
+        }
+
+    }
+
     const getListOrders = async () => {
         try {
             var data = await GojekAPI.getOrderDetail(idOrder);
@@ -172,7 +207,10 @@ const OrderDetail = ({ idOrder }) => {
                     <hr />
                     <div className='box-btn-order' >
                         <div
-                            onClick={() => setToggleChat(true)}
+                            onClick={() => {
+                                setChannelID("");
+                                setToggleChat(true);
+                            }}
                         >
                             Chat
                         </div>
@@ -197,7 +235,8 @@ const OrderDetail = ({ idOrder }) => {
                     trackingLocation && <MapMarker location={trackingLocation} />
                 }
 
-                {toggleChat && <ChatBox toggleChat={toggleChat} idOrder={idOrder} setToggleChat={setToggleChat} />}
+                {toggleChat && <ChatBox makeCancel={makeCancel} toggleChat={toggleChat} channelID={channelID} idOrder={idOrder} setToggleChat={setToggleChat} />}
+                {/* {toggleCancel && <CancelOrder toggle={toggleCancel} idOrder={idOrder} setToggle={setToggleCancel} />} */}
 
             </div>
 
