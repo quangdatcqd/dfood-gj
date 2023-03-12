@@ -58,11 +58,9 @@ const OrderDetail = ({ idOrder }) => {
                 await new Promise(reject => setTimeout(reject, 2000))
                 enqueueSnackbar("Đợi xíu!", { variant: 'warning' })
             }
-
         } else {
             enqueueSnackbar(data?.error[0]?.message, { variant: 'error' })
         }
-
     }
 
     const getListOrders = async () => {
@@ -206,7 +204,7 @@ const OrderDetail = ({ idOrder }) => {
 
                         </div>
                     </div>
-                    <p className='vehicle-info py-2'>{dataOrder?.vehicle?.brand_name}  {dataOrder?.vehicle?.model} | {dataOrder?.vehicle?.vehicle_number}</p>
+                    <p className='vehicle-info py-2'>{dataOrder?.vehicle?.brand_name}  {dataOrder?.vehicle?.model} | {dataOrder?.vehicle?.vehicle_number} | <span onClick={() => navigator.clipboard.writeText(idOrder)}>{idOrder}</span></p>
                     <hr />
                     <div className='box-btn-order' >
                         <div
