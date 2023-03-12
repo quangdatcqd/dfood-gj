@@ -240,8 +240,12 @@ const listStatus = (key) => {
 
             return "Đã bị huỷ!"
 
+        case 7:
 
+            return "Đã bị bởi bạn!"
+        case 8:
 
+            return "case 8"
         default:
             return ""
 
