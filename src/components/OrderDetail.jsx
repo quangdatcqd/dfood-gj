@@ -7,7 +7,7 @@ import ChatBox from './ChatBox';
 import { useSnackbar } from 'notistack';
 import { Refresh } from '@mui/icons-material';
 import { fomatCurrency } from '../common';
-import CancelOrder from './CancelOrder';
+
 const OrderDetail = ({ idOrder }) => {
     const [toggleChat, setToggleChat] = useState(false);
     const [loadingCoppy, setLoadingCoppy] = useState(false);
