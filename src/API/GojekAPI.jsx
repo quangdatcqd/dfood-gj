@@ -522,21 +522,21 @@ const GojekAPI = {
             return ex;
         }
     },
-    getNumberVOTP() {
+    getNumberVOTP(APIKey) {
         try {
 
 
-            const url = `https://api.viotp.com/request/getv2?token=6da02b69278e49ce8d7b6d51b4e8d56d&serviceId=12`;
+            const url = `https://api.viotp.com/request/getv2?token=${APIKey}&serviceId=12`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
         }
     },
-    getOTPVOTP(id_session) {
+    getOTPVOTP(APIKey, id_session) {
         try {
 
 
-            const url = `https://api.viotp.com/session/getv2?requestId=${id_session}&token=6da02b69278e49ce8d7b6d51b4e8d56d`;
+            const url = `https://api.viotp.com/session/getv2?requestId=${id_session}&token=${APIKey}`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;

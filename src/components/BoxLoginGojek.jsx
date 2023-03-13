@@ -18,6 +18,7 @@ const BoxLoginGojek = (props) => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [loadingROTP, setLoadingROTP] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [APIKey, setAPIKey] = useState(localStorage.getItem("api_key"));
     const [logginStatus, setLogginStatus] = useState("");
     const [OTP, setOTP] = useState("");
     const [otpToken, setOTPToken] = useState("");
@@ -38,8 +39,9 @@ const BoxLoginGojek = (props) => {
         generateID();
 
         try {
+            localStorage.setItem("api_key", APIKey);
             setLoading(true);
-            var data = await GojekAPI.getNumberVOTP();
+            var data = await GojekAPI.getNumberVOTP(APIKey);
 
             if (data?.success) {
                 // localStorage.setItem("G-Token", data?.access_token);
@@ -56,7 +58,7 @@ const BoxLoginGojek = (props) => {
                     while (true) {
 
 
-                        var datav = await GojekAPI.getOTPVOTP(data.data?.request_id);
+                        var datav = await GojekAPI.getOTPVOTP(APIKey, data.data?.request_id);
                         if (datav?.success && datav?.data?.Code !== null) {
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
@@ -248,6 +250,7 @@ const BoxLoginGojek = (props) => {
 
         }
     }
+
     const checkIPAddress = async () => {
         var data = await GojekAPI.test();
         setIpAddress(data?.ip)
@@ -285,12 +288,20 @@ const BoxLoginGojek = (props) => {
             <Avatar sx={{ m: 1, bgcolor: 'success.dark' }}>
                 <LockOutlinedIcon />
             </Avatar>
+            <div className='mb-2 w-100  '>
+                <InputBox
+                    placeholder={"API đăng nhập nhanh"}
+                    onChange={(e) => setAPIKey(e.target.value)}
+                    value={APIKey}
+                    type={"text"} />
+            </div>
             <LoadingButton
                 size="small"
                 onClick={fetchToken}
                 loading={loading}
                 loadingIndicator="Đợi.."
                 variant="contained"
+                color='warning'
             >
                 ĐĂNG NHẬP NHANH
             </LoadingButton>
