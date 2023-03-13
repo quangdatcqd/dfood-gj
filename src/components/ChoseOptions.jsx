@@ -26,8 +26,9 @@ const ChoseOptions = memo((props) => {
         if (hasvariant >= 0 && indexItem >= 0) {
             setQuantity(contexts.selectedItems[indexItem]?.quantity >= 1 ? contexts.selectedItems[indexItem]?.quantity : 1);
             setNoteItem(contexts.selectedItems[indexItem]?.notes)
-            variants.current = contexts.selectedItems[indexItem]?.variants[0];
-            price.current = Number(contexts.selectedItems[indexItem]?.variants[1]);
+            variants.current = contexts.selectedItems[indexItem]?.variants[0] !== undefined ? contexts.selectedItems[indexItem]?.variants[0] : [];
+            price.current = Number(contexts.selectedItems[indexItem]?.variants[1]) >= 0 ? Number(contexts.selectedItems[indexItem]?.variants[1]) : 0;
+
             // total = (((Number(data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price)) * quantity) + pricein);
             contexts.handleVariant([variants.current, price.current]);
             setPricePreview(total);

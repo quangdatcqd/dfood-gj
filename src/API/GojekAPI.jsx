@@ -319,8 +319,6 @@ const GojekAPI = {
     setAddress(id) {
         try {
             const url = `https://api.gojekapi.com/poi/v3/findLatLng?placeid=${id}&service_type=5`;
-
-
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
@@ -345,8 +343,6 @@ const GojekAPI = {
         try {
             const url = `https://api.gojekapi.com/gofood/v2/deals/checkout?merchant_id=${merchantID}&brand_id=${brandID}&service_type=5&picked_loc=${HEADERS().picked_loc}`;
             // const url = `https://api.gojekapi.com/gofood/v2/deals/checkout?merchant_id=2644b825-0c4e-4a36-8cbf-bb01c33ed0b1&brand_id=d57bfd59-2053-4784-95a7-d74136b997e1&service_type=5&picked_loc=10.687392%2C106.59386`;
-
-
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
@@ -355,7 +351,6 @@ const GojekAPI = {
     makeOrder(dataPayload) {
         try {
             const url = `https://api.gojekapi.com/waiter/v4/orders`;
-
             return axiosClient.post(url, dataPayload, HEADERS());
         } catch (ex) {
             return ex;
@@ -373,7 +368,6 @@ const GojekAPI = {
     getAllChat(id) {
         try {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}/messages?batch_size=20&direction=prev&message_ts=8999999999999`;
-
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
@@ -383,8 +377,6 @@ const GojekAPI = {
     getMemberChat(id) {
         try {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}`;
-
-
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
@@ -394,9 +386,7 @@ const GojekAPI = {
     sendMessage(id, text) {
         try {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}/message`;
-
             let payload = `{"channel_type":"group-booking","data":"{\\"tracking_id\\":\\"ff41235f-b55c-4f52-9e07-62abd8560d35\\"}","request_id":"d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd","text":"${text}","type":"text"}`
-
             return axiosClient.post(url, payload, HEADERS());
         } catch (ex) {
             return ex;
@@ -406,7 +396,6 @@ const GojekAPI = {
     getVoucher() {
         try {
             const url = `https://api.gojekapi.com/gopoints/v3/wallet/vouchers?limit=200&page=1`;
-
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
@@ -453,8 +442,6 @@ const GojekAPI = {
 
     Methods(phone) {
         try {
-
-            console.log("render")
             const url = `https://goid.gojekapi.com/nvs/v1/methods`;
             let payload = `{"client_id":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","country_code":"+84","flow":"signup","phone_number":"${phone}"}`;
             return axiosClient.post(url, payload, HEADERS());
@@ -524,9 +511,7 @@ const GojekAPI = {
     },
     getNumberVOTP(APIKey) {
         try {
-
-
-            const url = `https://api.viotp.com/request/getv2?token=${APIKey}&serviceId=12`;
+            const url = `https://api.viotp.com/request/getv2?token=${APIKey}&serviceId=12&network=VIETTEL`;
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
             return ex;
