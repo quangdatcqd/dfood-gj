@@ -251,45 +251,20 @@ const listStatus = (key) => {
     // 3==  đag chuẩN bị món
     // 6 ==  đã bị huỷ
     // 4 == đang giao hàng
+    const liststatus = [
+        "case0",
+        "Đang không biết!",
+        "Đang tìm tài xế!",
+        "Đag chuẩn bị món ăn!",
+        "Đang giao hàng!",
+        "Đã hoàn thành đơn!",
+        "Đã bị huỷ!",
+        "Đã bị bởi ",
+        "case 8",
+        "case 9",
+    ]
 
-    switch (key) {
-        case 1:
-
-            return "Đang không biết!"
-        case 2:
-
-            return "Đang tìm tài xế!"
-
-
-        case 3:
-
-            return "Đag chuẩn bị món ăn!"
-
-
-        case 4:
-
-            return "Đang giao hàng!"
-
-
-        case 5:
-
-            return "Đã hoàn thành đơn!"
-
-
-        case 6:
-
-            return "Đã bị huỷ!"
-
-        case 7:
-
-            return "Đã bị bởi "
-        case 8:
-
-            return "case 8"
-        default:
-            return ""
-
-    }
+    return liststatus[key];
 
 }
 export default OrderDetail;
