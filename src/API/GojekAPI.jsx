@@ -177,6 +177,15 @@ const GojekAPI = {
             return ex;
         }
     },
+    quickCancel(id) {
+        try {
+            const url = `https://api.gojekapi.com/waiter/v1/orders/${id}/cancel`;
+            var payload = { "activitySource": 2, "bookingId": 0, "cancelDescription": "Cancelled by customer apps", "cancelReasonCode": "CUSTOMER_CANCEL_WITH_NO_REASON", "orderNo": id }
+            return axiosClient.put(url, payload, HEADERS());
+        } catch (ex) {
+            return ex;
+        }
+    },
 
     checkPassword(password) {
         try {

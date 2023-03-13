@@ -170,7 +170,7 @@ const Checkout = ({ getOrdersActive }) => {
     }
 
     const handleCancelOrder = async () => {
-        var data = await GojekAPI.cancelOrder(id_oder.current);
+        var data = await GojekAPI.quickCancel(id_oder.current);
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
 
