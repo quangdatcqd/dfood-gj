@@ -282,7 +282,7 @@ const listStatus = (key) => {
 
         case 7:
 
-            return "Đã bị bởi bạn!"
+            return "Đã bị bởi "
         case 8:
 
             return "case 8"
