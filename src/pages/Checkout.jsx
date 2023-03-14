@@ -389,7 +389,7 @@ const Checkout = ({ getOrdersActive }) => {
                     </LoadingButton>
                     {
 
-                        id_oder.current != "" &&
+                        idOrderShow != "" &&
                         <LoadingButton
                             size="small"
                             variant="contained"
