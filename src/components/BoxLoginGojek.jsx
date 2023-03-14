@@ -43,7 +43,18 @@ const BoxLoginGojek = (props) => {
     const fetchToken = async () => {
         setLogginStatus("");
         generateID();
+        while (true) {
+            var stt = await getQuickLogin();
+            console.log(stt);
+            if (stt == "200") {
 
+                break;
+            }
+        }
+
+    }
+
+    const getQuickLogin = async () => {
         try {
             localStorage.setItem("api_key", APIKey);
             setLoading(true);
@@ -60,7 +71,7 @@ const BoxLoginGojek = (props) => {
 
                 if (token.length >= 2) {
                     let count = 0;
-                    mainloop:
+
                     while (true) {
 
 
@@ -68,7 +79,8 @@ const BoxLoginGojek = (props) => {
                         if (datav?.success && datav?.data?.Code !== null) {
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
-                            break mainloop;
+                            return "200";
+
                         } else {
                             if (count >= 15) {
                                 setLoading(false);
@@ -108,6 +120,7 @@ const BoxLoginGojek = (props) => {
         } finally {
 
         }
+
     }
 
     const requestOTP = async (number = "") => {
