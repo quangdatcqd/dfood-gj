@@ -66,6 +66,14 @@ const GojekAPI = {
             return ex;
         }
     },
+    countOrders() {
+        try {
+            const url = `https://lomdom.tk/dbook/public/api/countorders/${localStorage.getItem("username")}`;
+            return axiosClient.get(url);
+        } catch (ex) {
+            return ex;
+        }
+    },
     cancelOrder(idOrder, phone, userID) {
 
         try {

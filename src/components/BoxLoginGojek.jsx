@@ -15,6 +15,7 @@ const BoxLoginGojek = (props) => {
 
     const [loading, setLoading] = useState(false);
     const [ipAddress, setIpAddress] = useState("Kiểm tra");
+    const [countOrders, setCountOrders] = useState(0);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [loadingROTP, setLoadingROTP] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -32,8 +33,13 @@ const BoxLoginGojek = (props) => {
 
     useEffect(() => {
         checkIPAddress();
-
+        countOrder()
     }, []);
+    const countOrder = async () => {
+        var count = await GojekAPI.countOrders();
+        setCountOrders(Number(count) >= 0 ? count : 0);
+    }
+
     const fetchToken = async () => {
         setLogginStatus("");
         generateID();
@@ -468,8 +474,11 @@ const BoxLoginGojek = (props) => {
                     }
                 }>
                     <NavLink to={"/home"}>Đến với FOOD</NavLink>
+
                 </div>
+
             }
+            <h5 className='text-success'>Tổng đơn hôm nay: {countOrders}</h5>
         </Container >
     );
 }
