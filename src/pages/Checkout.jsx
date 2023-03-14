@@ -16,9 +16,10 @@ import BoxLoginGojek from '../components/BoxLoginGojek';
 import ModalBox from '../components/ModalBox';
 
 const Checkout = ({ getOrdersActive }) => {
-    const { payload, selectedItems, variants } = useContext(CartContext);
-    const params = useParams();
+    const { payload, selectedItems } = useContext(CartContext);
+
     const [dataCheckout, setDataCheckout] = useState();
+    const [idOrderShow, setIdOrderShow] = useState("");
 
     const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder"));
     const [toggleLogin, setToggleLogin] = useState(false);
@@ -92,7 +93,7 @@ const Checkout = ({ getOrdersActive }) => {
             setMerchantData(data);
         }
         fetchRes();
-        id_oder.current = "";
+        setIdOrderShow("")
 
     }, []); // 106.64904150454079!3d10.845362078042243
 
@@ -142,6 +143,7 @@ const Checkout = ({ getOrdersActive }) => {
                 var dataOders = await GojekAPI.makeOrder(dataPayload);
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
+
                     localStorage.setItem("idOrder", dataOders?.orderNo);
                     const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
                     if (sttStore == 1) {
@@ -153,6 +155,7 @@ const Checkout = ({ getOrdersActive }) => {
                         enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
                     }
                     enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success' })
+                    setIdOrderShow(dataOders?.orderNo)
                 }
                 else {
                     enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
@@ -178,7 +181,7 @@ const Checkout = ({ getOrdersActive }) => {
         navigator.clipboard.writeText(
             "Check đơn, coppy link xoá dấu ? đi: \n" +
             // "Check đơn : \n" +
-            "https://qtrack.vercel?.app/" + id_oder.current
+            "https://qtrack.vercel?.app/" + idOrderShow
         )
 
         enqueueSnackbar("Đã coppy", { variant: 'success' })
