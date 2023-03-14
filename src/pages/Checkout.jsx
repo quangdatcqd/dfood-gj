@@ -92,7 +92,7 @@ const Checkout = ({ getOrdersActive }) => {
             setMerchantData(data);
         }
         fetchRes();
-
+        id_oder.current = "";
 
     }, []); // 106.64904150454079!3d10.845362078042243
 
@@ -172,6 +172,17 @@ const Checkout = ({ getOrdersActive }) => {
     const handleCancelOrder = async () => {
         var data = await GojekAPI.quickCancel(id_oder.current);
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
+    }
+    const handleCoppy = () => {
+
+        navigator.clipboard.writeText(
+            "Check đơn, coppy link xoá dấu ? đi: \n" +
+            // "Check đơn : \n" +
+            "https://qtrack.vercel?.app/" + id_oder.current
+        )
+
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
+
     }
 
     return (
@@ -373,7 +384,18 @@ const Checkout = ({ getOrdersActive }) => {
                     >
                         Huỷ đơn
                     </LoadingButton>
+                    {
 
+                        id_oder.current != "" &&
+                        <LoadingButton
+                            size="small"
+                            variant="contained"
+                            color='primary'
+                            onClick={() => handleCoppy()}
+                        >
+                            COPPY
+                        </LoadingButton>
+                    }
                     <Button onClick={handleOrder} variant="contained" color="secondary" style={{ marginTop: "10px" }}   >Đặt ngay</Button>
                 </div>
 
