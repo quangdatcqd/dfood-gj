@@ -15,7 +15,7 @@ function App() {
   return (
 
     <ThemeProvider theme={theme}  >
-      <SnackbarProvider anchorOrigin={{ vertical: "bottom", horizontal: "left" }} maxSnack={2} autoHideDuration={1500}>
+      <SnackbarProvider anchorOrigin={{ vertical: "bottom", horizontal: "left" }} maxSnack={3} autoHideDuration={1500}>
 
         <BrowserRouter>
 

@@ -28,8 +28,10 @@ export default function Home() {
     const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
     const [toggleMenu, setToggleMenu] = useState(false);
+    const [dataImport, setDataImport] = useState("");
     const [toggleListRes, setToggleListRes] = useState(false);
     const [toggleOrders, setToggleOrders] = useState(false);
+    const [toggleImport, setToggleImport] = useState(false);
     const [toggleOderDetail, setToggleOderDetail] = useState(false);
     const [listOrders, setListOrders] = useState([]);
     const [listOrdersActive, setListOrdersActive] = useState([]);
@@ -91,7 +93,22 @@ export default function Home() {
         }
 
     }
-
+    const handleImport = () => {
+        try {
+            var data = JSON.parse(dataImport);
+            localStorage.setItem("selectedItems", data?.selectedItems)
+            localStorage.setItem("merchantData", data?.merchantData)
+            localStorage.setItem("merchantLoc", data?.merchantLoc)
+            localStorage.setItem("customerLoc", data?.customerLoc)
+            localStorage.setItem("payload", data?.payload)
+            enqueueSnackbar("Nhập đơn thành công!", { variant: 'success', autoHideDuration: 2500 })
+            window.location.reload();
+            setToggleImport(false)
+        } catch (error) {
+            enqueueSnackbar(error?.message, { variant: 'error' })
+        }
+        setDataImport("")
+    }
     return (
         <div style={{ backgroundColor: "white" }} >
             <div>
@@ -102,6 +119,21 @@ export default function Home() {
                     <div className='menu-div'></div>
                     <div className='menu-div'></div>
                 </div>
+                <div className='btn-export-order' onClick={() => setToggleImport(toggleImport ? false : true)}>
+
+                    {
+                        toggleImport ? "Đóng" : "Nhập"
+                    }
+                </div>
+                {
+                    toggleImport &&
+                    <div className='input-import-order'>
+
+                        <textarea onChange={(e) => setDataImport(e.target.value)} placeholder='Nhập đơn đặt' >{dataImport}</textarea>
+                        <div onClick={() => handleImport()}>OK</div>
+                    </div>
+                }
+
 
                 {
                     listOrdersActive?.data?.cards?.length > 0 &&
@@ -168,6 +200,7 @@ export default function Home() {
             <Container onClick={() => {
                 setToggleMenu(false);
                 setToggleOrders(false);
+                setToggleImport(false);
 
             }} >
                 <div

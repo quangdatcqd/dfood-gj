@@ -21,7 +21,7 @@ const Checkout = ({ getOrdersActive }) => {
     const [dataCheckout, setDataCheckout] = useState();
     const [idOrderShow, setIdOrderShow] = useState("");
 
-    const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder"));
+    const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder") != "null" ? localStorage.getItem("noteOrder") : "alo tới a gọi số này nha 00000");
     const [toggleLogin, setToggleLogin] = useState(false);
 
     const [loading, setLoading] = useState(false);
@@ -154,7 +154,7 @@ const Checkout = ({ getOrdersActive }) => {
                     else {
                         enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
                     }
-                    enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success' })
+                    enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
                     setIdOrderShow(dataOders?.orderNo)
                 }
                 else {
@@ -188,6 +188,19 @@ const Checkout = ({ getOrdersActive }) => {
 
     }
 
+    const handleExport = () => {
+        let data = {
+            "selectedItems": localStorage.getItem("selectedItems"),
+            "merchantData": localStorage.getItem("merchantData"),
+            "merchantLoc": localStorage.getItem("merchantLoc"),
+            "customerLoc": localStorage.getItem("customerLoc"),
+            "payload": localStorage.getItem("payload"),
+        }
+        navigator.clipboard.writeText(JSON.stringify(data))
+
+
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
+    }
     return (
 
         <div className='  w-100 mb-5 pb-5 container-com'   >
@@ -386,6 +399,14 @@ const Checkout = ({ getOrdersActive }) => {
                         onClick={() => handleCancelOrder()}
                     >
                         Huỷ đơn
+                    </LoadingButton>
+                    <LoadingButton
+                        size="small"
+                        variant="contained"
+                        color='primary'
+                        onClick={() => handleExport()}
+                    >
+                        Xuất món
                     </LoadingButton>
                     {
 
