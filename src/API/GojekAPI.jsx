@@ -496,7 +496,7 @@ const GojekAPI = {
     register(phone, token) {
         try {
 
-            let payload = `{"client_name":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","data":{"consent_given":true,"email":"${randomString("0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM" + "_", 15)}d@gmail.com","name":"dat","onboarding_partner":"android","phone":"+84${phone}"}}`;
+            let payload = `{"client_name":"gojek:consumer:app","client_secret":"pGwQ7oi8bKqqwvid09UrjqpkMEHklb","data":{"consent_given":true,"email":"${randomString("0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM" + "_", 15)}d@gmail.com","name":"uyên","onboarding_partner":"android","phone":"+84${phone}"}}`;
             const url = `https://api.gojekapi.com/v7/customers/signup`;
             return axiosClient.post(url, payload, {
                 headers: {

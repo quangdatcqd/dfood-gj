@@ -59,20 +59,20 @@ export const generateID = () => {
         }
         return mac.toUpperCase();
     }
-    var XM1 = ' 1:__' + randomString(chars, 37) +
+    var XM1 = ' 1:__' + randomString(chars, 33) +
         ',2:asdfsdf,3:' + new Date().getTime() +
         '-7026432932894132169,4:52251,5:' + randomString(fullchars, 8) +
         '|19eew00|8,6:' + randomMAC() +
         ',7:"' + randomString(fullchars, 13) +
-        '",8:720x1356,9:asdf,10:2,11:' + randomString(fullchars, 31) +
-        'AAAAAAAAAAA=,12:' + randomString(chars, 40) +
+        '",8:720x1356,9:asdf,10:2,11:' + randomString(fullchars, 32) +
+        'AAAAAAAAAAA=,12:' + randomString(chars, 42) +
         ',13:33005,14:7026432932894132169';
     localStorage.setItem("XM1", XM1);
 
     localStorage.setItem("device_id", randomString(fullchars + "+/", 345) + "==")
 
-    localStorage.setItem("unique_id", randomString(chars, 40));
-    var tokenDevice = randomString(fullchars, 18) + "-DHZ:" + randomString(fullchars, 163);
+    localStorage.setItem("unique_id", randomString(chars, 33));
+    var tokenDevice = randomString(fullchars, 18) + "-DHZ:" + randomString(fullchars, 149);
     localStorage.setItem("token_device", tokenDevice);
 
     genSessionID();
