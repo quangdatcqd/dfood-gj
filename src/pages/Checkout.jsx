@@ -179,6 +179,7 @@ const Checkout = ({ getOrdersActive }) => {
     const handleCoppy = () => {
 
         navigator.clipboard.writeText(
+            "YÊU CẦU BẠN KIỂM TRA ĐƠN HÀNG TRÁNH SAI SÓT \n" +
             "Check đơn, coppy link xoá dấu ? đi: \n" +
             // "Check đơn : \n" +
             "https://qtrack.vercel?.app/" + idOrderShow
