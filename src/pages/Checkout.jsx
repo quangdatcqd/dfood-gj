@@ -48,7 +48,7 @@ const Checkout = ({ getOrdersActive }) => {
             const dataItems = dataPayload || payload;
             setLoadingRefresh("refresh-icon-ro");
 
-            var getVC = await GojekAPI.getVoucher();
+            let getVC = await GojekAPI.getVoucher();
             let indexVC = -1;
             if (getVC?.success) {
                 indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");

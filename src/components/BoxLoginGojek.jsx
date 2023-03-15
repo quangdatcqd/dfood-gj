@@ -79,6 +79,7 @@ const BoxLoginGojek = (props) => {
                         if (datav?.success && datav?.data?.Code !== null) {
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
+
                             return "200";
 
                         } else {
@@ -251,7 +252,7 @@ const BoxLoginGojek = (props) => {
             if (data?.access_token) {
                 localStorage.setItem("G-Token", data?.access_token);
                 localStorage.setItem("R-Token", data?.refresh_token);
-
+                await GojekAPI.getVoucher();
                 // setToggleLogin(false);
 
                 setLogginStatus("Đã đăng nhập thành công!");
