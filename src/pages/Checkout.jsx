@@ -45,20 +45,22 @@ const Checkout = ({ getOrdersActive }) => {
 
     const fetchData = async (dataPayload) => {
         try {
+
+            idvoucher.current = localStorage.getItem("idVoucher")
             const dataItems = dataPayload || payload;
             setLoadingRefresh("refresh-icon-ro");
 
-            let getVC = await GojekAPI.getVoucher();
-            let indexVC = -1;
-            if (getVC?.success) {
-                indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
-                idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
-            }
+            // let getVC = await GojekAPI.getVoucher();
+            // let indexVC = -1;
+            // if (getVC?.success) {
+            //     indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
+            //     idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
+            // }
 
             var data = await GojekAPI.checkout({
                 ...dataItems,
-                offer_id: idvoucher.current,
-                voucherId: idvoucher.current
+                offer_id: localStorage.getItem("idVoucher"),
+                voucherId: localStorage.getItem("idVoucher")
 
             });
 
@@ -95,6 +97,7 @@ const Checkout = ({ getOrdersActive }) => {
         fetchRes();
         setIdOrderShow("")
 
+
     }, []); // 106.64904150454079!3d10.845362078042243
 
 
@@ -106,7 +109,7 @@ const Checkout = ({ getOrdersActive }) => {
 
         try {
 
-            if (idvoucher.current != undefined) {
+            if (localStorage.getItem("idVoucher")?.length >= 5) {
 
                 var dataPayload = {
                     "cartPriceEstimated": (Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)),
@@ -137,7 +140,7 @@ const Checkout = ({ getOrdersActive }) => {
                         }
                     ],
                     "restaurantId": merchantLoc?.id,
-                    "voucherId": idvoucher.current
+                    "voucherId": localStorage.getItem("idVoucher")
                 }
 
                 var dataOders = await GojekAPI.makeOrder(dataPayload);
@@ -174,15 +177,16 @@ const Checkout = ({ getOrdersActive }) => {
 
     const handleCancelOrder = async () => {
         var data = await GojekAPI.quickCancel(id_oder.current);
+        localStorage.setItem("idVoucher", idvoucher.current)
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
     const handleCoppy = () => {
 
         navigator.clipboard.writeText(
             "YÊU CẦU BẠN KIỂM TRA ĐƠN HÀNG TRÁNH SAI SÓT \n" +
-            "Check đơn, coppy link xoá dấu ? đi: \n" +
+
             // "Check đơn : \n" +
-            "https://qtrack.vercel?.app/" + idOrderShow
+            "https://qtrack.vercel.app/" + idOrderShow
         )
 
         enqueueSnackbar("Đã coppy", { variant: 'success' })
@@ -206,7 +210,7 @@ const Checkout = ({ getOrdersActive }) => {
 
         <div className='  w-100 mb-5 pb-5 container-com'   >
             <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
-                <BoxLoginGojek setToggleLogin={setToggleLogin} />
+                <BoxLoginGojek setToggleLogin={setToggleLogin} quickLogin={true} fetchCheckout={fetchData} setLoadingLogin={setLoading} />
             </ModalBox>
             <Container>
 
@@ -389,7 +393,10 @@ const Checkout = ({ getOrdersActive }) => {
                         loadingIndicator="Đợi.."
                         variant="contained"
                         color='success'
-                        onClick={() => setToggleLogin(true)}
+                        onClick={() => {
+                            setToggleLogin(true)
+                            setLoading(true)
+                        }}
                     >
                         ĐĂNG NHẬP
                     </LoadingButton>

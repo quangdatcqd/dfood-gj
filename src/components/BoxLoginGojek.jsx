@@ -9,7 +9,7 @@ import InputBox from './InputBox';
 import { NavLink } from 'react-router-dom';
 import { generateID } from '../common';
 const BoxLoginGojek = (props) => {
-    const { setToggleLogin } = props;
+    const { quickLogin, setToggleLogin, fetchCheckout, setLoadingLogin } = props;
 
 
 
@@ -34,6 +34,11 @@ const BoxLoginGojek = (props) => {
     useEffect(() => {
         checkIPAddress();
         countOrder()
+        if (quickLogin) {
+            fetchToken();
+            setToggleLogin(false)
+
+        }
     }, []);
     const countOrder = async () => {
         var count = await GojekAPI.countOrders();
@@ -252,7 +257,22 @@ const BoxLoginGojek = (props) => {
             if (data?.access_token) {
                 localStorage.setItem("G-Token", data?.access_token);
                 localStorage.setItem("R-Token", data?.refresh_token);
-                await GojekAPI.getVoucher();
+                let count = 0;
+                while (true) {
+                    count++;
+                    var getVC = await GojekAPI.getVoucher();
+                    if (getVC?.success) {
+                        var indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
+
+                        if (indexVC >= 0) {
+                            localStorage.setItem("idVoucher", getVC?.data[indexVC]?.code);
+                            fetchCheckout();
+                            break;
+                        }
+
+                    }
+                    if (count >= 10) break;
+                }
                 // setToggleLogin(false);
 
                 setLogginStatus("Đã đăng nhập thành công!");
@@ -267,7 +287,7 @@ const BoxLoginGojek = (props) => {
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
-
+            setLoadingLogin(false)
         }
     }
 
