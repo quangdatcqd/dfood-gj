@@ -148,6 +148,7 @@ const Checkout = ({ getOrdersActive }) => {
                     id_oder.current = dataOders?.orderNo;
 
                     localStorage.setItem("idOrder", dataOders?.orderNo);
+                    localStorage.setItem("idVoucher", "");
                     const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
                     if (sttStore == 1) {
                         enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
