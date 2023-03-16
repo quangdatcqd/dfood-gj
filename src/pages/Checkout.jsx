@@ -177,6 +177,7 @@ const Checkout = ({ getOrdersActive }) => {
     }
 
     const handleCancelOrder = async () => {
+
         var data = await GojekAPI.quickCancel(id_oder.current);
         localStorage.setItem("idVoucher", idvoucher.current)
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
@@ -185,9 +186,8 @@ const Checkout = ({ getOrdersActive }) => {
 
         navigator.clipboard.writeText(
             "YÊU CẦU BẠN KIỂM TRA ĐƠN HÀNG TRÁNH SAI SÓT \n" +
-
-            // "Check đơn : \n" +
-            "https://qtrack.vercel.app/" + idOrderShow
+            "https://qtrack.vercel.app/" + idOrderShow + "\n \n" +
+            localStorage.getItem("quick_message")
         )
 
         enqueueSnackbar("Đã coppy", { variant: 'success' })

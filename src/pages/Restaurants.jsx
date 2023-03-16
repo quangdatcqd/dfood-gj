@@ -14,7 +14,7 @@ import InputBox from '../components/InputBox';
 
 function Restaurants(props) {
 
-    const { toggleSelectDishes, setToggleSelectDishes } = useContext(CartContext);
+    const { setSelectedRes, setToggleSelectDishes } = useContext(CartContext);
     // const { dataAddress } = props;
 
     const [dataRestaurant, setDataRestaurant] = useState("");
@@ -49,9 +49,28 @@ function Restaurants(props) {
     }
     const debounceDropDown = useCallback(debounce((nextValue) => fetchRestaurant(nextValue), 500), [])
 
-    const handleChangeKeyword = (e) => {
-        // if (e.target.value != "")
-        debounceDropDown(e.target.value);
+    const handleChangeKeyword = async (e) => {
+        //https://api.gojekapi.com/gofood/consumer/v1/app-links/CxG1P1q?full_url=https%3A%2F%2Fgofood.link%2Fa%2FCxG1P1q
+
+        const regex = /https/;
+        if (regex.test(e.target.value)) {
+            const regexID = /[0-9a-zA-Z]{7}/;
+            const matchID = e.target.value?.match(regexID);
+            console.log(matchID);
+            const result = await GojekAPI.searchRestaurantByURL(matchID && matchID[0]);
+
+
+            const regex = /\/([a-f\d-]+)\?/i;
+            const match = JSON.stringify(result)?.match(regex);
+            const id = match && match[1];
+            if (id) {
+                setToggleSelectDishes(true);
+                setSelectedRes(id);
+            }
+        }
+        else {
+            debounceDropDown(e.target.value);
+        }
     }
 
 

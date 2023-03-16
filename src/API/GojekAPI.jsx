@@ -306,7 +306,17 @@ const GojekAPI = {
     searchRestaurant(keyword) {
         try {
 
-            const url = `https://api.gojekapi.com/gofood/search/v1/query_understanding?search_query=${keyword}&picked_loc=${HEADERS().picked_loc}&redesign_enabled=true&super_partner_enabled=true`;
+            const url = `https://api.gojekapi.com/gofood/search/v1/query_understanding?search_query=${encodeURIComponent(keyword)}&picked_loc=${HEADERS().picked_loc}&redesign_enabled=true&super_partner_enabled=true`;
+
+            return axiosClient.get(url, HEADERS());
+        } catch (ex) {
+            return ex;
+        }
+    },
+    searchRestaurantByURL(urlinput) {
+        try {
+
+            const url = `https://api.gojekapi.com/gofood/consumer/v1/app-links/${urlinput}`;
 
             return axiosClient.get(url, HEADERS());
         } catch (ex) {
