@@ -2,12 +2,13 @@
 import * as React from "react";
 import { SnackbarProvider } from 'notistack';
 import { Routes, BrowserRouter, Route, } from "react-router-dom";
-import Home from "./pages/Home";
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import Login from "./pages/Login";
+import BoxLogin from "./pages/BoxLogin";
 import CheckUserValid from "./pages/CheckUserValid";
+import Home from "./pages/Home/Home";
 // import MapMarker from "./components/MapMarker";
 function App() {
   const theme = createTheme();
@@ -21,8 +22,8 @@ function App() {
 
           <Routes>
 
-            <Route path="/*" element={<CheckUserValid children={<Login />} />} />
-            <Route path="/home" element={<CheckUserValid children={<Home />} />} />
+            <Route path="/*" element={<BoxLogin />} />
+            <Route path="/home" element={<Home />} />
           </Routes>
         </BrowserRouter>
 

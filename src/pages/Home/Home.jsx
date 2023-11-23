@@ -2,30 +2,31 @@ import { React, useState, useEffect, useContext } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSnackbar } from 'notistack';
+import './home.css';
 
-
-import Cartpreview from '../components/Cartpreview';
-import Restaurants from '../pages/Restaurants';
-import SelectDishes from '../pages/SelectDishes';
-import Checkout from '../pages/Checkout';
-import ModalBox from '../components/ModalBox';
-import OrderDetail from '../components/OrderDetail';
-import ChoseAddress from '../components/ChoseAddress';
-import SwipeBanner from '../components/SwipeBanner';
-import GojekAPI from '../API/GojekAPI';
-import SwipeCategories from '../components/SwipeCategories';
-import SwipeCategoriesV1 from '../components/SwipeCategoriesV1';
-import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
-import ListItems from '../components/ListItems';
-import { CartContext } from '../Contexts/CartContext';
-import ListOrders from '../components/ListOrders';
-import ListResVIP from '../components/ListResVIP';
+import Cartpreview from '../../components/Cartpreview';
+import Restaurants from '../Restaurants';
+import SelectDishes from '../SelectDishes';
+import Checkout from '../Checkout';
+import ModalBox from '../../components/ModalBox';
+import OrderDetail from '../../components/OrderDetail';
+import ChoseAddress from './Header/components/ChoseAddress';
+import SwipeBanner from '../../components/SwipeBanner';
+import { GojekAPI, OrderAPI } from '../../API/GojekAPI';
+import SwipeCategories from '../../components/SwipeCategories';
+import SwipeCategoriesV1 from '../../components/SwipeCategoriesV1';
+import SwipeCategoriesV2 from '../../components/SwipeCategoriesV2';
+import ListItems from '../../components/ListItems';
+import { CartContext } from '../../Contexts/CartContext';
+import ListOrders from '../../components/ListOrders';
+import ListResVIP from '../../components/ListResVIP';
+import Header from './Header/Header';
 
 
 
 export default function Home() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const [currentLoc, setCurrentLoc] = useState(JSON.parse(localStorage.getItem("customerLoc")));
+
     const [toggleLocationChange, setToggleLocationChange] = useState(false);
     const [toggleMenu, setToggleMenu] = useState(false);
     const [dataImport, setDataImport] = useState("");
@@ -33,11 +34,11 @@ export default function Home() {
     const [toggleOrders, setToggleOrders] = useState(false);
     const [toggleImport, setToggleImport] = useState(false);
     const [toggleOderDetail, setToggleOderDetail] = useState(false);
-    const [listOrders, setListOrders] = useState([]);
+
     const [listOrdersActive, setListOrdersActive] = useState([]);
     const [idOrder, setIdOrder] = useState("");
     const { toggleSelectDishes, setToggleSelectDishes, toggleCheckout, setToggleCheckout } = useContext(CartContext);
-    const [toggleSearch, setToggleSearch] = useState(false);
+
     const [dataHomeCards, setDataHomeCards] = useState();
     const [dataDealsHome, setDataDealsHome] = useState();
     const indexBanner = dataHomeCards?.cards?.findIndex((element) => element?.card_type === 11);
@@ -60,27 +61,14 @@ export default function Home() {
             setDataDealsHome(data?.data);
         }
         fetchDealsHOme();
-
-        // ftabTWudToKUlyz3yc - DHZ: APA91bGoxvlyyWkFKFoBen85JfvFBAVosjWEt2N3BmxKSjdx97rkcZCSWaMB5Ygoj8ZwFuWbA70_CHate8E1rcZmQTIetRNsGM1Y8VwsuyXOxGACSVm3FaLCMjI1sVJ0kGiKWuKo0O0x
-
         getOrdersActive();
 
 
-
     }, []);
-    const getListOrders = async () => {
-        setToggleOrders(toggleOrders ? false : true);
-        if (!toggleOrders) {
-            var data = await GojekAPI.getListOrders();
-            getOrdersActive();
-            setListOrders(data);
-        }
 
-
-    }
     const getOrdersActive = async () => {
         try {
-            var data = await GojekAPI.getOrdersActive();
+            var data = await OrderAPI.getOrdersActive();
             if (data?.success) {
                 setListOrdersActive(data);
 
@@ -89,7 +77,8 @@ export default function Home() {
 
             }
         } catch (error) {
-            enqueueSnackbar(data?.message, { variant: 'error' });
+            enqueueSnackbar(error?.message, { variant: 'error' });
+
         }
 
     }
@@ -110,31 +99,10 @@ export default function Home() {
         setDataImport("")
     }
     return (
-        <div style={{ backgroundColor: "white" }} >
+        <div style={{ backgroundColor: "white", paddingTop: "40px" }} >
+
+            <Header />
             <div>
-                <div className='btn-menu'
-                    onClick={() => setToggleMenu(toggleMenu ? false : true)}
-                >
-                    <div className='menu-div'></div>
-                    <div className='menu-div'></div>
-                    <div className='menu-div'></div>
-                </div>
-                <div className='btn-export-order' onClick={() => setToggleImport(toggleImport ? false : true)}>
-
-                    {
-                        toggleImport ? "Đóng" : "Nhập"
-                    }
-                </div>
-                {
-                    toggleImport &&
-                    <div className='input-import-order'>
-
-                        <textarea onChange={(e) => setDataImport(e.target.value)} placeholder='Nhập đơn đặt' >{dataImport}</textarea>
-                        <div onClick={() => handleImport()}>OK</div>
-                    </div>
-                }
-
-
                 {
                     listOrdersActive?.data?.cards?.length > 0 &&
                     <div className='btn-active-order'
@@ -149,40 +117,14 @@ export default function Home() {
                         <img width={70} height={70} src="active-order.gif" alt="" />
                     </div>
                 }
-
                 {
-                    toggleMenu && <div className='boxMenu'
-                    >
-                        <div onClick={getListOrders}> Đơn hàng của bạn</div>
-
-                    </div>
+                    // toggleOrders && <ListOrders data={listOrders?.data} dataActive={listOrdersActive?.data} setToggleOderDetail={setToggleOderDetail} setIdOrder={setIdOrder} />
                 }
-                {
-                    toggleOrders && <ListOrders data={listOrders?.data} dataActive={listOrdersActive?.data} setToggleOderDetail={setToggleOderDetail} setIdOrder={setIdOrder} />
-                }
-
             </div>
-
-            <Box onClick={() => setToggleLocationChange(true)} style={{ width: "100%", textAlign: "center", cursor: "pointer", padding: "6px", backgroundColor: "white", marginBottom: "10px" }} >
-                <div style={{ fontSize: "bold", color: "red", marginBottom: "-5px" }} >Vị trí hiện tại <ExpandMoreIcon /></div>
-                <div style={{ fontSize: "16px", fontWeight: "bold" }}>  {currentLoc?.name} </div>
-            </Box>
             <ModalBox open={toggleOderDetail} setOpen={setToggleOderDetail} title={"Chi tiết đơn hàng"} >
                 <OrderDetail idOrder={idOrder} />
             </ModalBox>
-            <ModalBox open={toggleLocationChange} setOpen={setToggleLocationChange} title={"Thay đổi địa chỉ"} >
-                <ChoseAddress
-                    setCurrentLoc={setCurrentLoc}
-                    setOpen={setToggleLocationChange}
-                    onClick={() => {
-                        setToggleMenu(false);
-                        setToggleOrders(false);
-                    }}
-                />
-            </ModalBox>
-            <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món ăn"} >
-                <Restaurants />
-            </ModalBox>
+
             <ModalBox open={toggleListRes} setOpen={setToggleListRes} title={"Ưu đãi món ăn"} >
                 <ListResVIP open={toggleListRes} />
             </ModalBox>
@@ -203,28 +145,6 @@ export default function Home() {
                 setToggleImport(false);
 
             }} >
-                <div
-                    style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        // border: "solid 2px #e0e0e0",
-                        borderRadius: "20px",
-                        outline: "none",
-                        fontSize: "14pt",
-                        textAlign: "center",
-                        color: "gray",
-                        fontWeight: "bold",
-                        boxShadow: "0px 0px 5px 5px #e9e9e9"
-
-                    }}
-
-                    // value={keyword}
-                    // autoComplete="address"
-                    onClick={() => setToggleSearch(true)}
-                >Bạn muốn ăn gì nào?</div>
-
-
-
                 {/* {indexDealsHome >= 0 && (<CardDealsHome banners={dataHomeCards?.cards[indexBanner]} />)} */}
                 {indexBanner >= 0 && (<SwipeBanner banners={dataHomeCards?.cards[indexBanner]} />)}
                 {
@@ -244,7 +164,7 @@ export default function Home() {
 
 
 
-                <Cartpreview />
+                {/* <Cartpreview /> */}
 
 
             </Container >

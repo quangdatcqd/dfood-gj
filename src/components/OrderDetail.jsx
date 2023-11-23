@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { React, useLayoutEffect, useState, useRef } from 'react';
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI, OrderAPI } from '../API/GojekAPI';
 import MapMarker from './MapMarker';
 import ChatBox from './ChatBox';
 import { useSnackbar } from 'notistack';
@@ -84,7 +84,7 @@ const OrderDetail = ({ idOrder }) => {
     }
     const trackingOrder = async () => {
         try {
-            var data = await GojekAPI.tracking(idOrder);
+            var data = await OrderAPI.tracking(idOrder);
             if (data?.trackingDetails) {
                 let dataloc = data?.trackingDetails[0]?.data?.vehicle?.location?.coordinates;
                 setTrackingLocation(trackingLocationRC.current + "|" + dataloc?.latitude + "," + dataloc?.longitude);

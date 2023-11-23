@@ -1,7 +1,6 @@
 import { Button, IconButton, TextareaAutosize, } from '@mui/material';
 import { React, useState, useCallback, useContext, useEffect, useRef, useLayoutEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import GojekAPI from '../API/GojekAPI';
+import { OrderAPI, GojekAPI } from '../API/GojekAPI';
 import { Container } from '@mui/system';
 import { CartContext } from '../Contexts/CartContext';
 import { useSnackbar } from 'notistack';
@@ -57,7 +56,7 @@ const Checkout = ({ getOrdersActive }) => {
             //     idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
             // }
 
-            var data = await GojekAPI.checkout({
+            var data = await OrderAPI.checkout({
                 ...dataItems,
                 offer_id: localStorage.getItem("idVoucher"),
                 voucherId: localStorage.getItem("idVoucher")
@@ -143,21 +142,21 @@ const Checkout = ({ getOrdersActive }) => {
                     "voucherId": localStorage.getItem("idVoucher")
                 }
 
-                var dataOders = await GojekAPI.makeOrder(dataPayload);
+                var dataOders = await OrderAPI.makeOrder(dataPayload);
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
 
                     localStorage.setItem("idOrder", dataOders?.orderNo);
                     localStorage.setItem("idVoucher", "");
-                    const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
-                    if (sttStore == 1) {
-                        enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
-                    } else if (sttStore == 2) {
-                        enqueueSnackbar("Đã lưu phiên này rồi! ", { variant: 'warning' });
-                    }
-                    else {
-                        enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
-                    }
+                    // const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
+                    // if (sttStore == 1) {
+                    //     enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
+                    // } else if (sttStore == 2) {
+                    //     enqueueSnackbar("Đã lưu phiên này rồi! ", { variant: 'warning' });
+                    // }
+                    // else {
+                    //     enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
+                    // }
                     enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
                     setIdOrderShow(dataOders?.orderNo)
                 }
@@ -178,7 +177,7 @@ const Checkout = ({ getOrdersActive }) => {
 
     const handleCancelOrder = async () => {
 
-        var data = await GojekAPI.quickCancel(id_oder.current);
+        var data = await OrderAPI.quickCancel(id_oder.current);
         localStorage.setItem("idVoucher", idvoucher.current)
         enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
@@ -211,7 +210,7 @@ const Checkout = ({ getOrdersActive }) => {
 
         <div className='  w-100 mb-5 pb-5 container-com'   >
             <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
-                <BoxLoginGojek setToggleLogin={setToggleLogin} quickLogin={true} fetchCheckout={fetchData} setLoadingLogin={setLoading} />
+                <BoxLoginGojek setToggleLogin={setToggleLogin} quickLogin={false} fetchCheckout={fetchData} setLoadingLogin={setLoading} />
             </ModalBox>
             <Container>
 

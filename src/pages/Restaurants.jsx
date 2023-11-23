@@ -1,9 +1,9 @@
-import { TextField, Box, Container } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import { debounce } from 'debounce';
 import { React, useCallback, useEffect, useState, useContext } from 'react';
 
 import SwapeRestaurant from '../components/SwapeRestaurant';
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI } from '../API/GojekAPI';
 import './style.css'
 import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
@@ -15,10 +15,10 @@ import InputBox from '../components/InputBox';
 function Restaurants(props) {
 
     const { setSelectedRes, setToggleSelectDishes } = useContext(CartContext);
-    // const { dataAddress } = props;
-
     const [dataRestaurant, setDataRestaurant] = useState("");
+    const [dataResFilter, setDataResFilter] = useState(null);
     const [dataSearchSuggestions, setDataSearchSuggestions] = useState("");
+    const [keyword, setKeyword] = useState("");
 
 
     var indexBrandOutlet = dataRestaurant?.cards?.findIndex((item) => item?.card_template === "BRAND_OUTLETS");
@@ -44,8 +44,8 @@ function Restaurants(props) {
         if (keyword.length <= 0) return "";
         var data = await GojekAPI.searchRestaurant(keyword);
         setDataRestaurant(data?.data);
-
-
+        setDataResFilter(null)
+        setKeyword(keyword)
     }
     const debounceDropDown = useCallback(debounce((nextValue) => fetchRestaurant(nextValue), 500), [])
 
@@ -56,10 +56,7 @@ function Restaurants(props) {
         if (regex.test(e.target.value)) {
             const regexID = /[0-9a-zA-Z]{7}/;
             const matchID = e.target.value?.match(regexID);
-            console.log(matchID);
             const result = await GojekAPI.searchRestaurantByURL(matchID && matchID[0]);
-
-
             const regex = /\/([a-f\d-]+)\?/i;
             const match = JSON.stringify(result)?.match(regex);
             const id = match && match[1];
@@ -72,65 +69,52 @@ function Restaurants(props) {
             debounceDropDown(e.target.value);
         }
     }
-
+    const handleClickMore = async () => {
+        var data = await GojekAPI.searchRestaurantMore(keyword);
+        setDataResFilter(data);
+        setDataRestaurant(null)
+    }
 
 
 
     return (
-        <div className='bg-light w-100  mt-2'   >
-            {/* <BackBtn /> */}
-            <Cartpreview />
-            <Container >
-                < Box
-                    sx={{
-                        paddingTop: "10px",
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
 
-                    }}
-                >
-                    <InputBox
-                        id="restaurant"
-
-                        name="restaurant"
-                        // value={keyword}
-                        placeholder='Bạn muốn ăn gì nào?'
-                        // autoComplete="address"
-                        // style={{
-                        //     width: "100%",
-                        //     padding: "8px 30px",
-                        //     border: "none",
-                        //     borderRadius: "20px",
-                        //     outline: "none",
-                        //     fontSize: "14pt",
-                        //     textAlign: "left",
-                        //     color: "gray",
-                        //     fontWeight: "bold",
-                        //     boxShadow: "0px 0px 5px 5px #e9e9e9"
-
-                        // }}
-                        onChange={handleChangeKeyword}
-                    />
-                </Box >
-                {/* <Button onClick={() => setKeyword("")} className="materialBtn">
+        <Container className='restauRantContainer'>
+            < div className='divInputSearchRes'>
+                <input
+                    id="restaurant"
+                    name="restaurant"
+                    placeholder='Bạn muốn ăn gì nào?'
+                    onChange={handleChangeKeyword}
+                    className="inputSearRestaurant"
+                    autoFocus={true}
+                />
+            </div >
+            {/* <Button className="materialBtn">
                 Clear
             </Button> */}
+            <div className='query-result'>
+                {
+                    dataResFilter !== null && <ListItems listmerchants={dataResFilter} />
+                }
 
                 {
                     dataRestaurant?.cards !== null &&
-                    <div className='query-result'>
+
+
+                    <>
                         {
                             indexBrandOutlet >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutlet]} setToggleSelectDishes={setToggleSelectDishes} />
                         }
+
                         {
-                            // indexBrandOutletV1 >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutletV1]} />
+                            // indexTouchToSearch >= 0 && < TouchToSearch touchtosearch={dataRestaurant?.cards[indexTouchToSearch]} />
                         }
                         {
-                            indexTouchToSearch >= 0 && < TouchToSearch touchtosearch={dataRestaurant?.cards[indexTouchToSearch]} />
+                            indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants || dataRestaurant?.cards]} handleClickMore={handleClickMore} />
                         }
                         {
-                            indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants]} />
+                            indexBrandOutletV1 >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutletV1]} />
                         }
                         {
                             indexSearchSuggestions >= 0 && <SearchSuggestions searchsuggestions={dataSearchSuggestions?.cards[indexSearchSuggestions]} />
@@ -138,11 +122,14 @@ function Restaurants(props) {
                         {
                             indexSearchExolore >= 0 && <ExploreItems exploreitems={dataSearchSuggestions?.cards[indexSearchExolore]} />
                         }
-                    </div>
+                    </>
+
                 }
 
-            </Container>
-        </div >
+            </div>
+
+        </Container>
+
     );
 };
 
@@ -150,29 +137,20 @@ function Restaurants(props) {
 const SearchSuggestions = (props) => {
     const { searchsuggestions } = props;
     return (
-        <div>
+        <div className='boxSearchSG'>
 
-            <h4 style={{ fontWeight: "bolder" }} >{searchsuggestions?.content?.title} </h4>
+            <p className='categoryTitle'  >{searchsuggestions?.content?.title} </p>
             <div style={{ width: "100%", display: "flex", flexWrap: "wrap", }}>
                 {
                     searchsuggestions?.content?.terms?.map((item, key) => {
                         return (
-                            <div key={key} style={{
-                                fontSize: "14pt",
-                                fontWeight: "bold",
-                                borderRadius: "20px",
-                                padding: "4px 15px",
-                                border: "#e2e2e2 solid 2px",
-                                color: "green",
-                                margin: "5px 10px 5px 0px"
-                            }}>
+                            <div className='keywordSG' key={key} >
                                 {item?.name}
                             </div>
                         )
                     })
                 }
             </div>
-            <hr />
         </div>
     )
 }
@@ -180,13 +158,13 @@ const SearchSuggestions = (props) => {
 const ExploreItems = (props) => {
     const { exploreitems } = props;
     return (
-        <div>
-            <h4 style={{ fontWeight: "bolder" }} >{exploreitems?.content?.title} </h4>
-            <div style={{ width: "100%", display: "flex", flexWrap: "wrap" }}>
+        <div className='boxExploreItems'>
+            <p className="categoryTitle"  >{exploreitems?.content?.title} </p>
+            <div className='listExploreItems'  >
                 {
                     exploreitems?.content?.categories?.map((item, key) => {
                         return (
-                            <div key={key} style={{ width: "33.33%", overflow: "hidden", padding: "5px", }}>
+                            <div key={key} className='divExploreItem' >
                                 <img width="100%" height={"160px"} style={{ objectFit: "cover", borderRadius: "20px" }} src={item?.image_url} alt="" />
                                 <p style={{ fontSize: "14pt", fontWeight: "bold", padding: "10px", textAlign: "center", margin: "0px" }}>{item?.name} </p>
                             </div>
@@ -205,7 +183,7 @@ const TouchToSearch = (props) => {
     const { touchtosearch } = props;
 
     return (
-        <div>
+        <div className='boxTouchToSearch'>
             <h4 style={{ fontWeight: "bolder" }} >{touchtosearch?.content?.title} </h4>
             <div
                 style={{

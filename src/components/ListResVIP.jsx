@@ -1,6 +1,6 @@
 import { Container } from '@mui/system';
 import { React, useState, useLayoutEffect, useEffect, useRef, useContext } from 'react';
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI } from '../API/GojekAPI';
 import { randomString } from '../common';
 import { CartContext } from '../Contexts/CartContext';
 

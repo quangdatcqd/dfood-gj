@@ -3,7 +3,7 @@ import { Avatar, Container } from '@mui/material';
 import { React, useState, useEffect } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import GojekAPI from '../API/GojekAPI';
+import { AuthAPI, GojekAPI } from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
 import InputBox from './InputBox';
 import { NavLink } from 'react-router-dom';
@@ -23,6 +23,7 @@ const BoxLoginGojek = (props) => {
     const [logginStatus, setLogginStatus] = useState("");
     const [OTP, setOTP] = useState("");
     const [otpToken, setOTPToken] = useState("");
+    const [verificationId, setVerificationId] = useState("");
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const onOTPChange = (e) => {
         setOTP(e.target.value)
@@ -33,7 +34,7 @@ const BoxLoginGojek = (props) => {
 
     useEffect(() => {
         checkIPAddress();
-        countOrder()
+        // countOrder()
         if (quickLogin) {
             fetchToken();
             setToggleLogin(false)
@@ -63,7 +64,7 @@ const BoxLoginGojek = (props) => {
         try {
             localStorage.setItem("api_key", APIKey);
             setLoading(true);
-            var data = await GojekAPI.getNumberVOTP(APIKey);
+            var data = await AuthAPI.getNumberVOTP(APIKey);
 
             if (data?.success) {
                 // localStorage.setItem("G-Token", data?.access_token);
@@ -80,7 +81,7 @@ const BoxLoginGojek = (props) => {
                     while (true) {
 
 
-                        var datav = await GojekAPI.getOTPVOTP(APIKey, data.data?.request_id);
+                        var datav = await AuthAPI.getOTPVOTP(APIKey, data.data?.request_id);
                         if (datav?.success && datav?.data?.Code !== null) {
                             verifyPhone(datav?.data?.Code, token, phone_number);
                             enqueueSnackbar("Lấy được OTP " + datav?.data?.Code, { variant: 'success' });
@@ -144,24 +145,27 @@ const BoxLoginGojek = (props) => {
         }
         try {
 
-            let data = await GojekAPI.checkPhoneHas(numberPhone);
+            let data = await AuthAPI.checkPhoneHas(numberPhone);
 
             if (data?.success) {
 
                 if (!data?.data?.additional_methods_required) {
-                    data = await GojekAPI.Methods(numberPhone);
+                    data = await AuthAPI.Methods(numberPhone);
                     if (data?.success) {
-                        data = await GojekAPI.Initiate(numberPhone, data?.data?.verification_id);
-                        if (data?.success) {
+                        var dataI = await AuthAPI.Initiate(numberPhone, data?.data?.verification_id);
+                        if (dataI?.success) {
 
-                            setOTPToken(() => data?.data?.otp_token);
+                            setOTPToken(() => dataI?.data?.otp_token);
                             enqueueSnackbar("Đã gửI yêu cầu OTP!", { variant: 'success' });
+
                             number != "" && setLoadingROTP(false);
-                            return data?.data?.otp_token;
+
+                            setVerificationId(data?.data?.verification_id)
+                            return dataI?.data?.otp_token;
                         }
                         else {
                             throw new Error(
-                                data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!"
+                                dataI?.errors ? data?.errors[0]?.message_title : "Không phản hồi!"
                             );
                         }
                     }
@@ -213,12 +217,15 @@ const BoxLoginGojek = (props) => {
 
                 throw new Error("Chưa yêu cầu OTP!")
             }
-            var data = await GojekAPI.verifyPhone(otp_token, otp);
+            console.log(verificationId);
+            var data = await AuthAPI.verifyPhone(verificationId, otp_token, otp);
             if (data?.success) {
                 register(phone_number, data?.data?.verification_token);
             } else {
                 // console.log(data);
-
+                throw new Error(
+                    data?.errors ? data?.errors[0]?.message : "Không phản hồi!"
+                );
             }
         } catch (error) {
             enqueueSnackbar(error.message, { variant: 'error' });
@@ -229,7 +236,7 @@ const BoxLoginGojek = (props) => {
     }
     const register = async (phoneNumber, token) => {
         try {
-            var data = await GojekAPI.register(phoneNumber, token);
+            var data = await AuthAPI.register(phoneNumber, token);
             if (data?.success) {
                 localStorage.setItem("userInfo", JSON.stringify(data?.data?.customer));
                 localStorage.setItem("G-Token", data?.data?.access_token);
@@ -252,8 +259,8 @@ const BoxLoginGojek = (props) => {
 
     const refreshToken = async (access_token, refresh_token, user_uid) => {
         try {
-            var data = await GojekAPI.refreshToken(access_token, refresh_token, user_uid);
-            data = await GojekAPI.refreshToken(data?.access_token, data?.refresh_token, data);
+            var data = await AuthAPI.refreshToken(access_token, refresh_token, user_uid);
+            data = await AuthAPI.refreshToken(data?.access_token, data?.refresh_token, data);
             if (data?.access_token) {
                 localStorage.setItem("G-Token", data?.access_token);
                 localStorage.setItem("R-Token", data?.refresh_token);
@@ -309,7 +316,6 @@ const BoxLoginGojek = (props) => {
             setLoadingSubmit(false);
             setLoading(false);
         }
-
     }
 
     return (

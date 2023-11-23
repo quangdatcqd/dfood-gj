@@ -1,17 +1,21 @@
 .App {
   text-align: center;
 }
- ::-webkit-scrollbar {
-        width: 10px;
-    }
-    /* Đặt màu sắc cho phần đang kéo trên thanh cuộn */
-    ::-webkit-scrollbar-thumb {
-        background-color: #555;
-    }
-    /* Đặt màu sắc cho nền của thanh cuộn */
-    ::-webkit-scrollbar-track {
-        background-color: #f1f1f1;
-    }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Đặt màu sắc cho phần đang kéo trên thanh cuộn */
+::-webkit-scrollbar-thumb {
+  background-color: #F6AC7B;
+}
+
+/* Đặt màu sắc cho nền của thanh cuộn */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -42,9 +46,8 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
-
-

@@ -19,8 +19,8 @@ const SwapeRestaurant = (props) => {
 
     }
     return (
-        <div>
-            <h3>{dataRestaurant?.content?.title} </h3>
+        <div className="boxSwapeRestaurant">
+            <p className="categoryTitle">{dataRestaurant?.content?.title} </p>
             <h6> {dataRestaurant?.content?.sub_title}</h6>
             <Swiper
                 effect={"coverflow"}
@@ -34,35 +34,32 @@ const SwapeRestaurant = (props) => {
                     modifier: 0,
                     slideShadows: false,
                 }}
-                // pagination={true}
                 modules={[EffectCoverflow, Pagination]}
                 className="swiper-restaurant"
-                style={{ padding: "  10px " }}
+
             >
 
                 {
                     dataRestaurant?.content?.actions?.map((item, key) => {
                         return (
-                            <SwiperSlide key={key} style={{ paddingRight: "10px  " }}>
-                                {/* <NavLink
-                                    style={{ textDecoration: "none" }}
-                                    to={"/selectdishes/" + item?.restaurant_id}
-                                > */}
+                            <SwiperSlide key={key} style={{ paddingRight: "10px  ", width: "225px" }}>
 
                                 <Card sx={{
-                                    cursor: "pointer"
+                                    cursor: "pointer",
+                                    height: "235px",
+                                    margin: "5px 0px"
                                 }}
                                     onClick={() => handleSelect(item?.restaurant_id)}
                                 >
                                     <CardMedia
-                                        sx={{ height: 180 }}
+                                        sx={{ height: 150 }}
                                         image={item?.image_url}
                                         title="green iguana"
                                     />
                                     <CardContent style={{ padding: "10px", }} >
-                                        <Typography gutterBottom variant="body1" component="div">
+                                        <p className="swipeResName">
                                             {item?.merchant_name}
-                                        </Typography>
+                                        </p>
                                         <Typography variant="body2" color="text.secondary">{item?.point_1_label}
                                             <span className="text-danger">{item?.image_point_label ? " - " + item?.image_point_label : ""}</span>
                                         </Typography>
@@ -70,26 +67,23 @@ const SwapeRestaurant = (props) => {
                                     </CardContent>
 
                                 </Card>
-                                {/* </NavLink> */}
                             </SwiperSlide>
                         )
                     })
                 }
                 {
                     dataRestaurant?.content?.items?.map((item, key) => {
-                        // { console.log(item?.description?.id, item?.id) }
+                        console.log(item);
                         return (
-                            <SwiperSlide key={key}>
-                                {/* <NavLink
-                                    style={{ textDecoration: "none" }}
-
-                                    to={"/selectdishes/" + item?.id}
-                                > */}
-                                <Card sx={{ maxWidth: 345 }}
+                            <SwiperSlide key={key} style={{ paddingRight: "10px  ", width: "225px" }}>
+                                <Card sx={{
+                                    height: "235px",
+                                    margin: "5px 0px"
+                                }}
                                     onClick={() => handleSelect(item?.id)}
                                 >
                                     <CardMedia
-                                        sx={{ height: 140 }}
+                                        sx={{ height: 150 }}
                                         image={item?.image_url}
                                         title="green iguana"
                                     />
@@ -97,13 +91,10 @@ const SwapeRestaurant = (props) => {
                                         <Typography gutterBottom variant="body1" component="div">
                                             {(item?.title?.text) ? item?.title?.text : item?.name}
                                         </Typography>
-                                        {/* <Typography variant="body2" color="text.secondary">{item?.additional_info?.normal_text} */}
-                                        {/* </Typography> */}
 
                                     </CardContent>
 
                                 </Card>
-                                {/* </NavLink> */}
                             </SwiperSlide>
                         )
                     })
@@ -112,7 +103,7 @@ const SwapeRestaurant = (props) => {
 
 
             </Swiper>
-        </div>
+        </div >
     );
 };
 export default SwapeRestaurant;

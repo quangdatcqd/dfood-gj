@@ -1,49 +1,76 @@
 import axios from 'axios';
 
+// const BASE_URL = 'http://192.168.1.9:8080/baemin_server/index.php'; // Thay thế bằng URL cơ sở của API bạn đang sử dụng
+const BASE_URL = 'https://food.cqdgo.com/v1/index.php'; // Thay thế bằng URL cơ sở của API bạn đang sử dụng
 
-// Set config defaults when creating the instance
 const axiosClient = axios.create({
-    // baseURL: 'https://lomdom.tk/dbook/public/api/',
-    // baseURL: 'http://localhost:8000/api/',
+    baseURL: BASE_URL,
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded', // Hoặc 'multipart/form-data' tùy thuộc vào yêu cầu của bạn
+    },
 
 });
 
+// Interceptor để xử lý lỗi
+axiosClient.interceptors.response.use(
+    response => {
+
+        // Xử lý dữ liệu trả về thành công tại đây (nếu cần)
+        return response.data;
+    },
+    async error => {
+        // Xử lý lỗi tại đây
+        if (error.response) {
+            // Lỗi phản hồi từ API (status code không phải 2xx)
+            console.error('Response Error:', error.response.data);
+        } else if (error.request) {
+            // Không nhận được phản hồi từ API (không kết nối mạng chẳng hạn)
+            console.error('Request Error:', error.request);
+        } else {
+            // Lỗi xảy ra khi thiết lập yêu cầu (axios config chẳng hạn)
+            console.error('Error:', error.message);
+        }
+        if (error?.response?.status === 401 || error?.response?.status === 403) {
+            // Gửi yêu cầu refresh token để lấy access token mới 
+            const newAccessToken = await refreshAccessToken(); // Hàm refresh token
+
+            // Lưu trữ access token mới vào cookie
+            setAccessTokenCookie(newAccessToken); // Hàm lưu trữ access token vào cookie
+
+            // Thực hiện lại yêu cầu gốc với access token mới
+            // originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            // return api(originalRequest);
+        }
 
 
-// Add a request interceptor
-axiosClient.interceptors.request.use(function (config) {
-    // Do something before request is sent
+
+        return Promise.reject(error);
+    }
+);
 
 
-    return config;
-}, function (error) {
-    // localStorage.clear();
-    // window.location.reload(false);
-    // Do something with request error
 
-    return Promise.reject(error);
-});
+// Hàm refresh token
+async function refreshAccessToken() {
+    try {
+        const response = await axiosClient.post('?refresh=true');
+        const { accessToken } = response.data;
+        return accessToken;
+    } catch (error) {
+        // Xử lý lỗi refresh token
+        throw error;
+    }
+}
 
-// Add a response interceptor
-axiosClient.interceptors.response.use(function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
+// Hàm lấy refresh token từ cookie
+function getRefreshTokenFromCookie() {
+    // Implement your logic here to extract the refresh token from the HttpOnly cookie
+}
 
+// Hàm lưu trữ access token vào cookie
+function setAccessTokenCookie(accessToken) {
+    // Implement your logic here to set the access token in the HttpOnly cookie
+}
 
-    return response.data;
-}, function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    // localStorage.clear();
-    // window.location.reload(false);
-    // if (error.response && error.response.data && error.response.data.errors) {
-
-    //     throw new Error(
-    //         error.response.data.errors[0]
-    //     );
-
-    // }
-    return error.response.data;
-});
 
 export default axiosClient;

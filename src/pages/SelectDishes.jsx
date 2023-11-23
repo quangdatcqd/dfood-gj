@@ -1,7 +1,7 @@
 import { Avatar, AvatarGroup, Box, Card, CardContent, CardMedia, Divider, Paper, Stack, Typography, } from '@mui/material';
 import { React, useState, useContext, useEffect, memo } from 'react';
 
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI } from '../API/GojekAPI';
 import { styled } from '@mui/material/styles';
 import { Container } from '@mui/system';
 import Cartpreview from '../components/Cartpreview';

@@ -27,7 +27,7 @@ const QuantityInput = (props) => {
                 >
                     <RemoveCircleOutlineIcon
                         style={{
-                            fontSize: "26px",
+                            fontSize: "38px",
                             color: "red"
                         }} />
                 </IconButton>
@@ -42,7 +42,7 @@ const QuantityInput = (props) => {
                 < IconButton >
                     <AddCircleOutlineIcon
                         style={{
-                            fontSize: "26px",
+                            fontSize: "38px",
                             color: "green"
                         }} />
                 </IconButton>

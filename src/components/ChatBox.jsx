@@ -2,7 +2,7 @@ import { Box, Container, Dialog, DialogContent, DialogTitle, IconButton, TextFie
 import SendIcon from '@mui/icons-material/Send';
 import { React, useEffect, useState } from 'react';
 import { TextareaAutosize } from '@mui/base';
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI } from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
 

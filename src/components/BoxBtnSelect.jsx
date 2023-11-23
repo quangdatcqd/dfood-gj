@@ -132,11 +132,11 @@ const BoxBtnSelect = (props) => {
                                 onClick={() => setToggleEditItems(true)}
                                 style={{
                                     outline: "none",
-                                    padding: "2px 15px",
+                                    padding: "8px 20px",
                                     borderRadius: "15px",
-                                    border: "#12ae12 2px solid",
+                                    border: "red 2px solid",
                                     backgroundColor: "white",
-                                    color: "green",
+                                    color: "red",
                                     fontWeight: "bold"
                                 }}>
                                 {quantityShow + " mục"}
@@ -147,7 +147,7 @@ const BoxBtnSelect = (props) => {
                                 onClick={() => handleAdd()}
                                 style={{
                                     outline: "none",
-                                    padding: "2px 15px",
+                                    padding: "8px 20px",
                                     borderRadius: "15px",
                                     border: "#12ae12 2px solid",
                                     backgroundColor: "white",

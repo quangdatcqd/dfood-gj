@@ -1,80 +1,68 @@
 import { React, useContext } from 'react';
 import { CartContext } from '../Contexts/CartContext';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const ListItems = (props) => {
-    const { listmerchants } = props;
-    const dataMercharts = listmerchants?.content?.actions || listmerchants?.content?.items;
+    const { listmerchants, handleClickMore } = props;
+    const dataMercharts = listmerchants?.content?.actions || listmerchants?.content?.items || listmerchants?.data?.cards;
+    console.log(listmerchants);
     return (
-        <div>
-            <hr />
-            <h4 style={{ fontWeight: "bolder" }} >{listmerchants?.content?.title} </h4>
-            {
-                dataMercharts?.map((item, key) => {
-                    return (
-                        <BoxItem listmerchants={item} key={key} />
-                    )
-                })
-            }
-            {/* {
-                listmerchants?.content?.items?.map((item, key) => {
-                    return (
-                        <BoxItem listmerchants={item} key={key} />
-                    )
-                })
-            } */}
-            <div
-                style={{
-                    width: "100%",
-                    textAlign: "center"
-                }}
-            >
-                <button style={{
-                    padding: "10px 15px",
-                    color: "green",
-                    border: "2px solid green",
-                    outline: "none",
-                    fontWeight: "bold",
-                    fontSize: "14pt",
-                    borderRadius: "30px",
-                    width: "350px",
-                    backgroundColor: "white",
-                    margin: "10px"
+        <div className='boxCategory'>
+            <p className='categoryTitle' >{listmerchants?.content?.title} </p>
+            <div className='divListRestaurant'>
+                {
+                    dataMercharts?.map((item, key) => {
+                        return (
+                            <BoxItem merchantData={item?.content || item} key={key} />
+                        )
+                    })
+                }
 
-                }}>Xem thêm nhà hàng</button>
             </div>
+            {
+                !listmerchants?.data?.cards
+                && <div className='btnMoreItem' onClick={() => handleClickMore()}>
+                    Xem thêm
+                    <ExpandMoreIcon />
+                </div>
+            }
+
         </div>
     );
 }
 
 const BoxItem = (props) => {
-    const { listmerchants } = props;
+    const { merchantData } = props;
     const { toggleSelectDishes, setToggleSelectDishes, selectedRes, setSelectedRes } = useContext(CartContext);
+    console.log(merchantData);
     const handleSelect = (id) => {
 
         setToggleSelectDishes(true);
         setSelectedRes(id);
-
-
     }
     return (
-        <div style={{ cursor: "pointer", display: "flex", justifyItems: "center", borderBottom: "rgb(234 234 234) solid 2px", padding: "10px 0px 30px 0px" }} onClick={() => handleSelect(listmerchants?.restaurant_id || listmerchants?.id)}>
-            <div style={{ width: "110px", height: "110px", marginRight: "10px", borderRadius: "10px", overflow: "hidden" }}>
-                <img width={"100%"} height={"100%"} style={{ objectFit: "cover" }} src={listmerchants?.image_url} alt="" />
+        <div className='boxRestaurantItem' onClick={() => handleSelect(merchantData?.restaurant_id || merchantData?.id)}>
+            <div className='boxRestaurantItemImage'  >
+                <img src={merchantData?.image_url} alt="" />
             </div>
-            <div style={{ width: "calc(100% - 130px)" }}>
-                <p style={{ fontWeight: "bold", fontSize: "12pt", maxHeight: "24px", overflow: "hidden", marginBottom: "2px" }}>{listmerchants?.merchant_title?.text || listmerchants?.title?.text}</p>
+            <div className='boxResItemInfo'>
+                <p className='PResName'>{merchantData?.merchant_title?.text || merchantData?.title?.text}</p>
 
-                <p style={{ fontSize: "10pt", maxHeight: "24px", overflow: "hidden", marginBottom: "0px" }}>
+                <p className='PResDes' >
                     {
-                        listmerchants?.merchant_description?.merchant_description_badge?.image_url ? <img width={"20px"} src={listmerchants?.merchant_description?.merchant_description_badge?.image_url} alt="" /> : "$$$$ • "
+                        merchantData?.merchant_description?.merchant_description_badge?.image_url ?
+                            <img src={merchantData?.merchant_description?.merchant_description_badge?.image_url} alt="" /> : ""
                     }
-                    {listmerchants?.merchant_description?.text || listmerchants?.description?.text}
-
+                    {merchantData?.merchant_description?.text || merchantData?.description?.text}
                 </p>
-                <div style={{ borderTop: "2px dotted #dddddd", margin: "8px 0px" }} />
-                <p style={{ fontWeight: "bold", fontSize: "10pt", maxHeight: "24px", overflow: "hidden", marginBottom: "3px" }}>{listmerchants?.additional_info?.highlighted_text || listmerchants?.merchant_additional_info?.highlighted_text} < span style={{ color: "gray", fontWeight: "normal" }}>{listmerchants?.additional_info?.normal_text || listmerchants?.merchant_additional_info?.normal_text}</span> </p>
-                <p style={{ fontSize: "10pt", fontWeight: "bold", maxHeight: "24px", overflow: "hidden", marginBottom: "0px" }}>
-                    <img width={"20px"} src={listmerchants?.tagline_two?.image_url || listmerchants?.merchant_tagline_two?.image_url} alt="" />
-                    {listmerchants?.tagline_two?.text || listmerchants?.merchant_tagline_two?.text}
+                <p className='PResDes1' >
+                    {merchantData?.additional_info?.highlighted_text || merchantData?.merchant_additional_info?.highlighted_text}
+                    < span  >
+                        {merchantData?.additional_info?.normal_text || merchantData?.merchant_additional_info?.normal_text}
+                    </span>
+                </p>
+                <p className='PResDes2'  >
+                    <img src={merchantData?.tagline_two?.image_url || merchantData?.merchant_tagline_two?.image_url} alt="" />
+                    {merchantData?.tagline_two?.text || merchantData?.merchant_tagline_two?.text}
                 </p>
             </div>
 

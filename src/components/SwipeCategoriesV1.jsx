@@ -1,4 +1,4 @@
-import { Card, CardMedia, Typography } from '@mui/material';
+import { Card, CardMedia } from '@mui/material';
 import React from 'react';
 import { EffectCoverflow, Pagination } from "swiper";
 import "swiper/css";

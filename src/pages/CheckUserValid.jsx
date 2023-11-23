@@ -5,7 +5,7 @@ import { Container } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import InputBox from '../components/InputBox';
 import { LoadingButton } from '@mui/lab';
-import GojekAPI from '../API/GojekAPI';
+import { GojekAPI } from '../API/GojekAPI';
 
 const CheckUserValid = ({ children }) => {
     const [loading, setloading] = useState(false);

@@ -7,17 +7,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 .css-hz1bth-MuiDialog-container {
-      -webkit-box-pack: top !important;
-    -ms-flex-pack: top !important;
-    -webkit-justify-content: top !important; 
-    justify-content: top !important;
-    -webkit-align-items: top !important ;
-     -webkit-box-align: top ;
-    -ms-flex-align: top !important;
-      align-items: top !important; 
+  -webkit-box-pack: top !important;
+  -ms-flex-pack: top !important;
+  -webkit-justify-content: top !important;
+  justify-content: top !important;
+  -webkit-align-items: top !important;
+  -webkit-box-align: top;
+  -ms-flex-align: top !important;
+  align-items: top !important;
+}
+
+.react-confirm-alert-overlay {
+  z-index: 9999 !important;
+  background-color: transparent !important;
 }
