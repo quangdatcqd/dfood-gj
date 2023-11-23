@@ -130,7 +130,7 @@
 }
 
 .headerBtnMenu {
-    display: none;
+    display: none !important;
     padding: 0px;
 }
 
@@ -164,48 +164,48 @@
 
 @media screen and (max-width:990px) {
     .headerBtnNoti {
-        display: none;
+        display: none !important;
     }
 
     .headerBtnMenu {
-        display: flex;
+        display: flex !important;
     }
 }
 
 @media screen and (max-width:965px) {
     .headerBtnOrder {
-        display: none;
+        display: none !important;
     }
 }
 
 @media screen and (max-width:870px) {
     .headerBtnProfile {
-        display: none;
+        display: none !important;
     }
 }
 
 @media screen and (max-width:770px) {
     .headerLogo {
-        display: none;
+        display: none !important;
     }
 
     .headerLocation {
-        margin-left: 0px;
+        margin-left: 0px !important;
     }
 }
 
-@media screen and (max-width:570px) {
+@media screen and (max-width:590px) {
     .headerBtnCart>p, .headerBtnSearch>p {
-        display: none;
+        display: none !important;
     }
 
     .headerBtnSearch {
-        padding: 0px;
+        padding: 0px !important;
     }
 
     .inputSearchAddress {
-        width: calc(100% - 30px);
-        padding: 5px 30px;
+        width: calc(100% - 30px) !important;
+        padding: 5px 30px !important;
         border-radius: 10px;
         outline: none;
         font-size: 14pt;
@@ -219,15 +219,15 @@
     }
 
     .boxLogin {
-        padding: 30px;
-        width: calc(100% - 60px);
+        padding: 30px !important;
+        width: calc(100% - 60px) !important;
     }
 
 }
 
 @media screen and (max-width:480px) {
     .headerLocationTitle, .headerBtnSearch, .headerBtnCart {
-        display: none;
+        display: none !important;
     }
 
     .headerDivLeft {
@@ -254,7 +254,7 @@
     }
 
     .headerContainer {
-        height: 40px;
+        height: 40px !important;
         padding: 0px 10px !important;
     }
 
