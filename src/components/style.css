@@ -141,6 +141,7 @@ body {
   border-radius: 10px;
   background-color: rgb(255, 251, 245);
   margin-bottom: 10px;
+  margin-top: 15px;
 }
 
 .divListRestaurant {
@@ -171,8 +172,7 @@ body {
 .PResName {
   font-weight: bold;
   font-size: 15px;
-  max-height: 24px;
-  overflow: hidden;
+
   margin-bottom: -2px;
 }
 
@@ -188,7 +188,6 @@ body {
 }
 
 .PResDes1 {
-  font-weight: bold;
   font-size: 10pt;
   max-height: 24px;
   overflow: hidden;
@@ -202,7 +201,6 @@ body {
 }
 
 .PResDes2 {
-  font-weight: bold;
   font-size: 12px;
   max-height: 24px;
   overflow: hidden;
@@ -231,4 +229,216 @@ body {
   margin-bottom: 10px;
   border-radius: 10px;
   padding: 10px;
+}
+
+.titleDialog {
+  margin: 0px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+/* SwipeCategories */
+.listSwipeCategories {
+  display: grid;
+  margin-top: 20px;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.boxSwipeCategories {
+  border-radius: 10px;
+  margin-right: 3px;
+  text-align: center;
+}
+
+.boxSwipeCategories img {
+  width: 70px;
+}
+
+.boxSwipeCategories p {
+  font-weight: bold;
+  padding: 0px 10px;
+  height: 40px;
+  overflow: hidden;
+}
+
+/* SwipeCategories */
+
+/* SwipeCategoriesV1 */
+
+.boxSwipeCategoriesV1 {
+  margin-top: 15px;
+  border-radius: 10px;
+  padding: 10px 10px 0px 0px;
+}
+
+.divitemCV1 {
+  width: 150px !important;
+}
+
+.boxitemCV1 {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0px 10px;
+  align-items: center;
+}
+
+.boxitemCV1 img {
+  width: 100px;
+  border-radius: 50px;
+}
+
+.boxitemCV1 p {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: rgb(83, 83, 83);
+}
+
+/* SwipeCategoriesV1  */
+
+
+
+
+/* SwipeCategoriesV2  */
+.boxItemSCV2 {
+  width: 200px !important;
+  margin: 0px 7px;
+  box-shadow: 0px 1px 3px 2px rgba(145, 145, 145, 0.215);
+  height: 250px !important;
+  border-radius: 15px;
+}
+
+.divItemSCV2>div {
+  padding: 10px;
+}
+
+.divItemSCV2>img {
+  border-radius: 15px;
+  height: 140px;
+  object-fit: cover;
+  box-shadow: 0px 1px 2px 1px rgba(12, 12, 12, 0.16);
+}
+
+.itemSCV2Name {
+  height: 45px;
+  overflow: hidden;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.itemSCV2Des {
+  margin: 2px 0px;
+  display: flex;
+  align-items: center;
+}
+
+.itemSCV2Des img {
+  width: 18px;
+  height: 18px;
+  margin-top: -3px;
+  margin-right: 5px;
+}
+
+
+
+
+/* SwipeCategoriesV2  */
+@media screen and (max-width:800px) {
+  .listSwipeCategories {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+
+  .boxSwipeCategories img {
+    width: 40px;
+  }
+
+  .boxSwipeCategories p {
+    font-weight: bold;
+    padding: 0px;
+    font-size: 12px;
+  }
+
+  .boxitemCV1 img {
+    width: 70px;
+  }
+
+  .boxitemCV1 p {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+}
+
+@media screen and (max-width:600px) {
+  .listSwipeCategories {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+
+  .boxSwipeCategories p {
+    font-weight: bold;
+    padding: 0px;
+  }
+
+  .categoryTitle {
+    font-size: 18px;
+  }
+
+  .titleDialog {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width:500px) {
+  .listSwipeCategories {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .boxSwipeCategories p {
+    font-weight: bold;
+    padding: 0px;
+    font-size: 10px;
+    margin-bottom: 0px;
+  }
+
+
+
+  .boxResItemInfo p {
+    font-size: 12px;
+  }
+
+  .PResName {
+    font-size: 13px;
+  }
+
+  .divitemCV1 {
+    width: 90px !important;
+  }
+
+  .boxitemCV1 img {
+    width: 70px;
+  }
+
+  .boxitemCV1 p {
+    font-size: 10px;
+    margin-top: 5px;
+  }
+
+  .categoryTitle {
+    font-size: 14px;
+  }
+
+
+  .itemSCV2Name {
+    font-size: 13px;
+  }
+
+  .boxItemSCV2 {
+    height: 260px !important;
+  }
 }

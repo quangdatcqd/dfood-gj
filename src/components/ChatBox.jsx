@@ -2,7 +2,7 @@ import { Box, Container, Dialog, DialogContent, DialogTitle, IconButton, TextFie
 import SendIcon from '@mui/icons-material/Send';
 import { React, useEffect, useState } from 'react';
 import { TextareaAutosize } from '@mui/base';
-import { GojekAPI } from '../API/GojekAPI';
+import { ChatAPI, GojekAPI } from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
 
@@ -25,7 +25,7 @@ const ChatBox = (props) => {
     useEffect(() => {
 
         const getMembers = async (id) => {
-            var messages = await GojekAPI.getMemberChat(id);
+            var messages = await ChatAPI.getMemberChat(id);
 
             messages?.data?.members?.map((item) => {
 
@@ -43,7 +43,7 @@ const ChatBox = (props) => {
         }
         const getChannelId = async () => {
             try {
-                var data = await GojekAPI.getChannelChat(idOrder);
+                var data = await ChatAPI.getChannelChat(idOrder);
 
                 if (data?.success) {
                     idchannel = data?.data?.channel_id;
@@ -88,7 +88,7 @@ const ChatBox = (props) => {
         setLoadingCancel(false)
     }
     const getMessages = async (id) => {
-        var messages = await GojekAPI.getAllChat(id);
+        var messages = await ChatAPI.getAllChat(id);
 
         var res = messages?.data?.reduceRight(function (arr, last, index, coll) {
 
@@ -99,7 +99,7 @@ const ChatBox = (props) => {
     }
     const sendMessage = async () => {
 
-        var data = await GojekAPI.sendMessage(idChannel, message);
+        var data = await ChatAPI.sendMessage(idChannel, message);
         if (data?.success) {
             setMessage("");
         }

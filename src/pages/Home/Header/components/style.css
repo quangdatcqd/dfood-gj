@@ -131,7 +131,11 @@
 
 .headerBtnMenu {
     display: none !important;
-    padding: 0px;
+    padding: 0px !important;
+}
+
+.headerBtnMenu button {
+    padding: 0px !important;
 }
 
 .divSearchHeaderSM {
@@ -159,7 +163,38 @@
     margin: 0px;
 
 
+
 }
+
+.boxOTPInput p {
+    font-family: sans-serif;
+    margin-bottom: 0px;
+    margin-top: 5px;
+    text-align: center;
+    color: gray;
+}
+
+.divOTPInput {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.divOTPInput input {
+    border: none;
+    border-bottom: 2px solid rgb(19, 192, 191);
+    outline: none;
+    margin-left: 10px;
+    font-size: 30px;
+    text-align: center;
+    /* border-radius: 10px; */
+    padding: 0px;
+    color: rgb(19, 192, 191);
+    width: 40px !important;
+
+}
+
 
 
 @media screen and (max-width:990px) {
@@ -220,7 +255,8 @@
 
     .boxLogin {
         padding: 30px !important;
-        width: calc(100% - 60px) !important;
+        width: calc(100% - 30px) !important;
+        margin: 0 auto;
     }
 
 }
@@ -262,7 +298,7 @@
         width: calc(100% - 70px) !important;
         margin: 0 auto;
         display: block;
-        margin-left: 15px;
+        margin-left: 15px !important;
     }
 
     .divSearchHeaderSM {

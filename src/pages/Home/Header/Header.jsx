@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Menu from './components/Menu';
 import Search from './components/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Restaurants from '../../Restaurants';
+import Restaurants from '../../SearchBox';
 const Header = () => {
     const [currentLoc, setCurrentLoc] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
     const [toggleLocation, setToggleLocation] = useState(false);
@@ -45,12 +45,12 @@ const Header = () => {
             </Container>
             <div className='divSearchHeaderSM'>
                 <div className='headerLocation headerSearchBar ' onClick={() => setToggleSearch(true)}>
-                    <p className='headerLocationName'>  <SearchIcon style={{ marginTop: "-2px", fontSize: "20px" }} />Tìm kiếm món ăn</p>
+                    <p className='headerLocationName'>  <SearchIcon style={{ marginTop: "-2px", fontSize: "18px" }} />Tìm kiếm món ăn</p>
                 </div>
                 <IconButton
                     edge="start"
                     color="inherit"
-                    style={{ margin: "0px 15px 0px 0px" }}
+                    style={{ margin: "0px 7px 0px 0px" }}
                 >
                     <ShoppingCartIcon />
                 </IconButton>

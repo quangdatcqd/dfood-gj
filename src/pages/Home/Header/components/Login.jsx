@@ -149,7 +149,7 @@ const Login = ({ setOpen, open }) => {
 
                             if (indexVC >= 0) {
                                 localStorage.setItem("idVoucher", getVC?.data[indexVC]?.code);
-
+                                enqueueSnackbar("Lấy được mã giảm giá!", { variant: 'success' });
                                 break;
                             }
 
@@ -304,21 +304,21 @@ const Login = ({ setOpen, open }) => {
                 <FormControl variant="standard" fullWidth={true} >
                     {
                         formType !== "CHECK" &&
-                        <>
-                            <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                        <div className='boxOTPInput'>
+                            <div className='divOTPInput'  >
 
                                 <OTPInput
                                     value={OTPCode}
                                     onChange={setOTPCode}
                                     numInputs={4}
-                                    renderInput={(props) => <input {...props} style={{ border: "2px solid #13C0BF", outline: "none", marginLeft: "5px", fontSize: '30px', textAlign: "center", borderRadius: "10px", padding: " 5px", color: "#13C0BF", width: "50px" }} />}
+                                    renderInput={(props) => <input {...props} placeholder='-' type='number' />}
                                 />
                             </div>
                             <span style={{ fontSize: "12px", fontFamily: "sans-serif", color: "red", marginTop: "5px", textAlign: "center" }}>{otpError !== "" && otpError}</span>
-                            <p style={{ fontFamily: "sans-serif", marginBottom: "0px", marginTop: "2px", textAlign: "center", color: "gray" }}>
+                            <p  >
                                 Chưa nhận được? <span style={{ cursor: "pointer", color: "#13C0BF" }} onClick={handleRequestOTP}> {countdown ? countdown : "Gửi lại"}</span>
                             </p>
-                        </>
+                        </div>
                     }
 
                     {

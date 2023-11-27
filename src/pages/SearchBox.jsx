@@ -1,4 +1,4 @@
-import { Box, Button, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { debounce } from 'debounce';
 import { React, useCallback, useEffect, useState, useContext } from 'react';
 
@@ -9,7 +9,6 @@ import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
 import ListItems from '../components/ListItems';
 import { CartContext } from '../Contexts/CartContext';
-import InputBox from '../components/InputBox';
 
 
 function Restaurants(props) {

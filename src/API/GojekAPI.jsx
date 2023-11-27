@@ -2,6 +2,7 @@ import { genSessionID, randomString } from "../common";
 import axiosClient from "./axiosClient";
 
 const location = JSON.parse(localStorage.getItem("customerLoc"));
+const accessToken = localStorage.getItem("G-Token");
 const pickedLoc = location?.latitude + "," + location?.longitude;
 const deviceInfo = localStorage.getItem("deviceInfo") ? JSON.parse(localStorage.getItem("deviceInfo")) : null;
 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -12,20 +13,21 @@ const Objheaders =
     'X-Location': pickedLoc,
     'x-invalidate-cache': ' false',
     'accept': ' application/json',
-    'content-type': ' application/json',
+    'content-type': 'application/json ',
     'x-appversion': ' 4.78.3',
     'x-appid': ' com.gojek.app',
     'x-session-id': deviceInfo?.session_id,
     'd1': deviceInfo?.d1,
-    'x-platform': '*',
+    'x-platform': 'android',
     'x-uniqueid': deviceInfo?.unique_id,
-    'Authorization': ' Bearer  ' + localStorage.getItem("G-Token"),
+    'Authorization': ' Bearer  ' + accessToken,
     'x-user-type': ' customer',
     'x-deviceos': ' Android,9',
     'User-Uuid': userInfo?.id || "",
     'x-devicetoken': ' ',
     'x-phonemake': ' MEIZU',
     'x-pushtokentype': ' FCM',
+    'X-Location-Accuracy': ' 1.58',
     'x-phonemodel': ' Meizu,PRO 6 Plus',
     'accept-language': ' vi-VN',
     'x-user-locale': ' vi_VN',
@@ -34,6 +36,7 @@ const Objheaders =
     'gojek-timezone': ' Asia/Ho_Chi_Minh',
     'X-M1': deviceInfo?.XM1,
     'user-agent': ' Gojek/4.78.3 (Android 9)',
+
 }
 
 const headerToArray = (header) => {
@@ -126,7 +129,12 @@ export const GojekAPI = {
     test() {
         try {
 
-            return axiosClient.get("https://api.ipify.org?format=json");
+            const url = "https://api.ipify.org?format=json";
+            return axiosClient.post("", {
+                type: "GET",
+                header: "[]",
+                url: url
+            });
         } catch (ex) {
             return ex;
         }
@@ -348,7 +356,15 @@ export const ChatAPI = {
     sendMessage(id, text) {
         try {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}/message`;
-            let payload = `{"channel_type":"group-booking","data":"{\\"tracking_id\\":\\"ff41235f-b55c-4f52-9e07-62abd8560d35\\"}","request_id":"d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd","text":"${text}","type":"text"}`
+            let payload = {
+                "channel_type": "group-booking",
+                "data": {
+                    "tracking_id": "ff41235f-b55c-4f52-9e07-62abd8560d35"
+                },
+                "request_id": "d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd",
+                "text": text,
+                "type": "text"
+            };
 
             return axiosClient.post("", {
                 type: "POST",
@@ -372,7 +388,13 @@ export const OrderAPI = {
     quickCancel(id) {
         try {
             const url = `https://api.gojekapi.com/waiter/v1/orders/${id}/cancel`;
-            var payload = { "activitySource": 2, "bookingId": 0, "cancelDescription": "Cancelled by customer apps", "cancelReasonCode": "CUSTOMER_CANCEL_WITH_NO_REASON", "orderNo": id }
+            var payload = {
+                "activitySource": 2,
+                "bookingId": 0,
+                "cancelDescription": "Cancelled by customer apps",
+                "cancelReasonCode": "CUSTOMER_CANCEL_WITH_NO_REASON",
+                "orderNo": id
+            }
 
             return axiosClient.post("", {
                 type: "PUT",
@@ -470,7 +492,9 @@ export const OrderAPI = {
     tracking(id) {
         try {
             const url = `https://api.gojekapi.com/v4/booking/track`;
-            let payload = `{"orderNumbers":"${id}"}`
+            let payload = {
+                "orderNumbers": id
+            }
 
             return axiosClient.post("", {
                 type: "POST",
@@ -789,7 +813,7 @@ export const AuthAPI = {
                 'accept-language': ' vi-VN',
                 'x-user-locale': ' vi_VN',
                 'x-location': ' ',
-                'x-location-accuracy': ' ',
+                'x-location-accuracy': '',
                 'gojek-country-code': ' VN',
                 'x-m1': deviceInfo?.XM1,
                 'content-type': ' application/json; charset=UTF-8',

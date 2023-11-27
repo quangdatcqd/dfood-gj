@@ -1,10 +1,6 @@
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
-import List from '@mui/material/List';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 
@@ -15,7 +11,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ModalBox(props) {
-    const { open, setOpen, children, title, fulls, fullWidth, maxWidth } = props;
+    const { open, setOpen, children, title, fulls, fullWidth, maxWidth, useCloseBar } = props;
+    const useCloseDialogBar = useCloseBar === false ? false : true;
+
     const fullScreen = useMediaQuery("(max-width:600px)")
     return (
         <Dialog
@@ -25,18 +23,19 @@ export default function ModalBox(props) {
             TransitionComponent={Transition}
             fullWidth={fullWidth}
             maxWidth={maxWidth}
-        >
-            <div className='CPNBarDialog' onClick={() => setOpen(false)} >
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="close"
-                >
-                    <CloseIcon />
-                </IconButton>
-                <p style={{ margin: "0px", fontSize: "18px", fontWeight: "bold", textAlign: "center", width: "100%" }}> {title}</p>
-            </div>
-
+        >{
+                useCloseDialogBar &&
+                <div className='CPNBarDialog' onClick={() => setOpen(false)} >
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="close"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <p className='titleDialog'  > {title}</p>
+                </div>
+            }
             {
                 children
             }

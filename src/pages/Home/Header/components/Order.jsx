@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './style.css';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { OrderAPI } from '../../../../API/GojekAPI';
+import OrderDetail from '../../../../components/OrderDetail'
 const Order = () => {
     const [listOrders, setListOrders] = useState(null);
     const getListOrders = async () => {
@@ -31,7 +32,9 @@ const Order = () => {
                     })}
                 </div>
             </div>
+
         </div>
+
     );
 }
 
