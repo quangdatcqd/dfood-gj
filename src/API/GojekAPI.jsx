@@ -348,7 +348,13 @@ export const ChatAPI = {
     sendMessage(id, text) {
         try {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}/message`;
-            let payload = `{"channel_type":"group-booking","data":"{\\"tracking_id\\":\\"ff41235f-b55c-4f52-9e07-62abd8560d35\\"}","request_id":"d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd","text":"${text}","type":"text"}`
+            let payload = {
+                "channel_type": "group-booking",
+                "data": { "tracking_id": "ff41235f-b55c-4f52-9e07-62abd8560d35" },
+                "request_id": "d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd",
+                "text": text,
+                "type": "text"
+            }
 
             return axiosClient.post("", {
                 type: "POST",
@@ -470,7 +476,7 @@ export const OrderAPI = {
     tracking(id) {
         try {
             const url = `https://api.gojekapi.com/v4/booking/track`;
-            let payload = `{"orderNumbers":"${id}"}`
+            let payload = {"orderNumbers":id}
 
             return axiosClient.post("", {
                 type: "POST",
