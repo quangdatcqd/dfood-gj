@@ -49,7 +49,7 @@ const OrderDetail = ({ idOrder }) => {
         var cfCancel = window.confirm("Huỷ với lí do thay đổi món!");
         if (!cfCancel) return "";
         var phone = dataOrder?.destination?.recipient_phone;
-        var data = await GojekAPI.cancelOrder(idOrder, phone, dataOrder?.customer_id);
+        var data = await OrderAPI.cancelOrder(idOrder, phone, dataOrder?.customer_id);
         if (data?.success) {
             enqueueSnackbar("Đã yêu cầu huỷ đơn hàng, đợi xíu!", { variant: 'success' })
             while (true) {
@@ -65,7 +65,7 @@ const OrderDetail = ({ idOrder }) => {
 
     const getListOrders = async () => {
         try {
-            var data = await GojekAPI.getOrderDetail(idOrder);
+            var data = await OrderAPI.getOrderDetail(idOrder);
             if (data?.success) {
                 setDataOrder(data?.data);
                 setTrackingStatus(listStatus(data?.data?.status) + " " + data?.data?.cancellation?.description)
