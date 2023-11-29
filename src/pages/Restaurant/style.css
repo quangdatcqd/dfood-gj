@@ -1,0 +1,370 @@
+ /* Restaurant */
+
+
+ .lResImage img {
+   width: 100%;
+   height: 250px;
+   object-fit: cover;
+
+ }
+
+ .lResInfo {
+
+   width: 100%;
+   margin: 0 auto;
+   position: absolute;
+   top: 180px;
+
+ }
+
+ .lBoxResInfo {
+   background-color: white;
+   padding: 15px;
+   border-radius: 15px;
+   width: calc(100% - 30px);
+   margin: 0 auto;
+   box-shadow: 0px 1px 3px 2px rgba(145, 145, 145, 0.215);
+   text-align: center;
+ }
+
+ .lResName {
+   font-weight: bold;
+   font-size: 20px;
+   text-align: center;
+   margin: 0px;
+ }
+
+ .lResParnerIcon {
+   text-align: center;
+ }
+
+ .lResParnerIcon {
+   margin: 0px;
+ }
+
+ .lResParnerSvg {
+   font-size: 30px !important;
+   margin-right: 5px;
+   /* background-color: red; */
+   padding: 2px;
+   border-radius: 50px;
+   color: rgb(219, 117, 15);
+ }
+
+ .lResDes {
+   color: rgb(158, 158, 158);
+   font-size: 15px;
+   margin: 0px;
+
+ }
+
+ .lResInfo1 {
+   margin-top: 10px;
+   padding: 10px 20px;
+   font-size: 16px;
+   font-weight: bold;
+ }
+
+ .lResInfoDiv {
+   display: flex;
+   justify-content: space-between;
+   color: gray;
+ }
+
+ .boxResDishes {
+   padding: 10px;
+ }
+
+ .listItemDishes {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+ }
+
+ .resItemDish {
+   margin: 0px;
+   display: flex;
+   padding: 10px;
+   background-color: white;
+   border-radius: 20px;
+   position: relative;
+   cursor: pointer;
+ }
+
+ .boxResInfo {
+   width: 350px;
+   position: relative;
+
+ }
+
+
+ .boxResDishes {
+   width: calc(100% - 350px);
+   overflow-y: scroll;
+   height: calc(100vh - 65px);
+ }
+
+ .cateResDishes {
+   /* margin-top: 30px; */
+ }
+
+ .boxResCart {
+   width: 100%;
+   position: absolute;
+   bottom: 0px;
+   padding: 10px;
+ }
+
+ .bg-1 {
+   background-color: rgba(6, 6, 6, 0.21);
+
+ }
+
+ .boxResCartBtn {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+
+ }
+
+ .boxResCartBtnCheckout {
+   background-color: rgb(219, 117, 15);
+   padding: 7px 25px;
+   color: white;
+   font-weight: bold;
+   border-radius: 8px;
+   font-size: 18px;
+   display: flex;
+   align-items: center;
+   cursor: pointer;
+
+ }
+
+ .boxResCartBtnCheckout:hover, .resCartBtn:hover {
+   background-color: rgb(174, 93, 11);
+
+
+ }
+
+
+ .boxResCartBtnCheckout p {
+   margin: 0px;
+ }
+
+ .paymentIcon {
+   margin-top: -2px;
+   margin-right: 10px;
+ }
+
+ .resCartBtn {
+   background-color: rgb(219, 117, 15);
+   color: white;
+   padding: 5px 10px 7px 10px;
+   border-radius: 8px;
+   cursor: pointer;
+ }
+
+ .resCartBtn svg {
+   font-size: 28px;
+ }
+
+ .boxSelectedDishes {
+   background-color: rgb(255, 249, 249);
+   border-radius: 10px;
+   overflow-y: scroll;
+   height: calc(100vh - 140px);
+   margin-bottom: 10px;
+   position: relative;
+
+
+ }
+
+ .itemDishSelected {
+   height: 200px;
+   width: 100%;
+
+ }
+
+ .closeListSlectedDishes {
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   background-color: white;
+   width: 100%;
+   padding: 10px;
+ }
+
+ .layerSoldOut {
+   background-color: rgba(0, 0, 0, 0.539);
+   position: absolute;
+   width: 100px;
+   height: 100px;
+   color: white;
+   border-radius: 10px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 16px;
+ }
+
+ .containerRes {
+   display: flex;
+
+ }
+
+ .divBtnCloseDlg {
+   background-image: linear-gradient(rgba(8, 8, 8, 0.58), rgba(255, 255, 255, 0));
+   color: white;
+   position: absolute;
+   width: 100%;
+ }
+
+ .btnCloseDlg {
+   padding: 5px;
+   border-radius: 50px;
+   background-image: linear-gradient(rgba(88, 88, 88, 0.468), rgba(69, 69, 69, 0.281));
+   margin: 10px;
+   border: 1px solid rgba(255, 255, 255, 0.368);
+   font-size: 35px !important;
+   cursor: pointer;
+ }
+
+ .btnCloseDlg:hover {
+   background-image: linear-gradient(rgba(69, 69, 69, 0.26), rgb(74, 74, 74));
+
+ }
+
+ .dishSelectedName {
+   margin: 5px 0px;
+   font-weight: bold;
+   font-size: 16px;
+
+ }
+
+ .dishSelectedPrice {
+   font-weight: bold;
+   color: gray;
+   margin: 0px;
+ }
+
+ .resDishSelected {
+   padding: 10px;
+
+ }
+
+
+
+ .boxBtnDishQty {
+   display: flex;
+   align-items: center;
+   color: #d88248;
+   justify-content: space-between;
+   font-size: 16px;
+
+ }
+
+
+ .qtyDish {
+   font-size: 16px;
+ }
+
+ .btnDishQtyRM {
+   margin: 0px 5px;
+   border-radius: 5px;
+   cursor: pointer;
+ }
+
+ .btnDishQtyRM:hover {
+   background-color: rgba(201, 201, 201, 0.479);
+ }
+
+ /* Restaurant */
+
+
+ @media only screen and (max-width: 800px) {
+
+
+
+   .containerRes {
+     display: block;
+     height: 100vh;
+
+   }
+
+   .boxResInfo {
+     width: 100%;
+   }
+
+   .boxResDishes {
+     margin-top: 250px;
+     width: calc(100% - 20px);
+     overflow-y: visible;
+   }
+
+   .lBoxResInfo {
+     margin-top: 50px;
+     width: calc(100% - 30px);
+   }
+
+   .divBtnCloseDlg, .boxResCart {
+     position: fixed;
+     z-index: 1;
+   }
+
+   .boxResCart {
+     padding-top: 20px;
+     background-image: linear-gradient(rgba(2, 2, 2, 0), rgba(0, 0, 0, 0.441));
+   }
+
+   .boxSelectedDishes {
+     height: calc(100vh - 180px);
+     width: 500px;
+     margin: 0 auto;
+     margin-bottom: 10px;
+   }
+ }
+
+ @media only screen and (min-width: 600px) {
+   ::-webkit-scrollbar {
+     width: 10px;
+     height: 10px;
+     background: transparent;
+     position: absolute;
+
+   }
+
+   ::-webkit-scrollbar-thumb {
+     background: #ffcaa6;
+     border-radius: 10px;
+   }
+
+   ::-webkit-scrollbar-thumb:hover {
+     background: #d88248;
+   }
+
+
+ }
+
+ @media only screen and (max-width: 600px) {
+   .inputSearRestaurant {
+     width: 100% !important;
+   }
+
+
+ }
+
+ @media only screen and (max-width: 530px) {
+   .boxSelectedDishes {
+     width: 100%;
+   }
+
+
+ }
+
+ @media only screen and (max-width: 400px) {
+
+
+   .lBoxResInfo {
+     width: 100%;
+   }
+
+ }

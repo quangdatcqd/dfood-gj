@@ -472,7 +472,6 @@
  .input-import-order textarea {
    width: 100%;
    height: 100%;
-
    padding: 5px;
    border: #02922a 1px solid;
    border-radius: 10px;
@@ -558,115 +557,7 @@
  }
 
 
- .containerRes {
-   display: flex;
 
- }
-
- .divBtnCloseDlg {
-   background-image: linear-gradient(rgba(8, 8, 8, 0.58), rgba(255, 255, 255, 0));
-   color: rgb(81, 81, 81);
-   position: absolute;
-   width: 100%;
- }
-
- .btnCloseDlg {
-   padding: 5px;
-   border-radius: 50px;
-   background-image: linear-gradient(white, rgba(69, 69, 69, 0.281));
-   margin: 10px;
-   font-size: 35px !important;
-   cursor: pointer;
- }
-
- .btnCloseDlg:hover {
-   background-image: linear-gradient(rgba(69, 69, 69, 0.26), white);
-
- }
-
- .boxResInfo {
-   width: 350px !important;
-   position: relative;
-
- }
-
-
- .boxResDishes {
-   width: calc(100% - 350px);
- }
-
-
-
- /* Restaurant */
- .lResImage img {
-   width: 100%;
-
- }
-
- .lResInfo {
-
-   width: 100%;
-   margin: 0 auto;
-   position: absolute;
-   top: 150px;
-
- }
-
- .lBoxResInfo {
-   background-color: white;
-   padding: 15px;
-   border-radius: 15px;
-   width: calc(100% - 60px);
-   margin: 0 auto;
-   box-shadow: 0px 1px 3px 2px rgba(145, 145, 145, 0.215);
-   text-align: center;
- }
-
- .lResName {
-   font-weight: bold;
-   font-size: 20px;
-   text-align: center;
-   margin: 0px;
- }
-
- .lResParnerIcon {
-   text-align: center;
- }
-
- .lResParnerIcon {
-   margin: 0px;
- }
-
- .lResParnerSvg {
-   font-size: 30px !important;
-   margin-right: 5px;
-   /* background-color: red; */
-   padding: 2px;
-   border-radius: 50px;
-   color: rgb(219, 117, 15);
- }
-
- .lResDes {
-   color: rgb(158, 158, 158);
-   font-size: 15px;
-   margin: 0px;
-
- }
-
- .lResInfo1 {
-   margin-top: 60px;
-   padding: 10px;
-   font-size: 16px;
-   font-weight: bold;
- }
-
- .lResInfoDiv {
-   display: flex;
-   justify-content: space-between;
-   color: gray;
- }
-
- /* Restaurant */
 
 
  @media only screen and (max-width: 800px) {
@@ -675,6 +566,7 @@
      animation: biker 8s linear 0s infinite;
 
    }
+
  }
 
  @media only screen and (min-width: 600px) {
@@ -716,10 +608,6 @@
      animation: biker 5s linear 0s infinite;
 
    }
- }
 
- .restauRantContainer {
-   height: 100vh;
-   overflow-y: scroll;
-   background-color: rgb(252, 237, 210);
+
  }

@@ -9,16 +9,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import BoxLogin from "./pages/BoxLogin";
 import CheckUserValid from "./pages/CheckUserValid";
 import Home from "./pages/Home/Home";
-import Restaurant from "./pages/Restaurant";
+import Restaurant from "./pages/Restaurant/Restaurant";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalBox from "./components/ModalBox";
 import { setResDlg } from "./store/dialogSlice";
+import { useMediaQuery } from "@mui/material";
 
 function App() {
   const theme = createTheme();
+  const matchMD = useMediaQuery("(max-width:1024px)")
   const resDialog = useSelector(state => state.dialog.resDialog.open)
   const dispatch = useDispatch();
-  console.log(resDialog);
   const handleOpenRes = (open) => {
     dispatch(setResDlg(open))
   }
@@ -38,7 +39,7 @@ function App() {
       </ThemeProvider >
       {
         resDialog &&
-        <ModalBox open={resDialog} setOpen={() => handleOpenRes()} title="Chọn món" maxWidth="xl" fullWidth={true} useCloseBar={false}>
+        <ModalBox open={resDialog} setOpen={handleOpenRes} title="Chọn món" maxWidth="xl" fulls={matchMD} fullWidth={true} useCloseBar={false}>
           <Restaurant />
         </ModalBox>
       }

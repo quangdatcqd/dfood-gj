@@ -1,5 +1,5 @@
 export const fomatCurrency = (number) => {
-    return Number(number) > 0 ? number.toLocaleString('it-IT', { style: 'currency', currency: "VND" }) : 0;
+    return Number(number) >= 0 ? number.toLocaleString('vi', { style: 'currency', currency: "VND" }) : 0;
 }
 const characters = "1234567890QWERTYUIOPLKJHGFDSAZXCVBNMazxcvbnmlkjhgfdsqwertyuiop";
 export const randomString = (length, char = null) => {

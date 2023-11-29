@@ -11,8 +11,7 @@ export const appDialog = createSlice({
     },
     reducers: {
         setResDlg: (state, action) => {
-            state.resDialog = action.payload;
-
+            state.resDialog.open = action.payload;
         },
         setResId: (state, action) => {
             state.resDialog.id = action.payload;

@@ -1,0 +1,107 @@
+.optionContaier {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+
+}
+
+.optionResInfo {
+    margin-top: 10px;
+
+}
+
+.boxBtnOption {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 10px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+}
+
+.btnOptionQty {
+    display: flex;
+    align-items: center;
+}
+
+.btnOptionQtyRM {
+    padding: 5px;
+    border-radius: 8px;
+    color: rgb(219, 117, 15);
+    margin: 0px 6px;
+    cursor: pointer;
+}
+
+.btnOptionQtyRM svg {
+    font-size: 30px;
+}
+
+.btnOptionQtyRM:hover {
+    background-color: rgba(219, 117, 15, 0.231);
+}
+
+.qtyOption {
+    font-size: 22px;
+    color: rgb(219, 117, 15);
+}
+
+.btnSelectOption {
+    font-weight: bold;
+    background-color: rgb(219, 117, 15);
+    border-radius: 8px;
+    padding: 10px 25px;
+    color: white;
+    cursor: pointer;
+
+
+
+}
+
+.btnSelectOption:hover {
+    background-color: rgb(175, 93, 12);
+
+}
+
+.optionItem {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.optionItemInput label {
+    padding-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: rgb(44, 44, 44);
+}
+
+.optionItemInput {}
+
+.cateOptionRequire {
+    margin: 0px;
+    color: rgb(255, 0, 0);
+    font-size: 16px;
+    margin-left: 6px;
+}
+
+@media screen and (max-width:800px) {
+    .boxBtnOption {
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        padding-top: 15px;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.511), rgb(255, 255, 255));
+    }
+
+    .lBoxResInfoOption {
+        margin-top: 0px !important;
+    }
+
+    .boxOption {
+        margin-top: 10px !important;
+    }
+}

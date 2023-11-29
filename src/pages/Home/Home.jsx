@@ -6,7 +6,7 @@ import './home.css';
 
 import Cartpreview from '../../components/Cartpreview';
 import Restaurants from '../SearchBox';
-import SelectDishes from '../Restaurant';
+import SelectDishes from '../Restaurant/Restaurant';
 import Checkout from '../Checkout';
 import ModalBox from '../../components/ModalBox';
 import OrderDetail from '../../components/OrderDetail';
