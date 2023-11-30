@@ -12,8 +12,10 @@ import Home from "./pages/Home/Home";
 import Restaurant from "./pages/Restaurant/Restaurant";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalBox from "./components/ModalBox";
-import { setResDlg } from "./store/dialogSlice";
+import { setCheckoutDlg, setOrderDlg, setResDlg } from "./store/dialogSlice";
 import { useMediaQuery } from "@mui/material";
+import OrderDetail from "./components/OrderDetail";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const theme = createTheme();
@@ -22,6 +24,14 @@ function App() {
   const dispatch = useDispatch();
   const handleOpenRes = (open) => {
     dispatch(setResDlg(open))
+  }
+  const orderDialog = useSelector(state => state.dialog.orderDialog.open)
+  const handleOpenOrderDetail = (open) => {
+    dispatch(setOrderDlg(open))
+  }
+  const checkoutDialog = useSelector(state => state.dialog.checkoutDialog.open)
+  const handleOpenCheckout = (open) => {
+    dispatch(setCheckoutDlg(open))
   }
   return (
     <>
@@ -43,7 +53,20 @@ function App() {
           <Restaurant />
         </ModalBox>
       }
+      {
+        orderDialog &&
+        <ModalBox open={orderDialog} setOpen={handleOpenOrderDetail} title="Đơn hàng" maxWidth="md" fulls={matchMD} fullWidth={true}  >
+          <OrderDetail />
+        </ModalBox>
+      }
+      {
+        checkoutDialog &&
+        <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="md" fulls={matchMD} fullWidth={true}  >
+          <Checkout />
+        </ModalBox>
+      }
     </>
+
   )
 }
 export default App;

@@ -20,18 +20,20 @@ import ListItems from '../../components/ListItems';
 // import ListOrders from '../../components/ListOrders';
 import ListResVIP from '../../components/ListResVIP';
 import Header from './Header/Header';
+import { useDispatch } from 'react-redux';
+import { setOrderId } from '../../store/dialogSlice';
 
 
 
 export default function Home() {
+    const dispatch = useDispatch();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [toggleMenu, setToggleMenu] = useState(false);
     const [dataImport, setDataImport] = useState("");
     const [toggleListRes, setToggleListRes] = useState(false);
-    const [toggleOderDetail, setToggleOderDetail] = useState(false);
 
     const [listOrdersActive, setListOrdersActive] = useState([]);
-    const [idOrder, setIdOrder] = useState("");
+
 
     const [dataHomeCards, setDataHomeCards] = useState();
     const [dataDealsHome, setDataDealsHome] = useState();
@@ -69,6 +71,11 @@ export default function Home() {
 
     }
 
+
+    const handleOpenOrderDetail = () => {
+        dispatch(setOrderId(localStorage.getItem("idOrder")))
+    }
+
     return (
         <div style={{ backgroundColor: "white", paddingTop: "40px" }} >
             <Header />
@@ -76,10 +83,7 @@ export default function Home() {
                 {
                     listOrdersActive?.data?.cards?.length > 0 &&
                     <div className='btn-active-order'
-                        onClick={() => {
-                            setIdOrder(localStorage.getItem("idOrder"))
-                            setToggleOderDetail(toggleMenu ? false : true)
-                        }}
+                        onClick={() => handleOpenOrderDetail()}
                     >
                         <div className='mess-ac' > Tới đây...
                             <div className='mess-af'> </div>
@@ -128,19 +132,19 @@ export default function Home() {
                 {
                     dataHomeCards?.cards?.map((item, index) => {
                         if (item?.card_type === 11) {
-                            return <SwipeBanner banners={item} />
+                            return <SwipeBanner banners={item} key={index} />
                         }
                         if (item?.card_type === 13) {
-                            return <SwipeCategories data={item} />
+                            return <SwipeCategories data={item} key={index} />
                         }
                         if (item?.card_type === 42 || item?.card_type === 12) {
-                            return <SwipeCategoriesV1 data={item} />
+                            return <SwipeCategoriesV1 data={item} key={index} />
                         }
                         if (item?.card_type === 47) {
-                            return <SwipeCategoriesV2 products={item} />
+                            return <SwipeCategoriesV2 products={item} key={index} />
                         }
                         if (item?.card_type === 48) {
-                            return <ListItems listmerchants={item} />
+                            return <ListItems listmerchants={item} key={index} />
                         }
                     })
                 }

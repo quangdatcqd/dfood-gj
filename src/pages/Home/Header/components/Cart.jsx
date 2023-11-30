@@ -1,8 +1,18 @@
 import React from 'react';
 import './style.css';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCheckoutData } from '../../../../store/dialogSlice';
 
 const Cart = () => {
+    const listCart = useSelector(state => state.cart.CartList)
+    const dispatch = useDispatch();
+    const handleSelectCart = (index) => {
+        dispatch(setCheckoutData(index))
+    }
+
+
+
     return (
 
         <div className='headerBtnDiv headerBtnCart'>
@@ -11,48 +21,19 @@ const Cart = () => {
             <div className='headerBtnBox'>
                 <p className='ptitle'>Giỏ hàng</p>
                 <div className='headerBtnBoxItems'>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
-                    <div className='headerBtnBoxItem'>
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/6bb3d38d-96d3-4dea-9ccb-02fad933e77f_brand-image_1690516414799.jpg?fit=crop&w=800&h=400" alt="" />
-                        <div className='headerBtnBoxItemDes'>
-                            <p>Sinh Tố - Nước Ép - Trà Trái Cây Gạo Sữa, Phạm Văn Chiêu sdfsd sdfsd fs dfs df</p>
-                            <p>{(250000).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                        </div>
-                    </div>
+                    {
+                        listCart?.map((item, index) => {
+                            return <div className='headerBtnBoxItem' key={index} onClick={() => handleSelectCart(index)}>
+                                <img src={item?.resData?.resImage} alt="" />
+                                <div className='headerBtnBoxItemDes'>
+                                    <p>{item?.resData?.resName}</p>
+                                    <p>{(item?.totalPrice).toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
+                                </div>
+                            </div>
+                        })
+                    }
+
+
 
                 </div>
             </div>

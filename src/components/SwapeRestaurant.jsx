@@ -1,23 +1,16 @@
-import { React, useContext } from "react";
+import { React } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import required modules
 import { EffectCoverflow, Pagination } from "swiper";
 import "../components/style.css";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
-import { CartContext } from '../Contexts/CartContext';
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 
 const SwapeRestaurant = (props) => {
-    const { toggleSelectDishes, setToggleSelectDishes, selectedRes, setSelectedRes } = useContext(CartContext);
-    const { dataRestaurant } = props;
+    const { dataRestaurant, handleSelectRes } = props;
 
-    const handleSelect = (id) => {
-        setToggleSelectDishes(true);
-        setSelectedRes(id);
 
-    }
     return (
         <div className="boxSwapeRestaurant">
             <p className="categoryTitle">{dataRestaurant?.content?.title} </p>
@@ -49,7 +42,7 @@ const SwapeRestaurant = (props) => {
                                     height: "235px",
                                     margin: "5px 0px"
                                 }}
-                                    onClick={() => handleSelect(item?.restaurant_id)}
+                                    onClick={() => handleSelectRes(item?.restaurant_id)}
                                 >
                                     <CardMedia
                                         sx={{ height: 150 }}
@@ -73,14 +66,14 @@ const SwapeRestaurant = (props) => {
                 }
                 {
                     dataRestaurant?.content?.items?.map((item, key) => {
-                        console.log(item);
+
                         return (
                             <SwiperSlide key={key} style={{ paddingRight: "10px  ", width: "225px" }}>
                                 <Card sx={{
                                     height: "235px",
                                     margin: "5px 0px"
                                 }}
-                                    onClick={() => handleSelect(item?.id)}
+                                    onClick={() => handleSelectRes(item?.id)}
                                 >
                                     <CardMedia
                                         sx={{ height: 150 }}

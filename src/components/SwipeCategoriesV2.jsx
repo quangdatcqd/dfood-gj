@@ -5,12 +5,17 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
+import { useDispatch } from 'react-redux';
+import { setResId } from '../store/dialogSlice';
 const SwipeCategoriesV2 = (props) => {
     const { products } = props;
-
-    const handleSelect = (id) => {
-
+    const dispatch = useDispatch();
+    const handleSelectRes = (id) => {
+        if (id)
+            dispatch(setResId(id))
     }
+    const data = products?.content?.actions || products?.content?.items;
+
     return (
         <div>
             <p className='categoryTitle'>{products?.content?.title} </p>
@@ -31,18 +36,22 @@ const SwipeCategoriesV2 = (props) => {
 
             >
                 {
-                    products?.content?.actions?.map((item, key) => {
+                    data?.map((item, key) => {
                         return (
-                            <SwiperSlide key={key} className='boxItemSCV2' >
-                                <div className='divItemSCV2' onClick={() => handleSelect(item?.restaurant_id)}>
+                            <SwiperSlide key={key} className={`boxItemSCV2 ${item?.restaurant_id === undefined && "boxItemSCV2Search"}`} >
+                                <div className='divItemSCV2' onClick={() => handleSelectRes(item?.restaurant_id)}>
                                     <img src={item?.image_url} alt="" />
                                     <div  >
-                                        <p className='itemSCV2Name'> {item?.merchant_name}</p>
+                                        <p className='itemSCV2Name'> {item?.merchant_name || item?.name}</p>
                                         <p className='itemSCV2Des'>   {item?.point_1_label}</p>
-                                        <p className='itemSCV2Des'>
-                                            <img src={item?.point_2_icon} alt="" />
-                                            <span> {item?.point_2_label}</span>
-                                        </p>
+                                        {
+                                            item?.point_2_icon &&
+                                            <p className='itemSCV2Des'>
+                                                <img src={item?.point_2_icon} alt="" />
+                                                <span> {item?.point_2_label}</span>
+                                            </p>
+                                        }
+
                                     </div>
                                 </div>
 

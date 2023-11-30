@@ -283,7 +283,7 @@ const Login = ({ setOpen, open }) => {
     return (
         <Dialog
             open={open}
-            onClose={() => setOpen(false)}
+            // onClose={() => setOpen(false)}
             fullScreen={matches}
             maxWidth={"xl"}
             className={"dlgLogin"}

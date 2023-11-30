@@ -8,12 +8,13 @@ import './style.css'
 import BackBtn from '../components/BackBtn';
 import Cartpreview from '../components/Cartpreview';
 import ListItems from '../components/ListItems';
-import { CartContext } from '../Contexts/CartContext';
+import { useDispatch } from 'react-redux';
+import { setResId } from '../store/dialogSlice';
+import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
 
 
 function Restaurants(props) {
 
-    const { setSelectedRes, setToggleSelectDishes } = useContext(CartContext);
     const [dataRestaurant, setDataRestaurant] = useState("");
     const [dataResFilter, setDataResFilter] = useState(null);
     const [dataSearchSuggestions, setDataSearchSuggestions] = useState("");
@@ -60,8 +61,7 @@ function Restaurants(props) {
             const match = JSON.stringify(result)?.match(regex);
             const id = match && match[1];
             if (id) {
-                setToggleSelectDishes(true);
-                setSelectedRes(id);
+                handleSelectRes(id)
             }
         }
         else {
@@ -74,7 +74,10 @@ function Restaurants(props) {
         setDataRestaurant(null)
     }
 
-
+    const dispatch = useDispatch();
+    const handleSelectRes = (id) => {
+        dispatch(setResId(id))
+    }
 
     return (
 
@@ -103,7 +106,7 @@ function Restaurants(props) {
 
                     <>
                         {
-                            indexBrandOutlet >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutlet]} setToggleSelectDishes={setToggleSelectDishes} />
+                            indexBrandOutlet >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutlet]} handleSelectRes={handleSelectRes} />
                         }
 
                         {
@@ -113,7 +116,7 @@ function Restaurants(props) {
                             indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants || dataRestaurant?.cards]} handleClickMore={handleClickMore} />
                         }
                         {
-                            indexBrandOutletV1 >= 0 && < SwapeRestaurant dataRestaurant={dataRestaurant?.cards[indexBrandOutletV1]} />
+                            indexBrandOutletV1 >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutletV1]} />
                         }
                         {
                             indexSearchSuggestions >= 0 && <SearchSuggestions searchsuggestions={dataSearchSuggestions?.cards[indexSearchSuggestions]} />

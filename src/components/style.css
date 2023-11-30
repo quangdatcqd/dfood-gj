@@ -255,6 +255,7 @@ body {
 
 .boxSwipeCategories img {
   width: 70px;
+  border-radius: 50px;
 }
 
 .boxSwipeCategories p {
@@ -314,6 +315,7 @@ body {
   border-radius: 15px;
 }
 
+
 .divItemSCV2>div {
   padding: 10px;
 }
@@ -345,8 +347,9 @@ body {
   margin-right: 5px;
 }
 
-
-
+.boxItemSCV2Search {
+  height: 200px !important;
+}
 
 /* SwipeCategoriesV2  */
 @media screen and (max-width:800px) {

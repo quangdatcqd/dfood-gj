@@ -7,6 +7,15 @@ export const appDialog = createSlice({
         resDialog: {
             open: false,
             id: ""
+        },
+        orderDialog: {
+            open: false,
+            id: ""
+        }
+        ,
+        checkoutDialog: {
+            open: false,
+            index: ""
         }
     },
     reducers: {
@@ -16,10 +25,25 @@ export const appDialog = createSlice({
         setResId: (state, action) => {
             state.resDialog.id = action.payload;
             state.resDialog.open = true;
+        },
+        setOrderDlg: (state, action) => {
+            state.orderDialog.open = action.payload;
+        },
+        setOrderId: (state, action) => {
+            state.orderDialog.id = action.payload;
+            state.orderDialog.open = true;
+        }
+        ,
+        setCheckoutDlg: (state, action) => {
+            state.checkoutDialog.open = action.payload;
+        },
+        setCheckoutData: (state, action) => {
+            state.checkoutDialog.index = action.payload;
+            state.checkoutDialog.open = true;
         }
     },
 });
 
-export const { setResDlg, setResId } = appDialog.actions;
+export const { setResDlg, setResId, setOrderDlg, setOrderId, setCheckoutData, setCheckoutDlg } = appDialog.actions;
 
 export default appDialog.reducer;

@@ -2,8 +2,8 @@ import { genSessionID, randomString } from "../common";
 import axiosClient from "./axiosClient";
 
 const location = JSON.parse(localStorage.getItem("customerLoc"));
-const accessToken = "eyJhbGciOiJkaXIiLCJjdHkiOiJKV1QiLCJlbmMiOiJBMTI4R0NNIiwidHlwIjoiSldUIiwiemlwIjoiREVGIn0..qRFgrSxqNNNt9FMz.qxICPT2di1i-rGu8RLAi-y_osjuBUQy2bCcmKFIOeRh4N8FmbFeH6b68nXyvjthvprEWvpj5npjX9LAVvKDJheD-x9eljC6-4mIC9DWDV08Tz6Glmqu76CnPAS8SjBdMgDwwquGDznhgj6eVOM50D14ZcboR2g7tMYc6pxw3TYTttdozKAxlcNPONkzomjN2Echl6wsQG61-0h-0gX_SVaoe-li1MuXNXObK32U7Mv1hh52spLWoiHWEPEQX3iG1Qp52c5TDdYqms6kpJ_U0YwNz7IS2bBSDRavi3I0n_DXt_-MXRJxc854qiMUyXSuftbfkIsjhfezdxG9pVdDEVrFVwrUf87hVz6RzhjOrmKzcTsPFk7sJmqe2A_wzIKZwEs_syE7K7RlD45l3n2oTRrPh-xWBEEds9fuofIGQGEsWyiu3G8CaHvFZ36BW72YJtmBiDw126QE10HF9QaCyHeVOoM118xy_MSbvNp0g3_EkWVN2ukpMEn1fOhA9N7uKB2UKaMGCdX5iEbbBf6YMO0mTqHepPhxLxmiR_iPeFKMYNii7qgCPlk9u3AkXFQvZlBr_rGFhSQiUiiwc6n0Cl-QUTolWrxCsU6SdOTThJOYnlVu6jFuS00Wte8ZAULNRSKEPjU793ERfelUa_s3_wY7GVWsUFWzPW4bNIBb9gfYkKs1If9-0pyr0VWfwsFlSl7jBagRJlH03wZD0mljHtWNJSjc54Lorko9Y5iwMZerewGTtMzMzQ5X8nydUvx5_9XzinV2vNGhaGM9G_FV9gy6ZJgjERwaub02lzSqmOPe8_7W6GN9PNCk8sjgCik2QsDdlX1wJAssmWxaO6dYGVReUy7J-5UNn19tm7NXg8nUyuK0nKotKSvUon6xx6-r2HCNM7cdusBLL858vq3tzSxIItwlzarLrQIB-Vg.A9xCVBoY8ZRUkk6M-XGk6w";
-// const accessToken = localStorage.getItem("G-Token");
+// const accessToken = "eyJhbGciOiJkaXIiLCJjdHkiOiJKV1QiLCJlbmMiOiJBMTI4R0NNIiwidHlwIjoiSldUIiwiemlwIjoiREVGIn0..qRFgrSxqNNNt9FMz.qxICPT2di1i-rGu8RLAi-y_osjuBUQy2bCcmKFIOeRh4N8FmbFeH6b68nXyvjthvprEWvpj5npjX9LAVvKDJheD-x9eljC6-4mIC9DWDV08Tz6Glmqu76CnPAS8SjBdMgDwwquGDznhgj6eVOM50D14ZcboR2g7tMYc6pxw3TYTttdozKAxlcNPONkzomjN2Echl6wsQG61-0h-0gX_SVaoe-li1MuXNXObK32U7Mv1hh52spLWoiHWEPEQX3iG1Qp52c5TDdYqms6kpJ_U0YwNz7IS2bBSDRavi3I0n_DXt_-MXRJxc854qiMUyXSuftbfkIsjhfezdxG9pVdDEVrFVwrUf87hVz6RzhjOrmKzcTsPFk7sJmqe2A_wzIKZwEs_syE7K7RlD45l3n2oTRrPh-xWBEEds9fuofIGQGEsWyiu3G8CaHvFZ36BW72YJtmBiDw126QE10HF9QaCyHeVOoM118xy_MSbvNp0g3_EkWVN2ukpMEn1fOhA9N7uKB2UKaMGCdX5iEbbBf6YMO0mTqHepPhxLxmiR_iPeFKMYNii7qgCPlk9u3AkXFQvZlBr_rGFhSQiUiiwc6n0Cl-QUTolWrxCsU6SdOTThJOYnlVu6jFuS00Wte8ZAULNRSKEPjU793ERfelUa_s3_wY7GVWsUFWzPW4bNIBb9gfYkKs1If9-0pyr0VWfwsFlSl7jBagRJlH03wZD0mljHtWNJSjc54Lorko9Y5iwMZerewGTtMzMzQ5X8nydUvx5_9XzinV2vNGhaGM9G_FV9gy6ZJgjERwaub02lzSqmOPe8_7W6GN9PNCk8sjgCik2QsDdlX1wJAssmWxaO6dYGVReUy7J-5UNn19tm7NXg8nUyuK0nKotKSvUon6xx6-r2HCNM7cdusBLL858vq3tzSxIItwlzarLrQIB-Vg.A9xCVBoY8ZRUkk6M-XGk6w";
+const accessToken = localStorage.getItem("G-Token");
 const pickedLoc = location?.latitude + "," + location?.longitude;
 const deviceInfo = localStorage.getItem("deviceInfo") ? JSON.parse(localStorage.getItem("deviceInfo")) : null;
 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -359,9 +359,7 @@ export const ChatAPI = {
             const url = `https://api.gojekapi.com/v2/chat/channels/${id}/message`;
             let payload = {
                 "channel_type": "group-booking",
-                "data": {
-                    "tracking_id": "ff41235f-b55c-4f52-9e07-62abd8560d35"
-                },
+                "data": "{ \"tracking_id\": \"ff41235f-b55c-4f52-9e07-62abd8560d35\" }",
                 "request_id": "d3e4fb1f-9cd4-4da1-8d8a-38e33ebc15dd",
                 "text": text,
                 "type": "text"

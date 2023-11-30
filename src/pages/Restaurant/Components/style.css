@@ -8,7 +8,7 @@
 
 .optionResInfo {
     margin-top: 10px;
-
+    margin-bottom: 100px;
 }
 
 .boxBtnOption {
@@ -103,5 +103,9 @@
 
     .boxOption {
         margin-top: 10px !important;
+    }
+
+    .boxOption>div:last-child {
+        padding-bottom: 200px;
     }
 }

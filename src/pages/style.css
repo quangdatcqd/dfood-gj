@@ -137,7 +137,6 @@
 
  .container-com {
    background-image: linear-gradient(rgb(178 211 234 / 56%), rgb(255 233 232));
-   margin-bottom: 100px;
    padding: 10px 0px 100px 0px;
  }
 
@@ -557,6 +556,29 @@
  }
 
 
+ /*   Checkout*/
+
+ .notesCK {
+   color: gray;
+   font-weight: bold;
+ }
+
+ .nameDishCK {
+   margin: 0px;
+   font-size: 16px;
+   font-weight: bold;
+   color: rgb(74, 74, 74);
+ }
+
+ .itemDishCK {
+   margin-top: 10px;
+   box-shadow: rgb(206, 206, 206) 3px 3px 6px 0px;
+   padding: 10px 15px;
+   border-radius: 20px;
+   background-color: rgb(248, 255, 249);
+ }
+
+ /*   Checkout*/
 
 
 

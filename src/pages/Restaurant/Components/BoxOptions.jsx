@@ -61,7 +61,6 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
 
     useEffect(() => {
         let totalVariantPrice = listVariant ? listVariant?.reduce((total, item) => total + item?.price, 0) : 0;
-        console.log(data?.promotion?.selling_price || data?.price);
         setTotalPriceDish(totalVariantPrice + (data?.promotion?.selling_price * qty || data?.price * qty));
     }, [listVariant, qty, data]);
 
@@ -72,14 +71,14 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
 
 
     return (
-        <ModalBox open={open} setOpen={handleOpenDlog} title="Tuỳ chọn" maxWidth="md" fullWidth={true} fulls={matchMD} useCloseBar={false}>
+        <ModalBox open={open} setOpen={handleOpenDlog} title="Tuỳ chọn" maxWidth="md" fullWidth={data?.variant_categories?.length > 0} fulls={matchMD} useCloseBar={false}>
 
             <div className="containerRes">
                 <div className='boxResInfo'>
                     <div className='divBtnCloseDlg' onClick={() => handleOpenDlog(false)}><KeyboardBackspaceIcon className='btnCloseDlg' /></div>
                     <div className='divResInfo'>
                         <div className='lResImage'>
-                            <img src={data?.image} style={{ height: "200px" }} alt="" />
+                            <img src={data?.image || "./Khay.jpg"} style={{ height: "200px" }} alt="" />
                         </div>
                         <div className='optionResInfo'  >
                             <div className="lBoxResInfo lBoxResInfoOption">
@@ -107,22 +106,26 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
                     </div>
 
                 </div>
-                <div className='boxResDishes boxOption'>
-                    {
-                        data?.variant_categories?.map((variant, index) => {
-                            return <div key={index}>
-                                <p className='categoryTitle' style={{ color: 'rgb(219, 117, 15)' }}>{variant?.name}</p>
-                                <p className='cateOptionRequire'>{variant?.rules?.selection?.required && "Bắt buộc"} {variant?.rules?.selection?.text} </p>
-                                {
-                                    variant?.rules?.selection?.type === "SELECT_ONE" ?
-                                        <RadioInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} /> :
-                                        <CheckInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} />
-                                }
+                {
+                    data?.variant_categories?.length > 0 &&
 
-                            </div>
-                        })
-                    }
-                </div>
+                    <div className='boxResDishes boxOption'>
+                        {
+                            data?.variant_categories?.map((variant, index) => {
+                                return <div key={index}>
+                                    <p className='categoryTitle' style={{ color: 'rgb(219, 117, 15)' }}>{variant?.name}</p>
+                                    <p className='cateOptionRequire'>{variant?.rules?.selection?.required && "Bắt buộc"} {variant?.rules?.selection?.text} </p>
+                                    {
+                                        variant?.rules?.selection?.type === "SELECT_ONE" ?
+                                            <RadioInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} /> :
+                                            <CheckInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} />
+                                    }
+
+                                </div>
+                            })
+                        }
+                    </div>
+                }
             </div>
 
         </ModalBox>

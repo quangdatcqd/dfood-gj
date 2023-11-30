@@ -1,11 +1,9 @@
 import { Button, IconButton, TextareaAutosize, } from '@mui/material';
-import { React, useState, useCallback, useContext, useEffect, useRef, useLayoutEffect } from 'react';
+import { React, useState, useCallback, useEffect, useRef, useLayoutEffect } from 'react';
 import { OrderAPI, GojekAPI } from '../API/GojekAPI';
 import { Container } from '@mui/system';
-import { CartContext } from '../Contexts/CartContext';
 import { useSnackbar } from 'notistack';
 import { fomatCurrency } from '../common';
-
 import { Refresh } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import InputBox from '../components/InputBox';
@@ -13,90 +11,75 @@ import SelectedItem from '../components/SelectedItem';
 import { debounce } from "debounce";
 import BoxLoginGojek from '../components/BoxLoginGojek';
 import ModalBox from '../components/ModalBox';
+import { useSelector } from 'react-redux';
 
-const Checkout = ({ getOrdersActive }) => {
-    const { payload, selectedItems } = useContext(CartContext);
-
+const Checkout = () => {
+    const indexCart = useSelector(state => state.dialog.checkoutDialog.index);
+    const Cart = useSelector(state => state.cart.CartList[indexCart])
     const [dataCheckout, setDataCheckout] = useState();
     const [idOrderShow, setIdOrderShow] = useState("");
-
     const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder") != "null" ? localStorage.getItem("noteOrder") : "alo tới a gọi số này nha 00000");
     const [toggleLogin, setToggleLogin] = useState(false);
-
     const [loading, setLoading] = useState(false);
     const [loadingRefresh, setLoadingRefresh] = useState("false");
-
-
     const [merchantData, setMerchantData] = useState([]);
-    const [merchantLoc, setMerchantLoc] = useState(JSON.parse(localStorage.getItem("merchantLoc")));
-    const [customerData, setCustomerData] = useState(JSON.parse(localStorage.getItem("customerLoc")));
+    const [customerData, setCustomerData] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
     const [addressName, setAddressName] = useState(customerData?.name);
+    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-    var idvoucher = useRef();
+    var idvoucher = useRef(localStorage.getItem("idVoucher"));
     var id_oder = useRef();
-    const debounceDropDown = useCallback(debounce((payload) => fetchData(payload), 1500), [])
-    useLayoutEffect(() => {
-        debounceDropDown(payload);
-    }, [payload]);
+    const debounceDropDown = useCallback(debounce((merchantData) => fetchData(merchantData), 500), [])
+    useEffect(() => {
+        debounceDropDown(merchantData);
+    }, [merchantData]);
 
-    const fetchData = async (dataPayload) => {
+    const fetchData = async (dataMerchant) => {
         try {
-
-            idvoucher.current = localStorage.getItem("idVoucher")
-            const dataItems = dataPayload || payload;
+            dataMerchant = dataMerchant || merchantData;
+            let totalOriginalPrice = calcuTotalPriceCart(Cart?.dishes)
+            let promo_discount_cart_price = totalOriginalPrice - Cart?.totalPrice
+            var payload = {
+                apply_offer: true,
+                cart_price: totalOriginalPrice,
+                customer_location: customerData?.latitude + "," + customerData?.longitude,
+                items: Cart?.dishes,
+                merchant_location: dataMerchant?.restaurant?.location,
+                offer_id: "",
+                offer_type: "voucher",
+                payment_types: [],
+                promo_discount_cart_price: promo_discount_cart_price,
+                restaurant_uuid: dataMerchant?.restaurant?.id
+            }
             setLoadingRefresh("refresh-icon-ro");
-
-            // let getVC = await GojekAPI.getVoucher();
-            // let indexVC = -1;
-            // if (getVC?.success) {
-            //     indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
-            //     idvoucher.current = indexVC >= 0 ? getVC?.data[indexVC]?.code : "";
-            // }
-
             var data = await OrderAPI.checkout({
-                ...dataItems,
-                offer_id: localStorage.getItem("idVoucher"),
-                voucherId: localStorage.getItem("idVoucher")
+                ...payload,
+                offer_id: idvoucher.current,
+                voucherId: idvoucher.current
 
             });
-
             localStorage.setItem("noteOrder", noteOrder);
             setDataCheckout(data);
             if (data?.distance) {
-                enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
+                // enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
             } else {
                 data?.errors?.map((item, key) => {
-                    enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
-
+                    // enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
                 })
             }
-
         } catch (error) {
-
-            enqueueSnackbar(error.message, { variant: 'warning', autoHideDuration: 2000 })
-
+            // enqueueSnackbar(error.message, { variant: 'warning', autoHideDuration: 2000 })
         } finally {
             setLoadingRefresh("false")
         }
-
-
     }
-    useEffect(() => {
-        if (payload?.items?.length > 0) {
-            localStorage.setItem("payload", JSON.stringify(payload));
-            localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
-        }
+    useLayoutEffect(() => {
         const fetchRes = async () => {
-            let data = await GojekAPI.getRestaurant(merchantLoc?.id);
+            let data = await GojekAPI.getRestaurant(Cart?.resData?.resId);
             setMerchantData(data);
         }
         fetchRes();
         setIdOrderShow("")
-
-
     }, []); // 106.64904150454079!3d10.845362078042243
 
 
@@ -105,13 +88,11 @@ const Checkout = ({ getOrdersActive }) => {
 
 
     const handleOrder = async () => {
-
         try {
-
             if (localStorage.getItem("idVoucher")?.length >= 5) {
 
                 var dataPayload = {
-                    "cartPriceEstimated": (Number(payload?.cart_price) - Number(payload?.promo_discount_cart_price)),
+                    "cartPriceEstimated": Cart?.totalPrice,
                     "destinationAddress": customerData?.address,
                     "destinationAddressDetails": {
                         "isSaved": false,
@@ -121,7 +102,7 @@ const Checkout = ({ getOrdersActive }) => {
                     "destinationName": addressName,
                     "destinationNote": noteOrder,
                     "isGift": false,
-                    "items": payload?.items,
+                    "items": Cart?.dishes,
                     "analytics": {
                         "discoverySource": "Restaurant Deeplink",
                         "discoverySourceDetails": "gojek://gofood/merchant/93c3c961-53e3-4dc2-9dbd-07959c53bcd9?query_understanding_id\u003da09669f7-7d2e-43d8-a462-bfcb240efe17\u0026intent_action_type\u003drestaurant\u0026action_position\u003d1\u0026item_position\u003d3\u0026intent_action_value\u003dph%C3%BAc%20l%E1%BB%99c%20th%E1%BB%8D\u0026template_id\u003dBRAND_OUTLETS",
@@ -129,23 +110,22 @@ const Checkout = ({ getOrdersActive }) => {
                         "understandingId": "a09669f7-7d2e-43d8-a462-bfcb240efe17"
                     },
                     "orderReviewScreenEnabled": false,
-                    "originAddress": merchantLoc?.address,
-                    "originLatLong": merchantLoc?.location,
-                    "originName": merchantLoc?.name,
+                    "originAddress": merchantData?.restaurant?.address,
+                    "originLatLong": merchantData?.restaurant?.location,
+                    "originName": merchantData?.restaurant?.name,
                     "paymentOptions": [
                         {
                             "displayName": "Tiền mặt",
                             "type": "CASH"
                         }
                     ],
-                    "restaurantId": merchantLoc?.id,
+                    "restaurantId": merchantData?.restaurant?.id,
                     "voucherId": localStorage.getItem("idVoucher")
                 }
 
                 var dataOders = await OrderAPI.makeOrder(dataPayload);
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
-
                     localStorage.setItem("idOrder", dataOders?.orderNo);
                     localStorage.setItem("idVoucher", "");
                     // const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
@@ -157,29 +137,25 @@ const Checkout = ({ getOrdersActive }) => {
                     // else {
                     //     enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
                     // }
-                    enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
+                    // enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
                     setIdOrderShow(dataOders?.orderNo)
                 }
                 else {
-                    enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
+                    // enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
                 }
             }
         } catch (error) {
-            enqueueSnackbar(error?.message, { variant: 'warning' })
+            // enqueueSnackbar(error?.message, { variant: 'warning' })
 
         } finally {
-            setTimeout(() => {
-                getOrdersActive();
-            }, 2000);
         }
 
     }
 
     const handleCancelOrder = async () => {
-
         var data = await OrderAPI.quickCancel(id_oder.current);
         localStorage.setItem("idVoucher", idvoucher.current)
-        enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
+        // enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
     const handleCoppy = () => {
 
@@ -189,7 +165,7 @@ const Checkout = ({ getOrdersActive }) => {
             localStorage.getItem("quick_message")
         )
 
-        enqueueSnackbar("Đã coppy", { variant: 'success' })
+        // enqueueSnackbar("Đã coppy", { variant: 'success' })
 
     }
 
@@ -204,11 +180,25 @@ const Checkout = ({ getOrdersActive }) => {
         navigator.clipboard.writeText(JSON.stringify(data))
 
 
-        enqueueSnackbar("Đã coppy", { variant: 'success' })
+        // enqueueSnackbar("Đã coppy", { variant: 'success' })
+    }
+
+
+    function calcuTotalPriceCart(dishes) {
+
+        let totalPrice = dishes?.reduce((total, item) => {
+            var totalPriceOps = 0;
+            item.variants?.forEach((variant) => {
+                totalPriceOps += variant?.price
+            })
+            return (total + (item?.originalPrice * item.quantity)) + totalPriceOps;
+        }, 0)
+
+        return totalPrice;
     }
     return (
 
-        <div className='  w-100 mb-5 pb-5 container-com'   >
+        <div className='  w-100  pb-5 container-com'   >
             <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
                 <BoxLoginGojek setToggleLogin={setToggleLogin} quickLogin={false} fetchCheckout={fetchData} setLoadingLogin={setLoading} />
             </ModalBox>
@@ -230,10 +220,10 @@ const Checkout = ({ getOrdersActive }) => {
                         fontSize: "14pt",
                         fontWeight: "bold"
                     }}>
-                        {merchantLoc?.address}
+                        {merchantData?.restaurant?.address}
                     </p>
                 </div>
-                <hr />
+
                 <div style={{
                     width: "100%",
 
@@ -272,7 +262,6 @@ const Checkout = ({ getOrdersActive }) => {
 
 
                 </div>
-                <hr />
                 <p style={{
                     fontWeight: "bold",
                     fontSize: "14pt",
@@ -280,27 +269,16 @@ const Checkout = ({ getOrdersActive }) => {
 
                 }}> Các món bạn chọn</p>
                 {
-                    payload?.items?.map((item, key) => {
+                    Cart?.dishes?.map((item, key) => {
 
 
                         var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
                         return (
-                            <div key={key} style={{
+                            <div className='itemDishCK' key={key}  >
+                                <p className='nameDishCK'>{item?.itemName}</p>
+                                <p className='notesCK'>Ghi chú: {item?.notes}</p>
 
-                                marginTop: "10px",
-                                boxShadow: "#cecece 3px 3px 6px 0px",
-                                padding: "10px 15px",
-                                borderRadius: "20px",
-                                backgroundColor: "#f8fff9",
-
-                            }}>
-                                <p style={{
-                                    fontWeight: "bold",
-                                    fontSize: "14pt",
-                                    marginBottom: "3px"
-                                }}>{item?.itemName}</p>
-
-                                <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={index > 0 && merchantData?.items[index]} indexItem={key} />
+                                {/* <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={index > 0 && merchantData?.items[index]} indexItem={key} /> */}
                             </div>
                         )
                     })
@@ -318,7 +296,6 @@ const Checkout = ({ getOrdersActive }) => {
                         border: "5px dashed #ffb8b8",
                         padding: "8px 12px",
                         marginTop: "20px"
-
                     }}
                 >
                     <p style={{
@@ -361,18 +338,20 @@ const Checkout = ({ getOrdersActive }) => {
                             <p style={{
                                 fontSize: "18px",
                                 fontWeight: "bold",
-                                borderTop: "1px dotted gray",
-                                paddingTop: "10px",
+                                marginBottom: "5px",
+                                paddingTop: "5px",
                                 display: 'flex',
                                 justifyContent: 'space-between'
                             }}>Thanh toán :
 
                                 {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_amount)}
-                                <strike>
-                                    {dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount}
-                                </strike>
+                                <i>
+                                    <strike>
+                                        {fomatCurrency(dataCheckout?.delivery_options[0]?.payment_options[0]?.total_discount)}
+                                    </strike>
+                                </i>
                             </p>
-                            <p className='text-success'>     {dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.text?.replace("{amount}", dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.amount)}</p>
+                            <p className='text-success'> {dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.text?.replace("{amount}", dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.savings_info?.amount)}</p>
 
                         </div>
 

@@ -11,14 +11,16 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import { useDispatch, useSelector } from 'react-redux';
-import { setResDlg } from '../../store/dialogSlice';
+import { setCheckoutData, setResDlg } from '../../store/dialogSlice';
 import './style.css'
 import BoxOptions from './Components/BoxOptions';
 import { deCreaseQty, inCreaseQty } from '../../store/cartSlice';
 const SelectDishes = () => {
     const [dataRestaurant, setDataRestaurant] = useState("");
     const idRes = useSelector(state => state.dialog.resDialog.id)
-    const Cart = useSelector(state => state.cart?.CartList?.find(item => item?.resData?.resId === dataRestaurant?.page?.share?.restaurant?.id))
+    const CartList = useSelector(state => state.cart?.CartList)
+    const indexCart = CartList?.findIndex(item => item?.resData?.resId === dataRestaurant?.page?.share?.restaurant?.id)
+    const Cart = CartList[indexCart];
     const dispatch = useDispatch();
     const [dishesSelectedDlg, setDishesSelectedDlg] = useState(false);
     const [openOption, setOpenOption] = useState(false);
@@ -52,7 +54,8 @@ const SelectDishes = () => {
         const resData = {
             resId: resInfo?.id,
             resName: resInfo?.name,
-            resImage: resInfo?.image
+            resImage: resInfo?.image,
+
         }
         setDataOption({
             data: data,
@@ -73,6 +76,9 @@ const SelectDishes = () => {
             index: index,
             idRestaurant: dataRestaurant?.page?.share?.restaurant?.id
         }))
+    }
+    const handleSelectCart = () => {
+        dispatch(setCheckoutData(indexCart))
     }
     return (
 
@@ -176,7 +182,7 @@ const SelectDishes = () => {
                                             </>
                                     }
                                 </div>
-                                <div className='boxResCartBtnCheckout'>
+                                <div className='boxResCartBtnCheckout' onClick={() => handleSelectCart()}>
                                     <PaymentsIcon className='paymentIcon' />
                                     <p>{fomatCurrency(Cart?.totalPrice)}</p>
                                 </div>
@@ -230,12 +236,13 @@ const SelectDishes = () => {
                                         </p>
                                         <div className='listItemDishes'>
                                             {
-                                                cards?.content?.items?.map((item, key) => {
-                                                    return (
-                                                        <div onClick={() => handleOpenOption(item)} >
-                                                            <ItemSelect key={key} data={item} />
-                                                        </div>
-                                                    )
+                                                cards?.content?.items?.map((item, index) => {
+                                                    if (item?.active)
+                                                        return (
+                                                            <div onClick={() => handleOpenOption(item)} key={index}>
+                                                                <ItemSelect data={item} />
+                                                            </div>
+                                                        )
                                                 })
                                             }
                                         </div>
@@ -262,7 +269,6 @@ const SelectDishes = () => {
 
 const ItemSelect = memo((props) => {
     const { data } = props;
-
     return (
         <div className='resItemDish'    >
 
@@ -273,7 +279,7 @@ const ItemSelect = memo((props) => {
                 alt="Live from space album cover"
             />
             {
-                !data?.in_stock &&
+                (!data?.in_stock && data?.in_stock !== undefined) &&
                 <div className='layerSoldOut'> Đã hết</div>
             }
             <Box sx={{ display: 'flex', width: "100%", flexDirection: 'column' }}>
