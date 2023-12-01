@@ -26,7 +26,7 @@ const Checkout = () => {
     const [customerData, setCustomerData] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
     const [addressName, setAddressName] = useState(customerData?.name);
     // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+    console.log(Cart?.dishes);
     var idvoucher = useRef(localStorage.getItem("idVoucher"));
     var id_oder = useRef();
     const debounceDropDown = useCallback(debounce((merchantData) => fetchData(merchantData), 500), [])
@@ -39,6 +39,8 @@ const Checkout = () => {
             dataMerchant = dataMerchant || merchantData;
             let totalOriginalPrice = calcuTotalPriceCart(Cart?.dishes)
             let promo_discount_cart_price = totalOriginalPrice - Cart?.totalPrice
+            console.log(totalOriginalPrice);
+            console.log(Cart?.totalPrice);
             var payload = {
                 apply_offer: true,
                 cart_price: totalOriginalPrice,
@@ -127,7 +129,7 @@ const Checkout = () => {
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
                     localStorage.setItem("idOrder", dataOders?.orderNo);
-                    localStorage.setItem("idVoucher", "");
+                    // localStorage.setItem("idVoucher", "");
                     // const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
                     // if (sttStore == 1) {
                     //     enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
@@ -187,11 +189,11 @@ const Checkout = () => {
     function calcuTotalPriceCart(dishes) {
 
         let totalPrice = dishes?.reduce((total, item) => {
-            var totalPriceOps = 0;
-            item.variants?.forEach((variant) => {
-                totalPriceOps += variant?.price
-            })
-            return (total + (item?.originalPrice * item.quantity)) + totalPriceOps;
+            // var totalPriceOps = 0;
+            // item.variants?.forEach((variant) => {
+            //     totalPriceOps += variant?.price
+            // })
+            return (total + (item?.originalPrice * item.quantity));//+ totalPriceOps
         }, 0)
 
         return totalPrice;

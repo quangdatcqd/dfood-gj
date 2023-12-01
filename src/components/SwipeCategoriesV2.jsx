@@ -17,7 +17,7 @@ const SwipeCategoriesV2 = (props) => {
     const data = products?.content?.actions || products?.content?.items;
 
     return (
-        <div>
+        <div className='divSCV2'>
             <p className='categoryTitle'>{products?.content?.title} </p>
             <Swiper
                 effect={"coverflow"}

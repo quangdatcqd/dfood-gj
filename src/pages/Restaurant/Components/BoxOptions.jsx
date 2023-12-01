@@ -1,6 +1,6 @@
 
 import ModalBox from '../../../components/ModalBox';
-import { Box, CardContent, CardMedia, FormControlLabel, RadioGroup, Typography, useMediaQuery, } from '@mui/material';
+import { Box, CardContent, CardMedia, FormControlLabel, RadioGroup, TextareaAutosize, Typography, useMediaQuery, } from '@mui/material';
 import { React, useState, useEffect, memo } from 'react';
 
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 const BoxOptions = ({ open, setOpen, data, resData }) => {
     const matchMD = useMediaQuery("(max-width:800px)")
     const [listVariant, setListVariant] = useState(null);
+    const [noteOrder, setNoteOrder] = useState("");
     const [qty, setQty] = useState(1);
     const [totalPriceDish, setTotalPriceDish] = useState(data?.promotion?.selling_price || data?.price);
 
@@ -26,12 +27,14 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
             handleOpenDlog(false)
             return;
         }
+        let totalVariantPrice = listVariant ? listVariant?.reduce((total, item) => total + item?.price, 0) : 0;
+        let sellingPrice = data?.promotion?.selling_price ? data?.promotion?.selling_price : data?.price
         const dish = {
             itemId: data?.shopping_item_id,
             itemName: data?.name,
-            notes: "xin",
-            originalPrice: data?.price,
-            price: data?.promotion?.selling_price,
+            notes: noteOrder,
+            originalPrice: data?.price + totalVariantPrice,
+            price: sellingPrice + totalVariantPrice,
             quantity: qty,
             variants: listVariant ? listVariant : undefined,
             uuid: data?.id
@@ -85,7 +88,11 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
                                 <p className='lResName'>{data?.name}</p>
                                 <p className='lResDes'>{data?.description}</p>
                             </div>
+                            <div className='divNoteOption'>
+                                <TextareaAutosize placeholder='Ghi chú đơn hàng' onChange={(e) => setNoteOrder(e.target.value)} value={noteOrder} style={{ width: "100%", resize: "none", height: "80px", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px", fontSize: "16px", boxShadow: "0px 1px 3px 2px rgba(145, 145, 145, 0.215)" }} />
+                            </div>
                         </div>
+
                     </div>
                     <div className='boxBtnOption'>
                         <div className='btnOptionQty'>

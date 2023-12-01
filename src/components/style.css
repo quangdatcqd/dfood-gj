@@ -315,6 +315,11 @@ body {
   border-radius: 15px;
 }
 
+.divSCV2 {
+  background-color: rgb(255, 251, 245);
+  border-radius: 10px;
+  padding: 10px;
+}
 
 .divItemSCV2>div {
   padding: 10px;

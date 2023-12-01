@@ -172,7 +172,7 @@ export const GojekAPI = {
     searchRestaurant(keyword) {
         try {
 
-            const url = `https://api.gojekapi.com/gofood/search/v1/query_understanding?search_query=${encodeURIComponent(keyword)}&picked_loc=${pickedLoc}&redesign_enabled=true&super_partner_enabled=true`;
+            const url = `https://api.gojekapi.com/gofood/search/v1/query_understanding?search_query=${encodeURIComponent(keyword)}&picked_loc=${encodeURIComponent(pickedLoc)}&redesign_enabled=true&super_partner_enabled=true`;
 
             return axiosClient.post("", {
                 type: "GET",
@@ -186,12 +186,26 @@ export const GojekAPI = {
     searchRestaurantMore(keyword) {
         try {
 
-            const url = `https://api.gojekapi.com/gofood/consumer/v3/search?search=${encodeURIComponent(keyword)}&location=${encodeURIComponent(pickedLoc)}&intent=restaurant&filter_enabled=true&is_dynamic_filter_applied=false&picked_loc=${encodeURIComponent(pickedLoc)}&redesign_enabled=true&super_partner_enabled=true`;
-
+            // const url = `https://api.gojekapi.com/gofood/consumer/v3/search?search=${encodeURIComponent(keyword)}&location=${encodeURIComponent(pickedLoc)}&intent=restaurant&filter_enabled=true&is_dynamic_filter_applied=false&picked_loc=${encodeURIComponent(pickedLoc)}&redesign_enabled=true&super_partner_enabled=true&open_now=true`;
+            const urll = new URL("https://api.gojekapi.com/gofood/consumer/v3/search")
+            urll.search = new URLSearchParams(
+                {
+                    search: keyword,
+                    location: pickedLoc,
+                    intent: "dish",
+                    filter_enabled: true,
+                    is_dynamic_filter_applied: false,
+                    picked_loc: pickedLoc,
+                    redesign_enabled: true,
+                    super_partner_enabled: true,
+                    open_now: true,
+                    sort_by: "distance_asc"
+                }
+            ).toString()
             return axiosClient.post("", {
                 type: "GET",
                 header: StrArrHeaders,
-                url: url
+                url: urll.href
             });
         } catch (ex) {
             return ex;

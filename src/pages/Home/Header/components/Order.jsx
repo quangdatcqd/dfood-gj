@@ -46,12 +46,13 @@ const Order = () => {
                         </div>
                     })}
                     {listOrders?.activeActive?.map((item, index) => {
+                        console.log(item);
                         return <div className='headerBtnBoxItem' key={index} onClick={() => handleOpenOrderDetail(item?.event_tracking_properties?.order_id)}>
-                            <img src={item?.estate?.footer_components?.payload?.extra_payload?.driver_image_url} alt="" />
+                            <img src="./Khay.jpg" alt="" />
                             <div className='headerBtnBoxItemDes'>
-                                <p>{item?.estate?.body_components}</p>
-                                <p>{(item?.content?.order?.paid)?.toLocaleString("vi", { style: "currency", currency: "VND" })}</p>
-                                <p>{item?.content?.order?.order_status_text}</p>
+                                <p style={{ color: "red" }}>Đơn hàng đang thực hiện</p>
+                                <p style={{ color: "black", fontWeight: "bold" }}>{item?.event_tracking_properties?.order_id}</p>
+                                <p>{item?.event_tracking_properties?.order_status}</p>
                             </div>
                         </div>
                     })}

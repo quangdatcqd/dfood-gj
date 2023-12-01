@@ -15,7 +15,7 @@ import { setCheckoutData, setResDlg } from '../../store/dialogSlice';
 import './style.css'
 import BoxOptions from './Components/BoxOptions';
 import { deCreaseQty, inCreaseQty } from '../../store/cartSlice';
-const SelectDishes = () => {
+const Restaurant = () => {
     const [dataRestaurant, setDataRestaurant] = useState("");
     const idRes = useSelector(state => state.dialog.resDialog.id)
     const CartList = useSelector(state => state.cart?.CartList)
@@ -310,4 +310,4 @@ const ItemSelect = memo((props) => {
 })
 
 
-export default SelectDishes;
+export default Restaurant;

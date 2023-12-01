@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Menu from './components/Menu';
 import Search from './components/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Restaurants from '../../SearchBox';
+import SearchBox from '../../SearchBox';
 const Header = () => {
     const [currentLoc, setCurrentLoc] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
     const [toggleLocation, setToggleLocation] = useState(false);
@@ -59,7 +59,7 @@ const Header = () => {
                 <ChoseAddress />
             </ModalBox>
             <ModalBox open={toggleSearch} setOpen={setToggleSearch} title={"Tìm món ăn"} fulls={false} fullWidth={true} maxWidth={"lg"}>
-                <Restaurants />
+                <SearchBox />
             </ModalBox>
         </div>
     );

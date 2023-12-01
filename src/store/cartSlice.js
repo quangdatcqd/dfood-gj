@@ -4,11 +4,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const calcuTotalPriceCart = (dishes) => {
 
     let totalPrice = dishes?.reduce((total, item) => {
-        var totalPriceOps = 0;
-        item.variants?.forEach((variant) => {
-            totalPriceOps += variant?.price
-        })
-        return (total + (item?.price * item.quantity || item?.originalPrice * item.quantity)) + totalPriceOps;
+        // var totalPriceOps = 0;
+        // item.variants?.forEach((variant) => {
+        //     totalPriceOps += variant?.price
+        // })  
+        return total + item?.price * item.quantity;// + totalPriceOps
     }, 0)
 
     return totalPrice;

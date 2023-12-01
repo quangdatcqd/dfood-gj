@@ -311,7 +311,7 @@ const Login = ({ setOpen, open }) => {
                                     value={OTPCode}
                                     onChange={setOTPCode}
                                     numInputs={4}
-                                    renderInput={(props) => <input {...props} placeholder='-' type='number' />}
+                                    renderInput={(props) => <input {...props} inputmode="numeric" placeholder='-' type='text' />}
                                 />
                             </div>
                             <span style={{ fontSize: "12px", fontFamily: "sans-serif", color: "red", marginTop: "5px", textAlign: "center" }}>{otpError !== "" && otpError}</span>

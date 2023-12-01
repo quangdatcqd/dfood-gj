@@ -13,7 +13,7 @@ import { setResId } from '../store/dialogSlice';
 import SwipeCategoriesV2 from '../components/SwipeCategoriesV2';
 
 
-function Restaurants(props) {
+function SearchBox(props) {
 
     const [dataRestaurant, setDataRestaurant] = useState("");
     const [dataResFilter, setDataResFilter] = useState(null);
@@ -238,4 +238,4 @@ const TouchToSearch = (props) => {
 
     )
 }
-export default Restaurants;
+export default SearchBox;
