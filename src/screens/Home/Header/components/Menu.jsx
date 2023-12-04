@@ -11,7 +11,7 @@ const Menu = ({ toggleMenu, setToggleMenu, handleOpenLogin, handleLogout, userPr
             <div className='boxMenuBar' > <span>Thông tin cá nhân</span> <CloseOutlinedIcon className='btnCloseMenu' onClick={() => setToggleMenu(false)} /></div>
             <div className='boxMenuUser' onClick={() => handleOpenLogin()} >
                 <div >
-                    <img src={userProfile?.profile_image_url || "/Khay.jpg"} alt="" />
+                    <img src={userProfile?.profile_image_url || "/avatar.png"} alt="" />
                     <div className='boxMenuUserDetail'>
                         <p>{userProfile?.name || "Đăng nhập"}</p>
                         {
