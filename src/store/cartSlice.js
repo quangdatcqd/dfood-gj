@@ -26,17 +26,26 @@ export const cartSlice = createSlice({
             const cartIndex = state.CartList?.findIndex(cart => cart?.resData?.resId === action.payload?.resData?.resId);
             if (cartIndex >= 0) {
                 let Cart = state.CartList[cartIndex];
-                const index = Cart.dishes?.findIndex(item => {
-                    const prev = { ...item };
-                    const next = { ...action.payload.dishes };
-                    delete prev.quantity;
-                    delete next.quantity;
-                    return JSON.stringify(prev) == JSON.stringify(next)
-                });
-                if (index >= 0) {
-                    Cart.dishes[index] = { ...Cart.dishes[index], quantity: Cart.dishes[index].quantity + action.payload.dishes.quantity };
-                } else {
-                    Cart.dishes = [...Cart.dishes, action.payload.dishes];
+                // kiểm tra cập nhật option hay thêm mới vào
+
+                if (action.payload?.dishIndex >= 0) {
+                    // cập nhật món ăn
+                    Cart.dishes[action.payload?.dishIndex] = action.payload.dishes;
+                }
+                else {
+                    // kiểm tra trùng món ăn option thì tăng số lượng khỏi thêm mới
+                    const index = Cart.dishes?.findIndex(item => {
+                        const prev = { ...item };
+                        const next = { ...action.payload.dishes };
+                        delete prev.quantity;
+                        delete next.quantity;
+                        return JSON.stringify(prev) == JSON.stringify(next)
+                    });
+                    if (index >= 0) {
+                        Cart.dishes[index] = { ...Cart.dishes[index], quantity: Cart.dishes[index].quantity + action.payload.dishes.quantity };
+                    } else {
+                        Cart.dishes = [...Cart.dishes, action.payload.dishes];
+                    }
                 }
 
                 const totalPrice = calcuTotalPriceCart(Cart.dishes);
@@ -83,6 +92,7 @@ export const cartSlice = createSlice({
             localStorage.setItem("cart", JSON.stringify(state.CartList))
         },
         inCreaseQty: (state, action) => {
+            console.log(action.payload);
             const cartIndex = state.CartList?.findIndex(cart => cart?.resData?.resId === action.payload?.idRestaurant);
             let Cart = state.CartList[cartIndex];
             const dishIndex = action.payload.index;

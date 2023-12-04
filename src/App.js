@@ -20,6 +20,7 @@ import Checkout from "./screens/Checkout";
 function App() {
   const theme = createTheme();
   const matchMD = useMediaQuery("(max-width:1024px)")
+  const matchSM = useMediaQuery("(max-width:500px)")
   const resDialog = useSelector(state => state.dialog.resDialog.open)
   const dispatch = useDispatch();
   const handleOpenRes = (open) => {
@@ -58,7 +59,7 @@ function App() {
         }
         {
           checkoutDialog &&
-          <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="md" fulls={matchMD} fullWidth={true}  >
+          <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="sm" fulls={matchSM} fullWidth={true}  >
             <Checkout />
           </ModalBox>
         }

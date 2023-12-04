@@ -8,7 +8,6 @@ import { fomatCurrency } from '../../common';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCheckoutData, setResDlg } from '../../store/dialogSlice';
@@ -34,7 +33,7 @@ const Restaurant = () => {
         const fetchData = async () => {
 
             var data = await GojekAPI.getRestaurantV5(idRes);
-            const indexCategoriesV2 = data?.data?.cards?.findIndex((element) => element?.card_type === 60008);
+            // const indexCategoriesV2 = data?.data?.cards?.findIndex((element) => element?.card_type === 60008);
 
             setDataRestaurant(data?.data);
 
@@ -129,11 +128,15 @@ const Restaurant = () => {
                                 <div className='boxSelectedDishes'>
 
                                     {Cart?.dishes?.map((item, index) => {
-
+                                        let variants = item?.variants?.map(item => " " + item?.name)
                                         return (
                                             <div className='resDishSelected' key={index}>
                                                 <p className='dishSelectedName'>{item?.itemName}</p>
-
+                                                <p className='dishSelectedOptions'>
+                                                    {
+                                                        variants?.join(",")
+                                                    }
+                                                </p>
                                                 <div className='boxBtnDishQty '>
                                                     <p className='dishSelectedPrice'>
                                                         {
@@ -175,7 +178,7 @@ const Restaurant = () => {
                                 <div className='resCartBtn' onClick={() => setDishesSelectedDlg(dishesSelectedDlg ? false : true)} >
                                     {
                                         dishesSelectedDlg ?
-                                            <CancelRoundedIcon /> :
+                                            <div className='btnCloseCartRes'>Đóng</div> :
                                             <>
                                                 <ShoppingBasketIcon />
                                                 <span>{Cart?.dishes?.length}</span>

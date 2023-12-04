@@ -103,12 +103,16 @@ const Header = () => {
                     </div>
                 </div>
             </Container>
+
+
             <Menu setToggleMenu={setToggleMenu}
                 toggleMenu={toggleMenu}
                 handleLogout={handleLogout}
                 userProfile={userProfile}
                 handleOpenLogin={handleOpenLogin}
             />
+
+
 
             <div className='divSearchHeaderSM'>
                 <div className='headerLocation headerSearchBar ' onClick={() => setToggleSearch(true)}>

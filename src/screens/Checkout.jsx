@@ -2,51 +2,54 @@ import { Button, IconButton, TextareaAutosize, } from '@mui/material';
 import { React, useState, useCallback, useEffect, useRef, useLayoutEffect } from 'react';
 import { OrderAPI, GojekAPI } from '../API/GojekAPI';
 import { Container } from '@mui/system';
-
 import { fomatCurrency } from '../common';
 import { Refresh } from '@mui/icons-material';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
 import InputBox from '../components/InputBox';
-import SelectedItem from '../components/SelectedItem';
 import { debounce } from "debounce";
-import BoxLoginGojek from '../components/BoxLoginGojek';
-import ModalBox from '../components/ModalBox';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import { setOrderId } from '../store/dialogSlice';
+import { deCreaseQty, inCreaseQty } from '../store/cartSlice';
+import BoxOptions from './Restaurant/Components/BoxOptions';
 
 const Checkout = () => {
     const indexCart = useSelector(state => state.dialog.checkoutDialog.index);
     const Cart = useSelector(state => state.cart.CartList[indexCart])
+    const dispatch = useDispatch();
     const [dataCheckout, setDataCheckout] = useState();
+    const [openOption, setOpenOption] = useState(false);
+    const [dataOption, setDataOption] = useState(null);
     const [idOrderShow, setIdOrderShow] = useState("");
     const [noteOrder, setNoteOrder] = useState(localStorage.getItem("noteOrder") != "null" ? localStorage.getItem("noteOrder") : "alo tới a gọi số này nha 00000");
-    const [toggleLogin, setToggleLogin] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [loadingRefresh, setLoadingRefresh] = useState("false");
     const [merchantData, setMerchantData] = useState([]);
-    const [customerData, setCustomerData] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
+    const customerData = localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null;
     const [addressName, setAddressName] = useState(customerData?.name);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     var idvoucher = useRef(localStorage.getItem("idVoucher"));
     var id_oder = useRef();
-    const debounceDropDown = useCallback(debounce((merchantData) => fetchData(merchantData), 500), [])
+    const debounceDropDown = useCallback(debounce((merchantData, CartU) => fetchData(merchantData, CartU), 500), [])
     useEffect(() => {
-        debounceDropDown(merchantData);
-    }, [merchantData]);
-
-    const fetchData = async (dataMerchant) => {
+        debounceDropDown(merchantData, Cart);
+    }, [merchantData, Cart]);
+    const handleOpenOrderDetail = (id) => {
+        dispatch(setOrderId(id))
+    }
+    const fetchData = async (dataMerchant, CartU) => {
         try {
             dataMerchant = dataMerchant || merchantData;
-            let totalOriginalPrice = calcuTotalPriceCart(Cart?.dishes)
-            let promo_discount_cart_price = totalOriginalPrice - Cart?.totalPrice
-            console.log(totalOriginalPrice);
-            console.log(Cart?.totalPrice);
+            CartU = CartU || Cart;
+            let totalOriginalPrice = calcuTotalPriceCart(CartU?.dishes)
+            let promo_discount_cart_price = totalOriginalPrice - CartU?.totalPrice
             var payload = {
                 apply_offer: true,
                 cart_price: totalOriginalPrice,
                 customer_location: customerData?.latitude + "," + customerData?.longitude,
-                items: Cart?.dishes,
+                items: CartU?.dishes,
                 merchant_location: dataMerchant?.restaurant?.location,
                 offer_id: "",
                 offer_type: "voucher",
@@ -141,7 +144,8 @@ const Checkout = () => {
                     //     enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
                     // }
                     // enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
-                    setIdOrderShow(dataOders?.orderNo)
+
+                    handleOpenOrderDetail(dataOders?.orderNo)
                 }
                 else {
                     enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
@@ -149,7 +153,6 @@ const Checkout = () => {
             }
         } catch (error) {
             enqueueSnackbar(error?.message, { variant: 'warning' })
-
         } finally {
         }
 
@@ -181,8 +184,6 @@ const Checkout = () => {
             "payload": localStorage.getItem("payload"),
         }
         navigator.clipboard.writeText(JSON.stringify(data))
-
-
         enqueueSnackbar("Đã coppy", { variant: 'success' })
     }
 
@@ -199,19 +200,46 @@ const Checkout = () => {
 
         return totalPrice;
     }
+
+    const handleIncreaseQty = (index) => {
+        dispatch(inCreaseQty({
+            index: index,
+            idRestaurant: Cart?.resData?.resId
+        }))
+    }
+    const handleDecreaseQty = (index) => {
+        dispatch(deCreaseQty({
+            index: index,
+            idRestaurant: Cart?.resData?.resId
+        }))
+    }
+
+
+    const handleChangeOption = (itemId, dish, index) => {
+        const resInfo = merchantData?.restaurant;
+        var data = merchantData?.items?.find((item) => item?.shopping_item_id === itemId)
+        const resData = {
+            resId: resInfo?.id,
+            resName: resInfo?.name,
+            resImage: resInfo?.image,
+        }
+        setDataOption({
+            data: data,
+            resData: resData,
+            dish: dish,
+            dishIndex: index
+        });
+        setOpenOption(true)
+    }
+
+
     return (
 
         <div className='  w-100  pb-5 container-com'   >
-            <ModalBox title={"Đăng nhập "} setOpen={setToggleLogin} open={toggleLogin}>
-                <BoxLoginGojek setToggleLogin={setToggleLogin} quickLogin={false} fetchCheckout={fetchData} setLoadingLogin={setLoading} />
-            </ModalBox>
             <Container>
-
                 <div style={{
                     width: "100%",
                     paddingTop: "20px",
-
-
                 }}>
                     <p style={{
                         fontWeight: "bold",
@@ -229,8 +257,6 @@ const Checkout = () => {
 
                 <div style={{
                     width: "100%",
-
-
                 }}>
                     <p style={{
                         fontWeight: "bold",
@@ -257,13 +283,9 @@ const Checkout = () => {
                         fontSize: "14pt",
                         textAlign: "left",
                         boxShadow: "0px 0px 5px 5px #e9e9e9",
-
-
                     }}>
                         <TextareaAutosize onChange={(e) => setNoteOrder(e.target.value)} value={noteOrder} style={{ width: "100%", resize: "none", padding: "10px", outline: "none", border: "0px solid #ff0086", borderRadius: "10px", fontSize: "15pt", fontWeight: "bold" }} />
                     </div>
-
-
                 </div>
                 <p style={{
                     fontWeight: "bold",
@@ -272,26 +294,47 @@ const Checkout = () => {
 
                 }}> Các món bạn chọn</p>
                 {
-                    Cart?.dishes?.map((item, key) => {
-
-
-                        var index = merchantData?.items?.findIndex((e) => e?.shopping_item_id === item?.itemId)
+                    Cart?.dishes?.map((item, index) => {
+                        let variants = item?.variants?.map(item => item?.name)
                         return (
-                            <div className='itemDishCK' key={key}  >
+                            <div className='itemDishCK' key={index}  >
                                 <p className='nameDishCK'>{item?.itemName}</p>
-                                <p className='notesCK'>Ghi chú: {item?.notes}</p>
+                                <p className='nameOptionCK'>{variants?.join(", ")}</p>
+                                <p className='nameOptionCK'>Ghi chú: {item?.notes}</p>
+                                <p className='priceDishCK'>{
+                                    item?.price ?
+                                        <>
+                                            {
+                                                fomatCurrency(item?.price)
+                                            }
+                                            {
+                                                item?.originalPrice > 0 &&
+                                                <i> - <strike>{fomatCurrency(item?.originalPrice)}</strike></i>
+                                            }
+                                        </>
+                                        :
+                                        fomatCurrency(item?.originalPrice)
 
-                                {/* <SelectedItem data={item} key={key} action={1} quantity={item?.quantity} dataVariants={index > 0 && merchantData?.items[index]} indexItem={key} /> */}
+                                }</p>
+                                <div className='boxChangeOptionCK'>
+
+                                    <span className='btnChangeOptionCK' onClick={() => handleChangeOption(item?.itemId, item, index)}>
+                                        Sửa
+                                    </span>
+                                    <div className='boxBtnDishQty'>
+                                        <div className='btnDishQtyRM'>
+                                            <RemoveIcon onClick={() => handleDecreaseQty(index)} />
+                                        </div>
+                                        <span className='qtyDish'>{item?.quantity}</span>
+                                        <div className='btnDishQtyRM'>
+                                            <AddIcon onClick={() => handleIncreaseQty(index)} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )
                     })
                 }
-
-
-
-
-
-
                 <div
                     style={{
                         backgroundColor: "#fffdf0",
@@ -316,12 +359,11 @@ const Checkout = () => {
                         }} aria-label="add to shopping cart"
                             onClick={() => fetchData()}
                         >
-                            <Refresh fontSize="inherit" className={loadingRefresh} />
+                            <Refresh fontSize="inherit" sx={{ color: "rgb(201, 100, 0)" }} className={loadingRefresh} />
                         </IconButton>
                     </p>
 
                     {
-
                         dataCheckout?.delivery_options != undefined ?
                             dataCheckout?.delivery_options[0]?.payment_options[0]?.pricing_info?.price_line_items?.rows?.map((item, key) => {
                                 return (
@@ -334,7 +376,9 @@ const Checkout = () => {
                                 )
                             })
 
-                            : ""
+                            : dataCheckout?.errors?.map((error, index) => {
+                                return <p className='errorCheckout'>{error?.message}</p>
+                            })
                     }
                     {dataCheckout?.delivery_options != undefined ?
                         <div>
@@ -359,9 +403,6 @@ const Checkout = () => {
                         </div>
 
                         : ""}
-
-
-
                 </div>
 
                 <div style={{
@@ -369,7 +410,7 @@ const Checkout = () => {
                     justifyContent: "space-around",
                     marginTop: "10px"
                 }}>
-                    <LoadingButton
+                    {/* <LoadingButton
                         size="small"
                         loading={loading}
                         loadingIndicator="Đợi.."
@@ -381,23 +422,20 @@ const Checkout = () => {
                         }}
                     >
                         ĐĂNG NHẬP
-                    </LoadingButton>
-                    <LoadingButton
-                        size="small"
-                        variant="contained"
-                        color='warning'
-                        onClick={() => handleCancelOrder()}
-                    >
-                        Huỷ đơn
-                    </LoadingButton>
-                    <LoadingButton
+                    </LoadingButton> */}
+
+                    <Button onClick={() => handleCancelOrder()}
+                        variant="contained" color='warning'
+                        style={{ marginTop: "10px", borderRadius: "50px", padding: "8px 50px" }}   > Huỷ đơn</Button>
+
+                    {/* <LoadingButton
                         size="small"
                         variant="contained"
                         color='primary'
                         onClick={() => handleExport()}
                     >
                         Xuất món
-                    </LoadingButton>
+                    </LoadingButton> */}
                     {
 
                         idOrderShow != "" &&
@@ -405,20 +443,37 @@ const Checkout = () => {
                             size="small"
                             variant="contained"
                             color='primary'
+                            style={{
+                                marginTop: "10px",
+                                borderRadius: "50px",
+                                padding: "8px 50px"
+                            }}
                             onClick={() => handleCoppy()}
                         >
                             COPPY
                         </LoadingButton>
                     }
-                    <Button onClick={handleOrder} variant="contained" color="secondary" style={{ marginTop: "10px" }}   >Đặt ngay</Button>
+                    <Button onClick={() => handleOrder()}
+                        variant="contained"
+                        color="secondary"
+                        style={{
+                            marginTop: "10px",
+                            borderRadius: "50px",
+                            padding: "8px 40px"
+                        }}>
+                        Đặt hàng
+                    </Button>
                 </div>
-
-
             </Container >
-
-
-
-
+            {
+                openOption &&
+                <BoxOptions open={openOption} setOpen={setOpenOption}
+                    data={dataOption?.data}
+                    resData={dataOption?.resData}
+                    dishSelected={dataOption?.dish}
+                    dishIndex={dataOption?.dishIndex}
+                />
+            }
         </div >
     );
 

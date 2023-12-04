@@ -558,10 +558,7 @@
 
  /*   Checkout*/
 
- .notesCK {
-   color: gray;
-   font-weight: bold;
- }
+
 
  .nameDishCK {
    margin: 0px;
@@ -570,12 +567,49 @@
    color: rgb(74, 74, 74);
  }
 
+ .nameOptionCK {
+   color: rgb(142, 142, 142);
+   margin: 0px 0px 2px 0px;
+ }
+
  .itemDishCK {
    margin-top: 10px;
    box-shadow: rgb(206, 206, 206) 3px 3px 6px 0px;
    padding: 10px 15px;
    border-radius: 20px;
    background-color: rgb(248, 255, 249);
+   position: relative;
+ }
+
+ .errorCheckout {
+   color: red;
+   font-weight: bold;
+ }
+
+ .btnChangeOptionCK {
+   padding: 3px 10px;
+   color: rgba(201, 100, 0, 0.744);
+   border-radius: 10px;
+   cursor: pointer;
+ }
+
+ .boxChangeOptionCK {
+   position: absolute;
+   display: flex;
+   align-items: center;
+   right: 10px;
+   bottom: 10px;
+ }
+
+ .btnChangeOptionCK:hover {
+   background-color: rgba(6, 6, 6, 0.094);
+
+ }
+
+ .priceDishCK {
+   margin: 0px;
+   font-weight: bold;
+   color: #d88248;
  }
 
  /*   Checkout*/

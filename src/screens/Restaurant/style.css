@@ -119,6 +119,12 @@
 
  }
 
+ .btnCloseCartRes {
+   font-size: 16px;
+   font-weight: bold;
+   padding: 3px 10px;
+ }
+
  .boxResCartBtn {
    display: flex;
    justify-content: space-around;
@@ -240,6 +246,11 @@
 
  }
 
+ .dishSelectedOptions {
+   margin: 0px;
+   color: rgb(147, 147, 147);
+ }
+
  .dishSelectedPrice {
    font-weight: bold;
    color: gray;
@@ -310,7 +321,7 @@
 
    .divBtnCloseDlg, .boxResCart {
      position: fixed;
-     z-index: 1;
+     z-index: 2;
    }
 
    .boxResCart {

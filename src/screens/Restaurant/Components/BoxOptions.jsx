@@ -1,7 +1,7 @@
 
 import ModalBox from '../../../components/ModalBox';
-import { Box, CardContent, CardMedia, FormControlLabel, RadioGroup, TextareaAutosize, Typography, useMediaQuery, } from '@mui/material';
-import { React, useState, useEffect, memo } from 'react';
+import { TextareaAutosize, useMediaQuery, } from '@mui/material';
+import { React, useState, useEffect } from 'react';
 
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -13,16 +13,18 @@ import { addDishesToCart } from '../../../store/cartSlice';
 import { useDispatch } from 'react-redux';
 
 
-const BoxOptions = ({ open, setOpen, data, resData }) => {
+const BoxOptions = ({ open, setOpen, data, resData, dishSelected, dishIndex }) => {
+
     const matchMD = useMediaQuery("(max-width:800px)")
-    const [listVariant, setListVariant] = useState(null);
+    const [listVariant, setListVariant] = useState(dishSelected?.variants || null);
     const [noteOrder, setNoteOrder] = useState("");
-    const [qty, setQty] = useState(1);
+    const [qty, setQty] = useState(dishSelected?.quantity || 1);
     const [totalPriceDish, setTotalPriceDish] = useState(data?.promotion?.selling_price || data?.price);
 
     const dispatch = useDispatch();
 
     const handleAddDish = () => {
+
         if (qty <= 0) {
             handleOpenDlog(false)
             return;
@@ -39,9 +41,11 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
             variants: listVariant ? listVariant : undefined,
             uuid: data?.id
         }
+
         dispatch(addDishesToCart({
             dishes: dish,
-            resData: resData
+            resData: resData,
+            dishIndex: dishIndex
         }))
         handleOpenDlog(false)
 
@@ -58,21 +62,23 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
     }
     const handleOpenDlog = (state) => {
         setOpen(state);
-        setQty(1)
-        setListVariant(null)
+        if (!dishSelected) {
+            setQty(1)
+            setListVariant(null)
+        }
     }
 
     useEffect(() => {
         let totalVariantPrice = listVariant ? listVariant?.reduce((total, item) => total + item?.price, 0) : 0;
-        setTotalPriceDish(totalVariantPrice + (data?.promotion?.selling_price * qty || data?.price * qty));
+        setTotalPriceDish((totalVariantPrice + (data?.promotion?.selling_price || data?.price)) * qty);
     }, [listVariant, qty, data]);
 
-
-
-
-
-
-
+    useEffect(() => {
+        if (dishSelected) {
+            setQty(dishSelected?.quantity)
+            setListVariant(dishSelected?.variants)
+        }
+    }, [dishSelected]);
     return (
         <ModalBox open={open} setOpen={handleOpenDlog} title="Tuỳ chọn" maxWidth="md" fullWidth={data?.variant_categories?.length > 0} fulls={matchMD} useCloseBar={false}>
 
@@ -119,13 +125,17 @@ const BoxOptions = ({ open, setOpen, data, resData }) => {
                     <div className='boxResDishes boxOption'>
                         {
                             data?.variant_categories?.map((variant, index) => {
+                                const variantSelected = dishSelected?.variants?.map(item => {
+                                    if (item?.category_id === variant?.id) return item?.id
+                                })
+
                                 return <div key={index}>
                                     <p className='categoryTitle' style={{ color: 'rgb(219, 117, 15)' }}>{variant?.name}</p>
                                     <p className='cateOptionRequire'>{variant?.rules?.selection?.required && "Bắt buộc"} {variant?.rules?.selection?.text} </p>
                                     {
                                         variant?.rules?.selection?.type === "SELECT_ONE" ?
-                                            <RadioInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} /> :
-                                            <CheckInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} />
+                                            <RadioInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} variantSelected={variantSelected} /> :
+                                            <CheckInputGroup variant={variant} setListVariant={setListVariant} listVariant={listVariant} variantSelected={variantSelected} />
                                     }
 
                                 </div>
