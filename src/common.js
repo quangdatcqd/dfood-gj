@@ -66,6 +66,7 @@ export const generateID = () => {
         device_token: device_token
     }
     localStorage.setItem("deviceInfo", JSON.stringify(deviceInfo));
+    window.location.reload();
 }
 
 

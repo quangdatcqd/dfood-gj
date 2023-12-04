@@ -93,15 +93,19 @@ export const cartSlice = createSlice({
             state.CartList[cartIndex] = { ...Cart, totalPrice: totalPrice };
             localStorage.setItem("cart", JSON.stringify(state.CartList))
         },
+        removeCart: (state, action) => {
+            // const cartIndex = state.CartList?.findIndex(cart => cart?.resData?.resId === action.payload?.idRestaurant);
+            state.CartList?.splice(action?.payload, 1);
+            localStorage.setItem("cart", JSON.stringify(state.CartList))
+        },
         clearCart: (state, action) => {
-            const cartIndex = state.CartList?.findIndex(cart => cart?.resData?.resId === action.payload?.idRestaurant);
-            state.CartList?.splice(cartIndex, 1);
+            state.CartList = [];
             localStorage.setItem("cart", JSON.stringify(state.CartList))
         },
 
     },
 });
 
-export const { addDishesToCart, inCreaseQty, deCreaseQty, clearCart } = cartSlice.actions;
+export const { addDishesToCart, inCreaseQty, deCreaseQty, clearCart, removeCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -1,6 +1,6 @@
 .headerBtnBox {
     position: absolute;
-    right: -100px;
+    right: 0px;
     top: 70px;
     width: calc(100% + 400px);
     z-index: 1;
@@ -12,13 +12,52 @@
     box-shadow: 0px 0px 3px 1px rgb(239, 239, 239);
 }
 
+.boxCart2 {
+    position: absolute;
+    left: 5px;
+    top: 80px;
+    width: calc(100% - 10px);
+    z-index: 1;
+    border-radius: 5px;
+    background-color: white;
+    border: 1px rgba(255, 255, 255, 0.432) solid;
+    color: rgb(92, 92, 92);
+    /* box-shadow: 1px 1px 1px 3px rgba(206, 206, 206, 0.509); */
+    background-color: rgb(255, 244, 224);
+}
+
+.btnRemoveCart, .btnRemoveCartAll {
+    color: rgb(240, 134, 47);
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.btnRemoveCart {
+    bottom: 10px;
+}
+
+.btnRemoveCartAll {
+    top: 5px;
+    font-weight: 100;
+    font-size: 13px;
+}
+
+.btnRemoveCart:hover, .btnRemoveCartAll:hover {
+    background-color: rgba(8, 8, 8, 0.043);
+
+}
+
 .ptitle {
     padding: 5px 10px;
     margin: 0px;
     font-weight: bold;
     color: rgb(178, 87, 13);
     font-size: 16px;
-    border-bottom: 2px rgba(202, 202, 202, 0.374) solid;
+    border-bottom: 2px rgba(178, 87, 13, 0.249) solid;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -27,23 +66,38 @@
     overflow-y: scroll;
     max-height: 400px;
     background-color: rgb(251, 240, 220);
+
+}
+
+.listCart2 {
+    overflow-y: scroll;
+    max-height: calc(100vh - 230px);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.listCart {
+    position: relative;
 }
 
 .headerBtnBoxItem {
     display: flex;
-    padding: 5px 10px;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
 
 }
 
 .headerBtnBoxItem:hover {
-    background-color: rgb(232, 232, 232);
+    background-color: wheat;
 
 }
 
 .headerBtnBoxItem img {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 .headerBtnBoxItemDes {
@@ -73,6 +127,7 @@
 .headerBtnOrder:hover .headerBtnBox {
     display: block;
 }
+
 
 
 .boxSearchAddress {
@@ -142,6 +197,118 @@
     display: none;
 }
 
+.boxMenuItem {
+    background-color: white;
+    width: 350px;
+    position: absolute;
+    right: -560px;
+    top: 0;
+    height: 100vh;
+    transition: all 0.1s ease;
+    opacity: 0;
+    z-index: 1;
+}
+
+.boxMenuItemOn {
+    right: 0px;
+    opacity: 1;
+}
+
+
+.boxMenuBar {
+    position: relative;
+    margin: 10px 0px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    /* border-bottom: #a8510e1f solid 2px; */
+
+    color: rgb(156, 76, 11);
+
+}
+
+.menuBtnLogout {
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(156, 76, 11);
+    cursor: pointer;
+}
+
+.menuBtnLogout:hover {
+    background-color: rgba(0, 0, 0, 0.055);
+
+}
+
+.menuBtnLogoutIcon {
+    font-size: 20px !important;
+    margin-top: -2px;
+    margin-left: 5px;
+}
+
+.btnCloseMenu {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    color: rgb(178, 87, 13);
+    padding: 3px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 30px !important;
+}
+
+
+.btnCloseMenu:hover {
+    background-color: rgba(0, 0, 0, 0.084);
+}
+
+.boxMenuUser {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: #a8510e1f solid 1px;
+    border-top: #a8510e1f solid 1px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.boxMenuUser:hover {
+    background-color: #a8510e0c;
+}
+
+.boxMenuUser>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profileBtnEdit {
+    margin-right: 10px;
+    color: #d46917;
+}
+
+.boxMenuUser img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+
+
+.boxMenuUserDetail>p {
+    margin: 0px;
+    color: #8b4611b3;
+    font-weight: bold;
+}
+
+.boxMenuUserDetail>p:first-child {
+    margin: 0px;
+    font-size: 16px;
+    color: #cd691d;
+}
 
 /* LOGIN */
 
@@ -208,30 +375,42 @@
 }
 
 @media screen and (max-width:965px) {
-    .headerBtnOrder {
-        display: none !important;
-    }
-}
 
-@media screen and (max-width:870px) {
+
     .headerBtnProfile {
         display: none !important;
     }
 }
 
-@media screen and (max-width:770px) {
+@media screen and (max-width:830px) {
     .headerLogo {
         display: none !important;
     }
 
+}
+
+
+@media screen and (max-width:770px) {
     .headerLocation {
         margin-left: 0px !important;
     }
+
+    .headerBtnProfile {
+        display: none !important;
+    }
+
 }
 
-@media screen and (max-width:590px) {
-    .headerBtnCart>p, .headerBtnSearch>p {
-        display: none !important;
+
+
+@media screen and (max-width:660px) {
+    .headerBtnDiv {
+        padding: 5px;
+    }
+
+    .headerBtnBoxItem img {
+        width: 80px;
+        height: 80px;
     }
 
     .headerBtnSearch {
@@ -259,11 +438,12 @@
         margin: 0 auto;
     }
 
-}
-
-@media screen and (max-width:480px) {
-    .headerLocationTitle, .headerBtnSearch, .headerBtnCart {
+    .headerLocationTitle, .headerBtnSearch, .headerBtnCart, .headerBtnOrder {
         display: none !important;
+    }
+
+    .boxMenuItem {
+        width: 100%;
     }
 
     .headerDivLeft {
@@ -307,8 +487,8 @@
         align-items: center;
 
     }
-
 }
+
 
 
 @media screen and (max-width:280px) {

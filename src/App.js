@@ -6,16 +6,16 @@ import { Routes, BrowserRouter, Route, } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import BoxLogin from "./pages/BoxLogin";
-import CheckUserValid from "./pages/CheckUserValid";
-import Home from "./pages/Home/Home";
-import Restaurant from "./pages/Restaurant/Restaurant";
+import BoxLogin from "./screens/BoxLogin";
+import CheckUserValid from "./screens/CheckUserValid";
+import Home from "./screens/Home/Home";
+import Restaurant from "./screens/Restaurant/Restaurant";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalBox from "./components/ModalBox";
 import { setCheckoutDlg, setOrderDlg, setResDlg } from "./store/dialogSlice";
 import { useMediaQuery } from "@mui/material";
 import OrderDetail from "./components/OrderDetail";
-import Checkout from "./pages/Checkout";
+import Checkout from "./screens/Checkout";
 
 function App() {
   const theme = createTheme();

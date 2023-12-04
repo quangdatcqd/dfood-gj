@@ -152,10 +152,13 @@ const Login = ({ setOpen, open }) => {
                                 enqueueSnackbar("Lấy được mã giảm giá!", { variant: 'success' });
                                 break;
                             }
-
                         }
                         if (count >= 10) break;
                     }
+                    enqueueSnackbar("Xong!", { variant: 'success' });
+                    handleSelectAddress();
+                    window.location.reload();
+
                 } else {
                     throw new Error(
                         dataregister?.errors ? dataregister?.errors[0]?.message_title : "Không phản hồi!"
@@ -171,6 +174,7 @@ const Login = ({ setOpen, open }) => {
             enqueueSnackbar(error.message, { variant: 'error' });
         } finally {
             setLoading(false)
+
         }
 
     }
@@ -247,22 +251,9 @@ const Login = ({ setOpen, open }) => {
             if (data?.success) {
                 localStorage.setItem("G-Token", data?.data?.access_token);
                 localStorage.setItem("R-Token", data?.data?.refresh_token);
-                let count = 0;
-                while (true) {
-                    count++;
-                    var getVC = await GojekAPI.getVoucher();
-                    if (getVC?.success) {
-                        var indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
-
-                        if (indexVC >= 0) {
-                            localStorage.setItem("idVoucher", getVC?.data[indexVC]?.code);
-                            break;
-                        }
-                    }
-                    if (count >= 10) break;
-                }
                 enqueueSnackbar("Đã đăng nhập", { variant: 'success' });
-                handleSelectAddress();
+
+                window.location.reload();
             } else {
                 throw new Error(
                     data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!"

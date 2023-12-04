@@ -10,7 +10,7 @@ const InputBox = (props) => {
             id={id}
             name={name}
             type={type}
-            autoFocus
+
             // autoComplete="address"
             style={{
                 width: "100%",

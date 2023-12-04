@@ -124,10 +124,6 @@ const OrderDetail = () => {
                 borderRadius: "10px",
                 zIndex: "999999999",
                 fontWeight: "bold"
-
-
-
-
             }}>
                 {trackingStatus}
             </div>
