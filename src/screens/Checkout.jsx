@@ -2,7 +2,7 @@ import { Button, IconButton, TextareaAutosize, } from '@mui/material';
 import { React, useState, useCallback, useEffect, useRef, useLayoutEffect } from 'react';
 import { OrderAPI, GojekAPI } from '../API/GojekAPI';
 import { Container } from '@mui/system';
-import { useSnackbar } from 'notistack';
+
 import { fomatCurrency } from '../common';
 import { Refresh } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -12,6 +12,7 @@ import { debounce } from "debounce";
 import BoxLoginGojek from '../components/BoxLoginGojek';
 import ModalBox from '../components/ModalBox';
 import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 const Checkout = () => {
     const indexCart = useSelector(state => state.dialog.checkoutDialog.index);
@@ -25,8 +26,8 @@ const Checkout = () => {
     const [merchantData, setMerchantData] = useState([]);
     const [customerData, setCustomerData] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
     const [addressName, setAddressName] = useState(customerData?.name);
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    console.log(Cart?.dishes);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     var idvoucher = useRef(localStorage.getItem("idVoucher"));
     var id_oder = useRef();
     const debounceDropDown = useCallback(debounce((merchantData) => fetchData(merchantData), 500), [])
@@ -63,14 +64,14 @@ const Checkout = () => {
             localStorage.setItem("noteOrder", noteOrder);
             setDataCheckout(data);
             if (data?.distance) {
-                // enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
+                enqueueSnackbar("Lựa món ok.", { variant: 'success', autoHideDuration: 2000 })
             } else {
                 data?.errors?.map((item, key) => {
-                    // enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
+                    enqueueSnackbar(item?.message, { variant: 'warning', autoHideDuration: 2000 })
                 })
             }
         } catch (error) {
-            // enqueueSnackbar(error.message, { variant: 'warning', autoHideDuration: 2000 })
+            enqueueSnackbar(error.message, { variant: 'warning', autoHideDuration: 2000 })
         } finally {
             setLoadingRefresh("false")
         }
@@ -143,11 +144,11 @@ const Checkout = () => {
                     setIdOrderShow(dataOders?.orderNo)
                 }
                 else {
-                    // enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
+                    enqueueSnackbar(dataOders?.errorMessage, { variant: 'warning' })
                 }
             }
         } catch (error) {
-            // enqueueSnackbar(error?.message, { variant: 'warning' })
+            enqueueSnackbar(error?.message, { variant: 'warning' })
 
         } finally {
         }
@@ -157,7 +158,7 @@ const Checkout = () => {
     const handleCancelOrder = async () => {
         var data = await OrderAPI.quickCancel(id_oder.current);
         localStorage.setItem("idVoucher", idvoucher.current)
-        // enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
+        enqueueSnackbar(data?.message_title ? data?.message_title : data?.message, { variant: 'warning' })
     }
     const handleCoppy = () => {
 
@@ -167,7 +168,7 @@ const Checkout = () => {
             localStorage.getItem("quick_message")
         )
 
-        // enqueueSnackbar("Đã coppy", { variant: 'success' })
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
 
     }
 
@@ -182,7 +183,7 @@ const Checkout = () => {
         navigator.clipboard.writeText(JSON.stringify(data))
 
 
-        // enqueueSnackbar("Đã coppy", { variant: 'success' })
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
     }
 
 

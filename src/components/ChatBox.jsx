@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab';
 const ChatBox = (props) => {
     const { setToggleChat, makeCancel, idOrder, channelID } = props;
 
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const [allMessages, setAllMessages] = useState([]);
     const [idChannel, setIdChannel] = useState(channelID);
@@ -55,7 +55,7 @@ const ChatBox = (props) => {
                     throw new Error(data?.errors ? data?.errors[0]?.message_title : "Không phản hồi!")
                 }
             } catch (error) {
-                // enqueueSnackbar(error.message, { variant: 'error' });
+                enqueueSnackbar(error.message, { variant: 'error' });
 
             }
         }

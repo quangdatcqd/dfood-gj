@@ -25,12 +25,13 @@ import { clearCart, removeCart } from '../../../store/cartSlice';
 import Login from './components/Login';
 const Header = () => {
     const [currentLoc, setCurrentLoc] = useState(localStorage.getItem("customerLoc") ? JSON.parse(localStorage.getItem("customerLoc")) : null);
+    const userProfile = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null
     const [toggleLocation, setToggleLocation] = useState(false);
     const [toggleSearch, setToggleSearch] = useState(false);
     const [toggleCart, setToggleCart] = useState(false);
     const [toggleOrders, setToggleOrders] = useState(false);
     const [toggleMenu, setToggleMenu] = useState(false);
-    const [toggleLogin, setToggleLogin] = useState(false);
+    const [toggleLogin, setToggleLogin] = useState(!userProfile);
     const listCart = useSelector(state => state.cart.CartList)
     const dispatch = useDispatch();
     const handleSelectCart = (index) => {
@@ -42,7 +43,7 @@ const Header = () => {
     const handleRemoveCart = (index) => {
         dispatch(removeCart(index))
     }
-    const userProfile = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null
+
     const handleLogout = () => {
         localStorage.removeItem("userInfo")
         window.location.reload();

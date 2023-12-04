@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
 const OrderDetail = () => {
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const idOrder = useSelector(state => state.dialog.orderDialog.id)
     const [toggleChat, setToggleChat] = useState(false);
     const [dataOrder, setDataOrder] = useState([]);
@@ -54,15 +54,15 @@ const OrderDetail = () => {
         var phone = dataOrder?.destination?.recipient_phone;
         var data = await OrderAPI.cancelOrder(idOrder, phone, dataOrder?.customer_id);
         if (data?.success) {
-            // enqueueSnackbar("Đã yêu cầu huỷ đơn hàng, đợi xíu!", { variant: 'success' })
+            enqueueSnackbar("Đã yêu cầu huỷ đơn hàng, đợi xíu!", { variant: 'success' })
             while (true) {
                 let id = await getListSP();
                 if (id != 0) break;
                 await new Promise(reject => setTimeout(reject, 2000))
-                // enqueueSnackbar("Đợi xíu!", { variant: 'warning' })
+                enqueueSnackbar("Đợi xíu!", { variant: 'warning' })
             }
         } else {
-            // enqueueSnackbar(data?.error[0]?.message, { variant: 'error' })
+            enqueueSnackbar(data?.error[0]?.message, { variant: 'error' })
         }
     }
 
@@ -107,7 +107,7 @@ const OrderDetail = () => {
             "https://qtrack.vercel?.app/" + idOrder
         )
 
-        // enqueueSnackbar("Đã coppy", { variant: 'success' })
+        enqueueSnackbar("Đã coppy", { variant: 'success' })
 
     }
 

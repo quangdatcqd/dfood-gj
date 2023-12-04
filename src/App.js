@@ -35,38 +35,35 @@ function App() {
   }
   return (
     <>
-      <ThemeProvider theme={theme}  >
-        <SnackbarProvider anchorOrigin={{ vertical: "bottom", horizontal: "left" }} maxSnack={3} autoHideDuration={1500}>
+      <SnackbarProvider anchorOrigin={{ vertical: "bottom", horizontal: "left" }} maxSnack={3} autoHideDuration={2500}>
+        <ThemeProvider theme={theme}  >
           <BrowserRouter>
-
             <Routes>
-
-              <Route path="/*" element={<BoxLogin />} />
+              <Route path="/*" element={<Home />} />
               <Route path="/home" element={<Home />} />
             </Routes>
           </BrowserRouter>
-        </SnackbarProvider>
-      </ThemeProvider >
-      {
-        resDialog &&
-        <ModalBox open={resDialog} setOpen={handleOpenRes} title="Chọn món" maxWidth="xl" fulls={matchMD} fullWidth={true} useCloseBar={false}>
-          <Restaurant />
-        </ModalBox>
-      }
-      {
-        orderDialog &&
-        <ModalBox open={orderDialog} setOpen={handleOpenOrderDetail} title="Đơn hàng" maxWidth="md" fulls={matchMD} fullWidth={true}  >
-          <OrderDetail />
-        </ModalBox>
-      }
-      {
-        checkoutDialog &&
-        <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="md" fulls={matchMD} fullWidth={true}  >
-          <Checkout />
-        </ModalBox>
-      }
+        </ThemeProvider >
+        {
+          resDialog &&
+          <ModalBox open={resDialog} setOpen={handleOpenRes} title="Chọn món" maxWidth="xl" fulls={matchMD} fullWidth={true} useCloseBar={false}>
+            <Restaurant />
+          </ModalBox>
+        }
+        {
+          orderDialog &&
+          <ModalBox open={orderDialog} setOpen={handleOpenOrderDetail} title="Đơn hàng" maxWidth="md" fulls={matchMD} fullWidth={true}  >
+            <OrderDetail />
+          </ModalBox>
+        }
+        {
+          checkoutDialog &&
+          <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="md" fulls={matchMD} fullWidth={true}  >
+            <Checkout />
+          </ModalBox>
+        }
+      </SnackbarProvider >
     </>
-
   )
 }
 export default App;
