@@ -5,7 +5,6 @@ import { fomatCurrency } from '../../../common';
 
 export default function RadioInputGroup({ variant, setListVariant, listVariant }) {
     const [valueSelected, setValueSelected] = useState("");
-
     const handleChange = (event) => {
         const idOption = event.target.value;
         handleSelectOne(idOption)
@@ -13,7 +12,6 @@ export default function RadioInputGroup({ variant, setListVariant, listVariant }
     };
     function handleSelectOne(idOption) {
         const optionItem = variant?.variants?.find((item => item?.id === idOption));
-
         var variantSelected = listVariant;
         if (variantSelected === null) {
             variantSelected = [
@@ -27,8 +25,6 @@ export default function RadioInputGroup({ variant, setListVariant, listVariant }
         } else {
             const indexItem = variantSelected?.findIndex((item => item?.category_id === variant?.id));
             if (indexItem >= 0) {
-
-
                 variantSelected = [
                     ...variantSelected,
                     {
@@ -70,9 +66,6 @@ export default function RadioInputGroup({ variant, setListVariant, listVariant }
                     </div>
                 })
             }
-
-
-
         </div>
     );
 }
