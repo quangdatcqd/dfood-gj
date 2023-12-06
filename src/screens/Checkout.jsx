@@ -41,7 +41,9 @@ const Checkout = () => {
     }
     const fetchData = async (dataMerchant, CartU) => {
         try {
+
             dataMerchant = dataMerchant || merchantData;
+            if (!dataMerchant) return;
             CartU = CartU || Cart;
             let totalOriginalPrice = calcuTotalPriceCart(CartU?.dishes)
             let promo_discount_cart_price = totalOriginalPrice - CartU?.totalPrice
