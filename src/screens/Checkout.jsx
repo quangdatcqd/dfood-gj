@@ -135,7 +135,7 @@ const Checkout = () => {
                 if (dataOders?.orderNo) {
                     id_oder.current = dataOders?.orderNo;
                     localStorage.setItem("idOrder", dataOders?.orderNo);
-                    // localStorage.setItem("idVoucher", "");
+                    localStorage.setItem("idVoucher", "");
                     // const sttStore = await GojekAPI.postSession(dataOders?.orderNo);
                     // if (sttStore == 1) {
                     //     enqueueSnackbar("Đã lưu phiên đăng nhập!   " + id_oder.current, { variant: 'success' })
@@ -145,8 +145,7 @@ const Checkout = () => {
                     // else {
                     //     enqueueSnackbar("Chưa lưu phiên đăng nhập, hãy xuất tay! ", { variant: 'danger' });
                     // }
-                    // enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
-
+                    enqueueSnackbar("Đã đặt hàng! " + id_oder.current, { variant: 'success', })
                     handleOpenOrderDetail(dataOders?.orderNo)
                 }
                 else {

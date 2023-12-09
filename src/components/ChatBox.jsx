@@ -1,6 +1,6 @@
 import { Box, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import { TextareaAutosize } from '@mui/base';
 import { ChatAPI, GojekAPI } from '../API/GojekAPI';
 import { useSnackbar } from 'notistack';
@@ -19,7 +19,7 @@ const ChatBox = (props) => {
     const [loadingCancel, setLoadingCancel] = useState(false);
     let idchannel;
 
-
+    const timerChat = useRef()
 
 
     useEffect(() => {
@@ -36,8 +36,6 @@ const ChatBox = (props) => {
                 }
                 if (customer != undefined) {
                     getMessages(id);
-
-
                 }
             })
         }
@@ -61,25 +59,26 @@ const ChatBox = (props) => {
         }
 
 
-        if (idOrder != undefined) {
-            let idchannel = null;
-            if (channelID == "") {
-                idchannel = getChannelId();
-            } else {
-                idchannel = channelID;
-                getMembers(idchannel); getMessages(idchannel);
-            }
-
-            if (idchannel?.length >= 10) {
-                const remessage = setInterval(() => {
+        const fetchChat = async () => {
+            if (idOrder != undefined) {
+                let idchannel = null;
+                if (channelID == "") {
+                    idchannel = await getChannelId();
+                } else {
+                    idchannel = channelID;
+                    await getMembers(idchannel);
                     getMessages(idchannel);
+                }
+                if (idchannel?.length >= 10) {
+                    timerChat.current = setInterval(() => {
+                        getMessages(idchannel);
+                    }, 10000);
 
-                }, 10000);
-                return () => clearInterval(remessage);
+                }
             }
         }
-
-
+        fetchChat();
+        return () => clearInterval(timerChat.current);
     }, []);
 
     const handleCancel = () => {
@@ -89,12 +88,9 @@ const ChatBox = (props) => {
     }
     const getMessages = async (id) => {
         var messages = await ChatAPI.getAllChat(id);
-
         var res = messages?.data?.reduceRight(function (arr, last, index, coll) {
-
             return (arr = arr.concat(last))
         }, []);
-
         setAllMessages(res);
     }
     const sendMessage = async () => {

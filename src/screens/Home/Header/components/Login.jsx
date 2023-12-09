@@ -144,19 +144,23 @@ const Login = ({ setOpen, open }) => {
                         count++;
                         var getVC = await GojekAPI.getVoucher(accessToken);
                         if (getVC?.success) {
-                            var indexVC = getVC?.data?.findIndex((element) => element?.title === "[NGƯỜI DÙNG MỚI] GoFood | Ưu đãi giảm đến 50% đơn hàng từ 60K");
+                            var indexVC = getVC?.data?.findIndex((element) => element?.sponsor_name === "GoFood");
 
                             if (indexVC >= 0) {
                                 localStorage.setItem("idVoucher", getVC?.data[indexVC]?.code);
                                 enqueueSnackbar("Lấy được mã giảm giá!", { variant: 'success' });
+                                window.location.reload();
                                 break;
                             }
                         }
-                        if (count >= 10) break;
+                        if (count >= 20) {
+                            enqueueSnackbar("Không có mã giảm giá!", { variant: 'success' });
+                            break;
+                        }
                     }
                     enqueueSnackbar("Xong!", { variant: 'success' });
                     handleSelectAddress();
-                    // window.location.reload();
+
 
                 } else {
                     throw new Error(

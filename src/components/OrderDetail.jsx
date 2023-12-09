@@ -18,11 +18,14 @@ const OrderDetail = () => {
     const [trackingLocationDr, setTrackingLocationDr] = useState("");
     const [trackingStatus, setTrackingStatus] = useState("");
 
-
+    var timerDetail = useRef();
 
     useLayoutEffect(() => {
+        timerDetail.current = setInterval(() => {
+            getListOrders();
+        }, 10000);
         getListOrders();
-
+        return () => clearInterval(timerDetail.current);
     }, []);
 
     var trackingLocationRC = useRef();
