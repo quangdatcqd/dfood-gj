@@ -1,5 +1,5 @@
  .query-result {
-   margin-top: 10px;
+   margin-top: 5px;
  }
 
  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
@@ -498,31 +498,76 @@
 
  .divInputSearchRes {
    width: 100%;
-   margin-top: 10px;
+   position: sticky;
+   z-index: 3;
+   top: 40px;
+   left: 0px;
+
+ }
+
+ .boxInputSearchRes {
+   padding: 5px 8px 8px 15px;
+   background-image: linear-gradient(rgba(0, 0, 0, 0.393), rgba(0, 0, 0, 0.219), rgba(0, 0, 0, 0));
+ }
+
+ .btnBackSearchInput {
+   position: absolute;
+   left: 10px;
+   top: 13px;
+   color: white;
+   display: none;
  }
 
  .inputSearRestaurant {
    border: none;
-   border-radius: 50px;
+   border-radius: 10px;
    padding: 8px 20px;
    outline: none;
    width: 400px;
    font-size: 16px;
-   font-weight: bold;
+   margin: 0 auto;
+   /* font-weight: bold; */
+   box-shadow: 1px 1px 3px 1px rgba(145, 145, 145, 0.215);
+ }
+
+
+ .btnClearSearchInput {
+   position: absolute;
+   left: 382px;
+   top: 12px;
+   color: rgba(201, 100, 0, 0.836);
+   cursor: pointer;
+
+ }
+
+ .btnClearSearchInput:hover {
+   position: absolute;
+   color: rgb(239, 194, 149);
+
  }
 
  .boxSearchSG {
    background-color: white !important;
    padding: 10px;
    border-radius: 10px;
-   margin-bottom: 10px;
+   margin-bottom: 5px;
+ }
+
+ .boxSearchLoading {
+   text-align: center;
+   font-size: 16px;
+   background-color: rgb(255, 251, 245);
+   margin-bottom: 5px;
+   border-radius: 10px;
+   padding: 5px;
+   color: gray;
  }
 
  .keywordSG {
    font-size: 16px;
    font-weight: bold;
    border-radius: 20px;
-   padding: 3px 15px;
+   padding: 2px 8px;
    border: 2px solid rgb(201, 100, 0);
    color: rgb(201, 100, 0);
    margin: 5px 10px 5px 0px;
@@ -533,6 +578,8 @@
    background-color: rgb(201, 100, 0);
    color: white;
  }
+
+ .boxSearchMore {}
 
  .boxExploreItems, .boxTouchToSearch {
    background-color: white;
@@ -644,14 +691,38 @@
    }
 
 
+
+
  }
 
  @media only screen and (max-width: 600px) {
    .inputSearRestaurant {
      width: 100% !important;
+     color: rgb(62, 62, 62);
+     padding: 6px 20px;
+   }
+
+   .boxInputSearchRes {
+     padding: 5px 10px 8px 40px !important;
    }
 
 
+   .listExploreItems {
+     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+   }
+
+   .btnClearSearchInput {
+     right: 18px;
+     left: unset;
+   }
+
+   .divInputSearchRes {
+     top: 37px;
+   }
+
+   .btnBackSearchInput {
+     display: block;
+   }
  }
 
  @media only screen and (max-width: 400px) {
@@ -663,6 +734,17 @@
 
      animation: biker 5s linear 0s infinite;
 
+   }
+
+   .keywordSG {
+     font-size: 12px;
+     font-weight: bold;
+     border-radius: 20px;
+     padding: 3px 10px;
+     border: 2px solid rgb(201, 100, 0);
+     color: rgb(201, 100, 0);
+     margin: 5px 5px 0px 0px;
+     cursor: pointer;
    }
 
 

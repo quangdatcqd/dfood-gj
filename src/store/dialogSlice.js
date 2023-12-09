@@ -16,6 +16,11 @@ export const appDialog = createSlice({
         checkoutDialog: {
             open: false,
             index: ""
+        },
+        itemFilterDialog: {
+            open: false,
+            data: "",
+            title: "tilte"
         }
     },
     reducers: {
@@ -32,18 +37,30 @@ export const appDialog = createSlice({
         setOrderId: (state, action) => {
             state.orderDialog.id = action.payload;
             state.orderDialog.open = true;
-        }
-        ,
+        },
         setCheckoutDlg: (state, action) => {
             state.checkoutDialog.open = action.payload;
         },
         setCheckoutData: (state, action) => {
             state.checkoutDialog.index = action.payload;
             state.checkoutDialog.open = true;
+        },
+        setItemFilterDlg: (state, action) => {
+            state.itemFilterDialog.open = action.payload;
+        },
+        setItemFilterData: (state, action) => {
+            state.itemFilterDialog.data = action.payload.data;
+            state.itemFilterDialog.title = action.payload.title;
+            state.itemFilterDialog.open = true;
         }
     },
 });
 
-export const { setResDlg, setResId, setOrderDlg, setOrderId, setCheckoutData, setCheckoutDlg } = appDialog.actions;
+export const {
+    setResDlg, setResId,
+    setOrderDlg, setOrderId,
+    setCheckoutData, setCheckoutDlg,
+    setItemFilterData, setItemFilterDlg
+} = appDialog.actions;
 
 export default appDialog.reducer;

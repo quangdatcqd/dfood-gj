@@ -4,7 +4,7 @@ export const fomatCurrency = (number) => {
 const characters = "1234567890QWERTYUIOPLKJHGFDSAZXCVBNMazxcvbnmlkjhgfdsqwertyuiop";
 export const randomString = (length, char = null) => {
     char = char !== null ? char : characters;
-    console.log(char);
+
     let result = "";
     for (let i = 0; i < length; i++) {
         result += char.charAt(Math.floor(Math.random() * char.length));

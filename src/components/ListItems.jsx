@@ -1,5 +1,6 @@
 import { React } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch } from 'react-redux';
 import { setResId } from '../store/dialogSlice';
 const ListItems = (props) => {
@@ -9,21 +10,29 @@ const ListItems = (props) => {
     return (
         <div className='boxCategory'>
             <p className='categoryTitle' >{listmerchants?.content?.title} </p>
-            <div className='divListRestaurant'>
-                {
-                    dataMercharts?.map((item, key) => {
-                        return (
-                            <BoxItem merchantData={item?.content || item} key={key} />
-                        )
-                    })
-                }
 
-            </div>
+            {
+                dataMercharts?.length > 0 ?
+                    <div className='divListRestaurant'>
+                        {dataMercharts?.map((item, key) => {
+                            return (
+                                <BoxItem merchantData={item?.content || item} key={key} />
+                            )
+                        })}
+                    </div> :
+                    <p style={{ textAlign: "center", color: "gray" }}>Không tìm thấy</p>
+            }
             {
                 !listmerchants?.data?.cards
                 && <div className='btnMoreItem' onClick={() => handleClickMore()}>
-                    Xem thêm
-                    <ExpandMoreIcon />
+                    <p  >
+                        Xem thêm nhà hàng "Cơm"
+                        <ExpandMoreIcon />
+                    </p>
+                    <p>
+                        Tìm món ăn "cơm"
+                        <SearchIcon style={{ marginTop: "-3px", marginLeft: "3px", fontSize: "20px" }} />
+                    </p>
                 </div>
             }
 

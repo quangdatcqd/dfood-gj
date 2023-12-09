@@ -80,7 +80,6 @@ const Login = ({ setOpen, open }) => {
                             const requestOTP = await AuthAPI.Initiate(phoneNumber, checkPhoneData?.data?.verification_id, "login_1fa")
                             setOtpToken(requestOTP?.data?.otp_token);
                             setVerificationId(checkPhoneData?.data?.verification_id)
-
                             setFormType("LOGIN");
                         }
 
@@ -157,7 +156,7 @@ const Login = ({ setOpen, open }) => {
                     }
                     enqueueSnackbar("Xong!", { variant: 'success' });
                     handleSelectAddress();
-                    window.location.reload();
+                    // window.location.reload();
 
                 } else {
                     throw new Error(

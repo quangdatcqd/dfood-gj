@@ -119,12 +119,23 @@ body {
 }
 
 .CPNBarDialog {
-  padding: 0px 20px;
+  padding: 8px 20px;
   background-color: rgb(201, 100, 0);
   color: white;
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 2;
+
+}
+
+.btnCloseBasic {
+  position: absolute;
+  left: 15px;
 
 }
 
@@ -140,8 +151,7 @@ body {
   padding: 10px;
   border-radius: 10px;
   background-color: rgb(255, 251, 245);
-  margin-bottom: 10px;
-  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .divListRestaurant {
@@ -218,10 +228,18 @@ body {
   color: rgb(201, 100, 0);
   font-weight: bold;
   cursor: pointer;
+  display: flex;
+  justify-content: space-around;
 }
 
-.btnMoreItem:hover {
-  background-color: rgb(255, 246, 246);
+.btnMoreItem p {
+  margin: 0px;
+  padding: 8px 15px;
+  border-radius: 10px;
+}
+
+.btnMoreItem p:hover {
+  background-color: rgb(255, 242, 226);
 }
 
 .boxSwapeRestaurant {
@@ -299,6 +317,7 @@ body {
   font-weight: bold;
   margin-top: 10px;
   color: rgb(83, 83, 83);
+  line-height: 17px;
 }
 
 /* SwipeCategoriesV1  */
@@ -319,6 +338,7 @@ body {
   background-color: rgb(255, 251, 245);
   border-radius: 10px;
   padding: 10px;
+  margin-bottom: 5px;
 }
 
 .divItemSCV2>div {
@@ -400,6 +420,8 @@ body {
   .titleDialog {
     font-size: 14px;
   }
+
+
 }
 
 @media screen and (max-width:500px) {
@@ -448,5 +470,9 @@ body {
 
   .boxItemSCV2 {
     height: 260px !important;
+  }
+
+  .btnMoreItem {
+    flex-direction: column;
   }
 }

@@ -26,13 +26,16 @@ export default function ModalBox(props) {
         >{
                 useCloseDialogBar &&
                 <div className='CPNBarDialog' onClick={() => setOpen(false)} >
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="close"
-                    >
-                        <CloseIcon />
-                    </IconButton>
+                    <div className='btnCloseBasic'>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="close"
+
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <p className='titleDialog'  > {title}</p>
                 </div>
             }

@@ -29,3 +29,8 @@ code {
   z-index: 9999 !important;
   background-color: transparent !important;
 }
+
+.css-1oqqzyl-MuiContainer-root {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}

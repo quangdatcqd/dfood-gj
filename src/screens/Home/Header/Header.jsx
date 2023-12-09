@@ -96,7 +96,11 @@ const Header = () => {
                     <div className='headerBtnDiv headerBtnMenu' >
                         <IconButton
                             color="inherit"
-                            onClick={() => setToggleMenu(true)}
+                            onClick={() => {
+                                setToggleMenu(true);
+                                setToggleCart(false);
+                                setToggleOrders(false);
+                            }}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -111,9 +115,6 @@ const Header = () => {
                 userProfile={userProfile}
                 handleOpenLogin={handleOpenLogin}
             />
-
-
-
             <div className='divSearchHeaderSM'>
                 <div className='headerLocation headerSearchBar ' onClick={() => setToggleSearch(true)}>
                     <p className='headerLocationName'>  <SearchIcon style={{ marginTop: "-2px", fontSize: "18px" }} />Tìm kiếm món ăn</p>
@@ -123,7 +124,12 @@ const Header = () => {
                     color="inherit"
                     style={{ margin: "0px 5px 0px 10px" }}
                     className='btnCart2'
-                    onClick={() => setToggleOrders(toggleOrders ? false : true)}
+                    onClick={() => {
+                        setToggleOrders(toggleOrders ? false : true)
+                        setToggleMenu(false);
+                        setToggleCart(false);
+
+                    }}
                 >
                     {
                         toggleOrders ? <HighlightOffIcon /> : <ReceiptLongOutlinedIcon />
@@ -138,7 +144,12 @@ const Header = () => {
                     color="inherit"
                     style={{ margin: "0px 7px 0px 0px" }}
                     className='btnCart2'
-                    onClick={() => setToggleCart(toggleCart ? false : true)}
+                    onClick={() => {
+                        setToggleCart(toggleCart ? false : true)
+                        setToggleMenu(false);
+                        setToggleOrders(false);
+                    }
+                    }
                 >
                     {
                         toggleCart ? <HighlightOffIcon /> : <ShoppingCartIcon />

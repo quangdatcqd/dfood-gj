@@ -1,6 +1,8 @@
  /* Restaurant */
  .restauRantContainer {
-   background-color: #fcedd2;
+   /* background-color: #fef6e7; */
+   background-image: linear-gradient(rgb(178 211 234 / 56%), rgb(255 233 232));
+
  }
 
  .lResImage img {
@@ -227,7 +229,7 @@
  .btnCloseDlg {
    padding: 5px;
    border-radius: 50px;
-   background-image: linear-gradient(rgba(88, 88, 88, 0.468), rgba(69, 69, 69, 0.281));
+   background-image: linear-gradient(rgb(88 88 88), rgba(69, 69, 69, 0.281));
    margin: 10px;
    border: 1px solid rgba(255, 255, 255, 0.368);
    font-size: 35px !important;
@@ -326,7 +328,7 @@
 
    .boxResCart {
      padding-top: 20px;
-     background-image: linear-gradient(rgba(2, 2, 2, 0), rgba(0, 0, 0, 0.441));
+     background-image: linear-gradient(rgba(2, 2, 2, 0), rgb(0 0 0 / 53%));
    }
 
    .boxSelectedDishes {

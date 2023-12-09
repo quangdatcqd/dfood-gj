@@ -6,20 +6,19 @@ import { Routes, BrowserRouter, Route, } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import BoxLogin from "./screens/BoxLogin";
-import CheckUserValid from "./screens/CheckUserValid";
 import Home from "./screens/Home/Home";
 import Restaurant from "./screens/Restaurant/Restaurant";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalBox from "./components/ModalBox";
-import { setCheckoutDlg, setOrderDlg, setResDlg } from "./store/dialogSlice";
+import { setCheckoutDlg, setItemFilterDlg, setOrderDlg, setResDlg } from "./store/dialogSlice";
 import { useMediaQuery } from "@mui/material";
 import OrderDetail from "./components/OrderDetail";
 import Checkout from "./screens/Checkout";
+import { BoxItemFilter } from "./screens/BoxItemFilter/BoxItemFilter";
 
 function App() {
   const theme = createTheme();
-  const matchMD = useMediaQuery("(max-width:1024px)")
+  const matchMD = useMediaQuery("(max-width:800px)")
   const matchSM = useMediaQuery("(max-width:500px)")
   const resDialog = useSelector(state => state.dialog.resDialog.open)
   const dispatch = useDispatch();
@@ -33,6 +32,10 @@ function App() {
   const checkoutDialog = useSelector(state => state.dialog.checkoutDialog.open)
   const handleOpenCheckout = (open) => {
     dispatch(setCheckoutDlg(open))
+  }
+  const itemFilterDialog = useSelector(state => state.dialog.itemFilterDialog)
+  const handleOpenItemFilter = (open) => {
+    dispatch(setItemFilterDlg(open))
   }
   return (
     <>
@@ -61,6 +64,12 @@ function App() {
           checkoutDialog &&
           <ModalBox open={checkoutDialog} setOpen={handleOpenCheckout} title="Thanh toán" maxWidth="sm" fulls={matchSM} fullWidth={true}  >
             <Checkout />
+          </ModalBox>
+        }
+        {
+          itemFilterDialog.open &&
+          <ModalBox open={itemFilterDialog.open} setOpen={handleOpenItemFilter} title={itemFilterDialog.title} maxWidth="lg" fulls={matchSM} fullWidth={true}  >
+            <BoxItemFilter />
           </ModalBox>
         }
       </SnackbarProvider >

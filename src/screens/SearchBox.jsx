@@ -1,12 +1,12 @@
-import { Container } from '@mui/material';
+import { Container, LinearProgress } from '@mui/material';
 import { debounce } from 'debounce';
 import { React, useCallback, useEffect, useState, useContext } from 'react';
 
 import SwapeRestaurant from '../components/SwapeRestaurant';
 import { GojekAPI } from '../API/GojekAPI';
 import './style.css'
-import BackBtn from '../components/BackBtn';
-import Cartpreview from '../components/Cartpreview';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ListItems from '../components/ListItems';
 import { useDispatch } from 'react-redux';
 import { setResId } from '../store/dialogSlice';
@@ -17,6 +17,7 @@ function SearchBox(props) {
 
     const [dataRestaurant, setDataRestaurant] = useState("");
     const [dataResFilter, setDataResFilter] = useState(null);
+    const [searchLoading, setSearchLoading] = useState(false);
     const [dataSearchSuggestions, setDataSearchSuggestions] = useState("");
     const [keyword, setKeyword] = useState("");
 
@@ -34,18 +35,24 @@ function SearchBox(props) {
         const fetchSearchSuggestions = async () => {
             var data = await GojekAPI.searchSuggestions();
             setDataSearchSuggestions(data?.data);
-
         }
         fetchSearchSuggestions();
-
     }, []);
 
+    useEffect(() => {
+        debounceDropDown(keyword)
+    }, [keyword]);
     const fetchRestaurant = async (keyword) => {
-        if (keyword.length <= 0) return "";
+        keyword = keyword.trim();
+        if (keyword.length <= 2) {
+            setDataRestaurant(null);
+            return "";
+        }
+        setSearchLoading(true)
         var data = await GojekAPI.searchRestaurant(keyword);
         setDataRestaurant(data?.data);
         setDataResFilter(null)
-        setKeyword(keyword)
+        setSearchLoading(false)
     }
     const debounceDropDown = useCallback(debounce((nextValue) => fetchRestaurant(nextValue), 500), [])
 
@@ -65,13 +72,16 @@ function SearchBox(props) {
             }
         }
         else {
-            debounceDropDown(e.target.value);
+            setKeyword(e.target.value);
         }
     }
     const handleClickMore = async () => {
+        setSearchLoading(true)
         var data = await GojekAPI.searchRestaurantMore(keyword);
         setDataResFilter(data);
         setDataRestaurant(null)
+        setSearchLoading(false)
+
     }
 
     const dispatch = useDispatch();
@@ -80,64 +90,75 @@ function SearchBox(props) {
     }
 
     return (
-
-        <Container className='restauRantContainer'>
+        <>
             < div className='divInputSearchRes'>
-                <input
-                    id="restaurant"
-                    name="restaurant"
-                    placeholder='Bạn muốn ăn gì nào?'
-                    onChange={handleChangeKeyword}
-                    className="inputSearRestaurant"
-                    autoFocus={true}
-                />
+                <div className='boxInputSearchRes'>
+                    <ArrowBackIcon className='btnBackSearchInput' />
+                    <input
+                        id="restaurant"
+                        name="restaurant"
+                        placeholder='Bạn muốn ăn gì nào?'
+                        onChange={handleChangeKeyword}
+                        className="inputSearRestaurant"
+                        autoFocus={true}
+                        value={keyword}
+                    />
+                    <HighlightOffIcon className='btnClearSearchInput' onClick={() => setKeyword("")} />
+                </div>
             </div >
-            {/* <Button className="materialBtn">
+            <Container className='restauRantContainer'>
+
+                {/* <Button className="materialBtn">
                 Clear
             </Button> */}
-            <div className='query-result'>
-                {
-                    dataResFilter !== null && <ListItems listmerchants={dataResFilter} />
-                }
+                <div className='query-result'>
 
-                {
-                    dataRestaurant?.cards !== null &&
+                    {
+                        dataResFilter !== null &&
+                        <div className='boxSearchMore'>
+                            <ListItems listmerchants={dataResFilter} />
+                        </div>
+                    }
+                    {
+                        searchLoading && <LinearProgress variant="indeterminate" color="secondary" force sx={{ marginBottom: "5px", backgroundColor: "rgb(239, 194, 149)" }} />
+                    }
 
+                    {
+                        dataRestaurant?.cards !== null &&
+                        <>
+                            {
+                                indexBrandOutlet >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutlet]} handleSelectRes={handleSelectRes} />
+                            }
 
-                    <>
-                        {
-                            indexBrandOutlet >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutlet]} handleSelectRes={handleSelectRes} />
-                        }
+                            {
+                                // indexTouchToSearch >= 0 && < TouchToSearch touchtosearch={dataRestaurant?.cards[indexTouchToSearch]} />
+                            }
+                            {
+                                indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants || dataRestaurant?.cards]} handleClickMore={handleClickMore} />
+                            }
+                            {
+                                indexBrandOutletV1 >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutletV1]} />
+                            }
+                            {
+                                indexSearchSuggestions >= 0 && <SearchSuggestions searchsuggestions={dataSearchSuggestions?.cards[indexSearchSuggestions]} setKeyword={setKeyword} />
+                            }
+                            {
+                                indexSearchExolore >= 0 && <ExploreItems exploreitems={dataSearchSuggestions?.cards[indexSearchExolore]} />
+                            }
+                        </>
 
-                        {
-                            // indexTouchToSearch >= 0 && < TouchToSearch touchtosearch={dataRestaurant?.cards[indexTouchToSearch]} />
-                        }
-                        {
-                            indexListMerchants >= 0 && <ListItems listmerchants={dataRestaurant?.cards[indexListMerchants || dataRestaurant?.cards]} handleClickMore={handleClickMore} />
-                        }
-                        {
-                            indexBrandOutletV1 >= 0 && < SwipeCategoriesV2 products={dataRestaurant?.cards[indexBrandOutletV1]} />
-                        }
-                        {
-                            indexSearchSuggestions >= 0 && <SearchSuggestions searchsuggestions={dataSearchSuggestions?.cards[indexSearchSuggestions]} />
-                        }
-                        {
-                            indexSearchExolore >= 0 && <ExploreItems exploreitems={dataSearchSuggestions?.cards[indexSearchExolore]} />
-                        }
-                    </>
+                    }
 
-                }
+                </div>
 
-            </div>
-
-        </Container>
-
+            </Container>
+        </>
     );
 };
 
 
 const SearchSuggestions = (props) => {
-    const { searchsuggestions } = props;
+    const { searchsuggestions, setKeyword } = props;
     return (
         <div className='boxSearchSG'>
 
@@ -146,7 +167,7 @@ const SearchSuggestions = (props) => {
                 {
                     searchsuggestions?.content?.terms?.map((item, key) => {
                         return (
-                            <div className='keywordSG' key={key} >
+                            <div className='keywordSG' key={key} onClick={() => setKeyword(item?.name)} >
                                 {item?.name}
                             </div>
                         )
@@ -167,8 +188,8 @@ const ExploreItems = (props) => {
                     exploreitems?.content?.categories?.map((item, key) => {
                         return (
                             <div key={key} className='divExploreItem' >
-                                <img width="100%" height={"160px"} style={{ objectFit: "cover", borderRadius: "20px" }} src={item?.image_url} alt="" />
-                                <p style={{ fontSize: "14pt", fontWeight: "bold", padding: "10px", textAlign: "center", margin: "0px" }}>{item?.name} </p>
+                                <img width="100%" height={150} style={{ objectFit: "cover", borderRadius: "20px" }} src={item?.image_url} alt="" />
+                                <p style={{ fontSize: "16px", fontWeight: "bold", padding: "10px", textAlign: "center", margin: "0px" }}>{item?.name} </p>
                             </div>
                         )
                     })
